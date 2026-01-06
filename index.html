@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C6 Eklendi</title>
+    <title>Kelime Uygulaması - C8 Eklendi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -252,7 +252,7 @@
       { "en": "Compliance", "tr": "Uyma, boyun eğme, itaat" }
     ];
 
-    // C 6 (YENİ EKLENDİ)
+    // C 6
     fixedData["C"][6] = [
       { "en": "Concede", "tr": "Kabullenmek, itiraf etmek" },
       { "en": "Concise", "tr": "Kısa ve öz" },
@@ -276,13 +276,61 @@
       { "en": "Counterfeit", "tr": "Sahte" }
     ];
 
-    // C 7-20 (Otomatik doldurma - 7'den başlıyor)
-    for(let k=7; k<=20; k++) {
+    // C 7
+    fixedData["C"][7] = [
+      { "en": "Crave", "tr": "Çok istemek, canı çekmek" },
+      { "en": "Credible", "tr": "İnanılır, güvenilir" },
+      { "en": "Crucial", "tr": "Çok önemli, kritik" },
+      { "en": "Culminate", "tr": "Zirveye ulaşmak, sonuçlanmak" },
+      { "en": "Culpable", "tr": "Kusurlu, suçlu" },
+      { "en": "Curb", "tr": "Zapt etmek, frenlemek" },
+      { "en": "Curtail", "tr": "Kısaltmak, azaltmak" },
+      { "en": "Cynical", "tr": "Alaycı, kötümser" },
+      { "en": "Dazzling", "tr": "Göz kamaştırıcı" },
+      { "en": "Debilitate", "tr": "Zayıflatmak, güçten düşürmek" },
+      { "en": "Decipher", "tr": "Şifresini çözmek" },
+      { "en": "Dedicate", "tr": "Adamak" },
+      { "en": "Deem", "tr": "Varsaymak, öyle kabul etmek" },
+      { "en": "Deficiency", "tr": "Eksiklik, yetersizlik" },
+      { "en": "Deft", "tr": "Becerikli, usta" },
+      { "en": "Deleterious", "tr": "Zararlı" },
+      { "en": "Delineate", "tr": "Tanımlamak, betimlemek" },
+      { "en": "Denounce", "tr": "Kınamak, ihbar etmek" },
+      { "en": "Depict", "tr": "Tasvir etmek, anlatmak" },
+      { "en": "Deplete", "tr": "Tüketmek, azaltmak" }
+    ];
+
+    // C 8 (YENİ EKLENDİ)
+    fixedData["C"][8] = [
+      { "en": "Deplorable", "tr": "Acıklı, içler acısı" },
+      { "en": "Deprive (of)", "tr": "Yoksun bırakmak" },
+      { "en": "Derive (from)", "tr": "-den türetmek, kaynaklanmak" },
+      { "en": "Desolate", "tr": "Issız, terkedilmiş" },
+      { "en": "Destitute", "tr": "Muhtaç, yoksul" },
+      { "en": "Deter", "tr": "Caydırmak" },
+      { "en": "Deviate", "tr": "Sapmak, yoldan çıkmak" },
+      { "en": "Devoid (of)", "tr": "-den yoksun" },
+      { "en": "Dextrous", "tr": "Becerikli, eli çabuk" },
+      { "en": "Diffuse", "tr": "Yaymak, dağıtmak" },
+      { "en": "Dignity", "tr": "Ağırbaşlılık, itibar" },
+      { "en": "Diligent", "tr": "Çalışkan, gayretli" },
+      { "en": "Discern", "tr": "Ayırt etmek, fark etmek" },
+      { "en": "Discrepancy", "tr": "Tutarsızlık, çelişki" },
+      { "en": "Disdain", "tr": "Kümsemek, hor görmek" },
+      { "en": "Disheartened", "tr": "Cesareti kırılmış" },
+      { "en": "Disparate", "tr": "Tamamen farklı, apayrı" },
+      { "en": "Disseminate", "tr": "Yaymak (bilgi, fikir)" },
+      { "en": "Divergent", "tr": "Farklılaşan, uyumsuz" },
+      { "en": "Docile", "tr": "Uysal, evcil" }
+    ];
+
+    // C 9-20 (Otomatik doldurma - 9'dan başlıyor)
+    for(let k=9; k<=20; k++) {
         fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
     }
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v8'; // v8 yaptık ki C6 hemen gözüksün
+    const DB_KEY = 'VocabApp_FixedLayout_v10'; // v10 yaptık ki C8 hemen gözüksün
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
