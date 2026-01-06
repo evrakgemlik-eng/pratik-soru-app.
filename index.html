@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C8 Eklendi</title>
+    <title>Kelime Uygulaması - C9 Eklendi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -300,7 +300,7 @@
       { "en": "Deplete", "tr": "Tüketmek, azaltmak" }
     ];
 
-    // C 8 (YENİ EKLENDİ)
+    // C 8
     fixedData["C"][8] = [
       { "en": "Deplorable", "tr": "Acıklı, içler acısı" },
       { "en": "Deprive (of)", "tr": "Yoksun bırakmak" },
@@ -324,13 +324,37 @@
       { "en": "Docile", "tr": "Uysal, evcil" }
     ];
 
-    // C 9-20 (Otomatik doldurma - 9'dan başlıyor)
-    for(let k=9; k<=20; k++) {
+    // C 9 (YENİ EKLENDİ)
+    fixedData["C"][9] = [
+      { "en": "Drastic", "tr": "Sert, şiddetli, radikal" },
+      { "en": "Dubious", "tr": "Şüpheli, belirsiz" },
+      { "en": "Durable", "tr": "Dayanıklı" },
+      { "en": "Dwell (on)", "tr": "Üzerinde durmak, kafa yormak" },
+      { "en": "Eager", "tr": "Hevesli, istekli" },
+      { "en": "Eccentric", "tr": "Eksantrik, tuhaf" },
+      { "en": "Edible", "tr": "Yenilebilir" },
+      { "en": "Efficacy", "tr": "Etkililik, yarar" },
+      { "en": "Elaborate", "tr": "Ayrıntılı, özenle hazırlanmış" },
+      { "en": "Eloquent", "tr": "Güzel konuşan, hitabeti güçlü" },
+      { "en": "Elusive", "tr": "Ele avuca sığmaz, tarifi zor" },
+      { "en": "Emancipate", "tr": "Özgürlüğüne kavuşturmak" },
+      { "en": "Embark (on)", "tr": "Bir işe girişmek, başlamak" },
+      { "en": "Embody", "tr": "Somutlaştırmak, temsil etmek" },
+      { "en": "Embrace", "tr": "Kucaklamak, benimsemek" },
+      { "en": "Emerge", "tr": "Ortaya çıkmak" },
+      { "en": "Eminent", "tr": "Seçkin, ünlü" },
+      { "en": "Empirical", "tr": "Deneysel, gözleme dayalı" },
+      { "en": "Emulate", "tr": "Öykünmek, taklit etmek" },
+      { "en": "Encompass", "tr": "Kapsamak, çevrelemek" }
+    ];
+
+    // C 10-20 (Otomatik doldurma - 10'dan başlıyor)
+    for(let k=10; k<=20; k++) {
         fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
     }
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v10'; // v10 yaptık ki C8 hemen gözüksün
+    const DB_KEY = 'VocabApp_FixedLayout_v11'; // v11 yaptık ki C9 hemen gözüksün
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
