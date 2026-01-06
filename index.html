@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kelime Uygulaması - Mobil</title>
+    <style>
+        /* --- GENEL MOBİL AYARLARI --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #2c3e50; /* Arka plan rengi */
+            color: white; 
+            height: 100vh; 
+            width: 100vw;
+            overflow: hidden; /* Sayfanın dışarı taşmasını engeller */
+            display: flex; justify-content: center; 
+        }
+
+        .app-container { 
+            width: 100%; 
+            height: 100%; 
+            background-color: #4a6a7a; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            max-width: 600px; /* Tabletlerde çok genişlemesin */
+        }
+        
+        /* HEADER */
+        header.home-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 15px 20px; 
+            background-color: #354f5c; 
+            flex-shrink: 0; /* Küçülmesini engelle */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2); 
+            z-index: 20;
+        }
+        .app-title { font-size: 18px; font-weight: bold; }
+        .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        
+        /* TABS (Sekmeler) */
+        .tabs { 
+            display: flex; justify-content: flex-start; 
+            padding: 0; 
+            background-color: #354f5c; 
+            overflow-x: auto; /* Yan kaydırma */
+            flex-shrink: 0;
+            white-space: nowrap;
+            scrollbar-width: none; /* Firefox scroll gizle */
+        }
+        .tabs::-webkit-scrollbar { display: none; /* Chrome scroll gizle */ }
+        
+        .tab { 
+            padding: 15px 20px; 
+            color: #bdc3c7; 
+            font-weight: bold; 
+            font-size: 14px; 
+            position: relative; 
+            cursor: pointer;
+        }
+        .tab.active { color: #f1c40f; }
+        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background-color: #f1c40f; }
+
+        /* LİSTE ALANI (Scroll Edilebilir) */
+        .content-area { 
+            padding: 15px; 
+            overflow-y: auto; 
+            flex-grow: 1; 
+            -webkit-overflow-scrolling: touch; /* iOS yumuşak kaydırma */
+            padding-bottom: 80px; 
+        }
+
+        /* LEVEL KARTLARI */
+        .level-card { 
+            background-color: #3e5c6a; 
+            border: 2px solid #d4a35a; 
+            border-radius: 12px; 
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px; margin-bottom: 12px; 
+            cursor: pointer; 
+            transition: background 0.1s;
+        }
+        .level-card:active { background-color: #354f5c; transform: scale(0.99); }
+        .level-icon { font-size: 24px; margin-right: 15px; }
+        .level-info { font-size: 16px; font-weight: bold; }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
+
+        /* FORM ELEMANLARI */
+        .add-word-container { background-color: #3e5c6a; padding: 15px; border-radius: 15px; border: 2px solid #f1c40f; margin-bottom: 20px; }
+        .backup-container { background-color: #2c3e50; padding: 15px; border-radius: 15px; border: 2px dashed #3498db; margin-bottom: 20px; }
+        
+        .form-input, .form-select, .form-textarea { 
+            width: 100%; padding: 12px; 
+            background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; 
+            color: white; font-size: 16px; box-sizing: border-box; margin-bottom: 10px;
+        }
+        .form-input:focus { border-color: #f1c40f; outline: none; }
+        .save-btn { width: 100%; padding: 14px; background-color: #f1c40f; color: #1a1a1a; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .backup-btn { width: 48%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 13px; color: white; cursor: pointer; }
+        .btn-download { background-color: #27ae60; }
+        .btn-upload { background-color: #3498db; }
+
+        /* TEST EKRANI (FULL SCREEN) */
+        #quiz-screen { 
+            display: none; 
+            flex-direction: column; 
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background-color: #1a1a1a; 
+            z-index: 100; /* En üstte olsun */
+            padding: 20px;
+        }
+        
+        .quiz-header { 
+            display: flex; justify-content: space-between; align-items: center; 
+            height: 50px; margin-bottom: 20px; 
+        }
+        
+        /* ÇARPI BUTONU DÜZELTİLDİ */
+        .close-btn { 
+            font-size: 30px; 
+            color: #e74c3c; 
+            cursor: pointer; 
+            padding: 10px; /* Tıklama alanı genişletildi */
+            font-weight: bold;
+        }
+
+        .progress-container { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; }
+        .progress-track { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; }
+        #progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
+        
+        .quiz-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 50px; }
+        .word-to-solve { font-size: 32px; font-weight: 800; margin-bottom: 40px; color: #fff; text-align: center; }
+        
+        .options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { 
+            background-color: #333; border: none; color: #ecf0f1; 
+            padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; 
+            cursor: pointer; text-align: center;
+        }
+        .option-btn:active { transform: scale(0.98); }
+        .option-btn.correct { background-color: #27ae60; color: white; }
+        .option-btn.wrong { background-color: #e74c3c; color: white; }
+
+        /* SONUÇ EKRANI */
+        #result-screen { 
+            display: none; flex-direction: column; 
+            align-items: center; justify-content: center; 
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+            background-color: rgba(26,26,26,0.98); z-index: 110; 
+        }
+        .result-card { background-color: #3e5c6a; width: 85%; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#f1c40f 0% 0%, #333 0% 100%); margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; position: relative; }
+        .score-circle::before { content: ""; position: absolute; width: 95px; height: 95px; background-color: #3e5c6a; border-radius: 50%; }
+        .score-text { position: relative; z-index: 2; }
+
+        #file-input { display: none; }
+        #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 105; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .checkmark { width: 30px; height: 60px; border-bottom: 8px solid white; border-right: 8px solid white; transform: rotate(45deg); margin-top: -10px; }
+
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div id="home-screen">
+        <header class="home-header">
+            <div style="font-size:24px;">⚙️</div>
+            <div class="app-title" id="app-header-title">C - Seviyesi</div>
+            <div class="profile-pic">👨🏻‍💼</div>
+        </header>
+
+        <div class="tabs">
+            <div class="tab" onclick="switchTab('YDS', this)">YDS</div>
+            <div class="tab" onclick="switchTab('H', this)">HABER</div>
+            <div class="tab" onclick="switchTab('B2', this)">B2</div>
+            <div class="tab" onclick="switchTab('B1', this)">B1</div>
+            <div class="tab active" onclick="switchTab('C', this)">C</div>
+            <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE/YEDEKLE</div>
+        </div>
+
+        <div class="content-area" id="content-container"></div>
+    </div>
+
+    <div id="quiz-screen">
+        <header class="quiz-header">
+            <div class="close-btn" onclick="forceQuitQuiz()">✕</div>
+            <div style="font-weight:bold; color:white;">Kelime Testi</div>
+            <div style="width:30px;"></div> </header>
+        
+        <div class="progress-container">
+            <div class="progress-track"><div id="progress-fill"></div></div>
+            <div style="color:#3498db; font-weight:bold; font-size:14px;" id="progress-text">1/20</div>
+        </div>
+        
+        <div class="quiz-content">
+            <div style="font-size:40px; margin-bottom:20px;">🔊</div>
+            <div class="word-to-solve" id="target-word">...</div>
+            <div class="options" id="options-container"></div>
+        </div>
+        
+        <div id="success-overlay"><div class="checkmark"></div></div>
+    </div>
+
+    <div id="result-screen">
+        <div class="result-card">
+            <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
+            <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
+            <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="file-input" accept=".json" onchange="importBackup(this)">
+
+<script>
+    // --- SABİT KELİMELER ---
+    const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
+    
+    // C 1-4
+    fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
+    fixedData["C"][2] = [{en:"Debate", tr:"Tartışmak"}, {en:"Decade", tr:"On yıl"}, {en:"Decay", tr:"Çürümek"}, {en:"Deceive", tr:"Aldatmak"}, {en:"Declare", tr:"İlan etmek"}, {en:"Decline", tr:"Reddetmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deduce", tr:"Sonuç çıkarmak"}, {en:"Defect", tr:"Kusur"}, {en:"Defend", tr:"Savunmak"}, {en:"Defer", tr:"Ertelemek"}, {en:"Deficiency", tr:"Eksiklik"}, {en:"Deficit", tr:"Açık"}, {en:"Define", tr:"Tanımlamak"}, {en:"Definite", tr:"Kesin"}, {en:"Delay", tr:"Gecikmek"}, {en:"Delicate", tr:"Hassas"}, {en:"Demonstrate", tr:"Göstermek"}, {en:"Denial", tr:"İnkar"}, {en:"Denounce", tr:"Kınamak"}];
+    fixedData["C"][3] = [{en:"Derive", tr:"Türetmek"}, {en:"Detect", tr:"Tespit etmek"}, {en:"Deter", tr:"Caydırmak"}, {en:"Deviate", tr:"Sapmak"}]; 
+    fixedData["C"][4] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
+
+    let vocabularyData = {};
+    const DB_KEY = 'VocabApp_Mobile_v1';
+
+    function initApp() {
+        const stored = localStorage.getItem(DB_KEY);
+        if(stored) {
+            vocabularyData = JSON.parse(stored);
+            for(let cat in fixedData) {
+                for(let lvl in fixedData[cat]) {
+                    if(!vocabularyData[cat]) vocabularyData[cat] = {};
+                    if(!vocabularyData[cat][lvl] || vocabularyData[cat][lvl].length === 0) {
+                        vocabularyData[cat][lvl] = fixedData[cat][lvl];
+                    }
+                }
+            }
+        } else {
+            vocabularyData = JSON.parse(JSON.stringify(fixedData));
+            saveToMemory();
+        }
+    }
+
+    function saveToMemory() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
+
+    // --- YEDEKLEME ---
+    function exportBackup() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocabularyData));
+        const dl = document.createElement('a');
+        dl.setAttribute("href", dataStr);
+        dl.setAttribute("download", "kelime_yedegim.json");
+        document.body.appendChild(dl); dl.click(); dl.remove();
+    }
+    function triggerImport() { document.getElementById('file-input').click(); }
+    function importBackup(input) {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try { vocabularyData = JSON.parse(e.target.result); saveToMemory(); alert("Yedek Yüklendi!"); switchTab('C',null); } catch(err){ alert("Hata!"); }
+        };
+        reader.readAsText(file);
+    }
+
+    // --- NAVİGASYON ---
+    let activeCategory = 'C';
+    let currentQuestions = [];
+    let currentStep = 0, correctCount = 0;
+
+    window.onload = function() { initApp(); switchTab('C', document.querySelector('.tabs .tab.active')); };
+
+    function switchTab(cat, el) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        if(el) el.classList.add('active');
+        
+        if(cat === 'ADD') {
+            document.getElementById('app-header-title').innerText = "Ekle / Yedekle";
+            renderAddScreen();
+        } else {
+            activeCategory = cat;
+            document.getElementById('app-header-title').innerText = cat;
+            renderList(cat);
+        }
+    }
+
+    function renderList(cat) {
+        const div = document.getElementById('content-container');
+        div.innerHTML = "";
+        const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
+        for(let i=1; i<=20; i++) {
+            if(!vocabularyData[cat]) vocabularyData[cat] = {};
+            if(!vocabularyData[cat][i]) vocabularyData[cat][i] = [];
+            let count = vocabularyData[cat][i].length;
+            let status = count > 0 ? `${count} Kelime` : "Boş";
+            let style = count > 0 ? "" : "opacity:0.6;";
+            div.innerHTML += `
+                <div class="level-card" onclick="startQuiz(${i})" style="${style}">
+                    <div><span class="level-icon">${icons[(i-1)%icons.length]}</span> <span class="level-info">${i}. Seviye</span></div>
+                    <div class="level-progress">${status}</div>
+                </div>`;
+        }
+    }
+
+    function renderAddScreen() {
+        document.getElementById('content-container').innerHTML = `
+            <div class="add-word-container">
+                <div style="font-weight:bold; color:#f1c40f; margin-bottom:10px;">Kelime Ekle</div>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <select id="t-cat" class="form-select"><option value="YDS">YDS</option><option value="H">HABER</option><option value="B2">B2</option><option value="B1">B1</option><option value="C" selected>C</option></select>
+                    <select id="t-lvl" class="form-select">${Array.from({length:20},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+                </div>
+                <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma&#10;Run : Koşmak"></textarea>
+                <button class="save-btn" onclick="addWords()">Kaydet</button>
+            </div>
+            <div class="backup-container">
+                <div style="font-weight:bold; color:#3498db; margin-bottom:10px;">Yedekleme</div>
+                <div style="display:flex; justify-content:space-between;">
+                    <button class="backup-btn btn-download" onclick="exportBackup()">İndir</button>
+                    <button class="backup-btn btn-upload" onclick="triggerImport()">Yükle</button>
+                </div>
+            </div>`;
+    }
+
+    function addWords() {
+        const txt = document.getElementById('bulk-txt').value.trim();
+        const cat = document.getElementById('t-cat').value;
+        const lvl = parseInt(document.getElementById('t-lvl').value);
+        if(!txt) return;
+        const lines = txt.split('\n');
+        let added = 0;
+        lines.forEach(line => {
+            let parts = line.split(/[:=\t]/);
+            if(parts.length >= 2) {
+                let en = parts[0].trim(), tr = parts.slice(1).join(' ').trim();
+                if(en && tr) {
+                    if(!vocabularyData[cat][lvl]) vocabularyData[cat][lvl] = [];
+                    vocabularyData[cat][lvl].push({en, tr});
+                    added++;
+                }
+            }
+        });
+        if(added > 0) { saveToMemory(); alert("Kaydedildi!"); document.getElementById('bulk-txt').value = ""; }
+    }
+
+    // --- TEST SİSTEMİ ---
+    function startQuiz(lvl) {
+        if(activeCategory === 'ADD') return;
+        let words = vocabularyData[activeCategory][lvl];
+        if(!words || words.length === 0) { alert("Bu seviye boş."); return; }
+        
+        currentQuestions = words.map(w => {
+            let others = ["Gitmek","Gelmek","Koşmak","Bakmak","Görmek","Duymak","Yazmak"];
+            let pool = [];
+            for(let l=1; l<=20; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
+            pool.push(...others);
+            let opts = [w.tr];
+            while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
+            return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
+        });
+
+        currentStep = 0; correctCount = 0;
+        document.getElementById('home-screen').style.display = 'none';
+        document.getElementById('quiz-screen').style.display = 'flex';
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        if(currentStep >= currentQuestions.length) { showResult(); return; }
+        let q = currentQuestions[currentStep];
+        document.getElementById('target-word').innerText = q.en;
+        document.getElementById('progress-text').innerText = `${currentStep+1}/${currentQuestions.length}`;
+        document.getElementById('progress-fill').style.width = `${((currentStep+1)/currentQuestions.length)*100}%`;
+        
+        let html = "";
+        q.options.forEach(opt => { html += `<button class="option-btn" onclick="check(this, '${opt}', '${q.correct}')">${opt}</button>`; });
+        document.getElementById('options-container').innerHTML = html;
+    }
+
+    function check(btn, sel, cor) {
+        document.querySelectorAll('.option-btn').forEach(b=>b.disabled=true);
+        if(sel === cor) {
+            btn.classList.add('correct'); correctCount++;
+            document.getElementById('success-overlay').style.display='flex';
+            setTimeout(()=>{ document.getElementById('success-overlay').style.display='none'; next(); }, 600);
+        } else {
+            btn.classList.add('wrong');
+            document.querySelectorAll('.option-btn').forEach(b=>{if(b.innerText===cor) b.classList.add('correct')});
+            setTimeout(next, 1200);
+        }
+    }
+    
+    function next() { currentStep++; renderQuestion(); }
+    
+    function showResult() {
+        document.getElementById('quiz-screen').style.display='none';
+        document.getElementById('result-screen').style.display='flex';
+        let total = currentQuestions.length;
+        document.getElementById('final-score').innerText = `${correctCount}/${total}`;
+        let p = (correctCount/total)*100;
+        let c = p>=50 ? '#a2c638' : '#e74c3c';
+        document.getElementById('score-circle').style.background = `conic-gradient(${c} 0% ${p}%, #333 ${p}% 100%)`;
+    }
+
+    // --- DÜZELTİLEN ÇARPI BUTONU FONKSİYONU ---
+    function forceQuitQuiz() {
+        // Direkt ekranları kapatıp anasayfayı aç
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'none';
+        document.getElementById('home-screen').style.display = 'flex';
+    }
+
+    function closeResultScreen() { forceQuitQuiz(); renderList(activeCategory); }
+    function quitQuiz() { if(confirm("Çıkış?")) forceQuitQuiz(); }
+</script>
+</body>
+</html>
