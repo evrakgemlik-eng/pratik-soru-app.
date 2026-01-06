@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - YDS 40 Full</title>
+    <title>Kelime Uygulaması - İlerleme Takibi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -95,9 +95,26 @@
         }
         .level-card:active { transform: scale(0.98); background-color: #354f5c; }
         
+        /* TAMAMLANMIŞ (YEŞİL) KART STİLİ */
+        .level-card.completed {
+            background-color: #27ae60;
+            border-color: #2ecc71;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
+
         .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
         .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
-        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; pointer-events: none; }
+        
+        .level-details { text-align: right; pointer-events: none; }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
+        .mastery-badge { 
+            font-size: 11px; 
+            background-color: rgba(0,0,0,0.3); 
+            padding: 3px 8px; 
+            border-radius: 10px; 
+            margin-top: 4px; 
+            display: inline-block;
+        }
 
         /* FORM VE BUTONLAR */
         .add-word-container, .backup-container { 
@@ -221,6 +238,7 @@
         <div class="result-card">
             <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
             <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
+            <div id="mastery-message" style="margin-top:10px; font-weight:bold; color:#f1c40f; display:none;">🎉 Mükemmel! İlerleme Kaydedildi.</div>
             <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
         </div>
     </div>
@@ -263,48 +281,16 @@
     fixedData["YDS"][28] = [{ "en": "Mend", "tr": "Tamir etmek" }, { "en": "Mention", "tr": "Bahsetmek" }, { "en": "Merge", "tr": "Birleşmek" }, { "en": "Merit", "tr": "Hak etmek" }, { "en": "Migrate", "tr": "Göç etmek" }, { "en": "Mind", "tr": "Umursamak" }, { "en": "Minimize", "tr": "En aza indirmek" }, { "en": "Mislead", "tr": "Yanıltmak" }, { "en": "Miss", "tr": "Kaçırmak, özlemek" }, { "en": "Mistake", "tr": "Hata yapmak" }, { "en": "Misuse", "tr": "Kötüye kullanmak" }, { "en": "Mitigate", "tr": "Hafifletmek" }, { "en": "Mix", "tr": "Karıştırmak" }, { "en": "Modify", "tr": "Değiştirmek" }, { "en": "Monitor", "tr": "İzlemek" }, { "en": "Motivate", "tr": "Motive etmek" }, { "en": "Mount", "tr": "Monte etmek, artmak" }, { "en": "Move", "tr": "Hareket etmek" }, { "en": "Multiply", "tr": "Çoğaltmak" }, { "en": "Murder", "tr": "Cinayet işlemek" }];
     fixedData["YDS"][29] = [{ "en": "Neglect", "tr": "İhmal etmek" }, { "en": "Negotiate", "tr": "Müzakere etmek" }, { "en": "Nominate", "tr": "Aday göstermek" }, { "en": "Note", "tr": "Not etmek" }, { "en": "Notice", "tr": "Fark etmek" }, { "en": "Notify", "tr": "Bildirmek" }, { "en": "Nourish", "tr": "Beslemek" }, { "en": "Obey", "tr": "İtaat etmek" }, { "en": "Object", "tr": "İtiraz etmek" }, { "en": "Oblige", "tr": "Mecbur bırakmak" }, { "en": "Observe", "tr": "Gözlemlemek" }, { "en": "Obstruct", "tr": "Engel olmak" }, { "en": "Obtain", "tr": "Elde etmek" }, { "en": "Occupy", "tr": "İşgal etmek, meşgul etmek" }, { "en": "Occur", "tr": "Meydana gelmek" }, { "en": "Offend", "tr": "Gücendirmek" }, { "en": "Offer", "tr": "Teklif etmek" }, { "en": "Omit", "tr": "Dahil etmemek" }, { "en": "Operate", "tr": "İşletmek, ameliyat etmek" }, { "en": "Oppose", "tr": "Karşı çıkmak" }];
     fixedData["YDS"][30] = [{ "en": "Oppress", "tr": "Baskı yapmak" }, { "en": "Order", "tr": "Emretmek, sipariş etmek" }, { "en": "Organize", "tr": "Düzenlemek" }, { "en": "Originate", "tr": "Kaynaklanmak" }, { "en": "Outline", "tr": "Taslağını çizmek" }, { "en": "Outnumber", "tr": "Sayıca üstün olmak" }, { "en": "Output", "tr": "Üretim, çıktı" }, { "en": "Outrage", "tr": "Gazaba getirmek" }, { "en": "Overcome", "tr": "Üstesinden gelmek" }, { "en": "Overdo", "tr": "Aşırıya kaçmak" }, { "en": "Overestimate", "tr": "Gözünde büyütmek" }, { "en": "Overflow", "tr": "Taşmak" }, { "en": "Overhear", "tr": "Kulak misafiri olmak" }, { "en": "Overlook", "tr": "Görmezden gelmek" }, { "en": "Overpower", "tr": "Etkisiz hale getirmek" }, { "en": "Overtake", "tr": "Sollamak" }, { "en": "Overthrow", "tr": "Devirmek (yönetimi)" }, { "en": "Owe", "tr": "Borçlu olmak" }, { "en": "Own", "tr": "Sahip olmak" }, { "en": "Pacify", "tr": "Yatıştırmak" }];
-
-    // --- YENİ EKLENEN SEVİYELER (31 - 40) ---
-    fixedData["YDS"][31] = [
-        { "en": "Extend", "tr": "Uzatmak, genişletmek" }, { "en": "Extensive", "tr": "Kapsamlı, yaygın" }, { "en": "Extent", "tr": "Boyut, derece" }, { "en": "Exterior", "tr": "Dış, harici" }, { "en": "Exterminate", "tr": "Yok etmek, kökünü kazımak" }, { "en": "External", "tr": "Dış, harici" }, { "en": "Extinct", "tr": "Nesli tükenmiş" }, { "en": "Extinguish", "tr": "Söndürmek" }, { "en": "Extract", "tr": "Çıkarmak, özet" }, { "en": "Extraordinary", "tr": "Olağanüstü" },
-        { "en": "Extravagant", "tr": "Savurgan, aşırı" }, { "en": "Extreme", "tr": "Aşırı, uç" }, { "en": "Fabricate", "tr": "Uydurmak (yalan/belge)" }, { "en": "Facilitate", "tr": "Kolaylaştırmak" }, { "en": "Faction", "tr": "Grup, hizip" }, { "en": "Factor", "tr": "Faktör, etken" }, { "en": "Fade", "tr": "Solmak, sönmek" }, { "en": "Failure", "tr": "Başarısızlık" }, { "en": "Faithful", "tr": "Sadık" }, { "en": "Fake", "tr": "Sahte" }
-    ];
-    fixedData["YDS"][32] = [
-        { "en": "Fallacy", "tr": "Yanlış inanç, safsata" }, { "en": "Falsify", "tr": "Tahrif etmek, saptırmak" }, { "en": "Falter", "tr": "Sendelemek, duraksamak" }, { "en": "Famine", "tr": "Kıtlık" }, { "en": "Fancy", "tr": "Süslü, hayal etmek" }, { "en": "Fatal", "tr": "Ölümcül" }, { "en": "Fatigue", "tr": "Aşırı yorgunluk" }, { "en": "Feasible", "tr": "Mümkün, yapılabilir" }, { "en": "Feature", "tr": "Özellik" }, { "en": "Feeble", "tr": "Zayıf, güçsüz" },
-        { "en": "Feedback", "tr": "Geri bildirim" }, { "en": "Ferocious", "tr": "Vahşi, acımasız" }, { "en": "Fertile", "tr": "Verimli" }, { "en": "Fetch", "tr": "Gidip getirmek" }, { "en": "Feud", "tr": "Kan davası, kavga" }, { "en": "Fickle", "tr": "Maymun iştahlı, değişken" }, { "en": "Fiction", "tr": "Kurgu" }, { "en": "Fierce", "tr": "Şiddetli, azgın" }, { "en": "Figure", "tr": "Rakam, şekil" }, { "en": "Filter", "tr": "Süzmek" }
-    ];
-    fixedData["YDS"][33] = [
-        { "en": "Finalize", "tr": "Sonuçlandırmak" }, { "en": "Finite", "tr": "Sınırlı, sonu olan" }, { "en": "Firm", "tr": "Sıkı, firma" }, { "en": "Fit", "tr": "Uygun, zinde" }, { "en": "Fix", "tr": "Onarmak, sabitlemek" }, { "en": "Flamboyant", "tr": "Gösterişli" }, { "en": "Flashy", "tr": "Gösterişli, cafcaflı" }, { "en": "Flaw", "tr": "Kusur, hata" }, { "en": "Flee", "tr": "Kaçmak" }, { "en": "Flexible", "tr": "Esnek" },
-        { "en": "Flimsy", "tr": "Derme çatma, dayanıksız" }, { "en": "Flip", "tr": "Ters dönmek/çevirmek" }, { "en": "Flourish", "tr": "Gelişmek, parlamak" }, { "en": "Fluctuate", "tr": "Dalgalanmak" }, { "en": "Fluent", "tr": "Akıcı" }, { "en": "Fluid", "tr": "Sıvı, akışkan" }, { "en": "Focus", "tr": "Odaklanmak" }, { "en": "Foe", "tr": "Düşman" }, { "en": "Fold", "tr": "Katlamak" }, { "en": "Forbid", "tr": "Yasaklamak" }
-    ];
-    fixedData["YDS"][34] = [
-        { "en": "Forecast", "tr": "Tahmin etmek" }, { "en": "Foreign", "tr": "Yabancı" }, { "en": "Foresee", "tr": "Öngörmek" }, { "en": "Forever", "tr": "Sonsuza dek" }, { "en": "Forge", "tr": "Sahtesini yapmak, demir dövmek" }, { "en": "Forgive", "tr": "Affetmek" }, { "en": "Formal", "tr": "Resmi" }, { "en": "Format", "tr": "Biçim" }, { "en": "Former", "tr": "Önceki" }, { "en": "Formidable", "tr": "Zorlu, ürkütücü" },
-        { "en": "Formulate", "tr": "Formüle etmek" }, { "en": "Fortunate", "tr": "Şanslı" }, { "en": "Foster", "tr": "Büyütmek, geliştirmek" }, { "en": "Foundation", "tr": "Temel, vakıf" }, { "en": "Fragile", "tr": "Hassas, kırılgan" }, { "en": "Fragment", "tr": "Parça, kırıntı" }, { "en": "Frankly", "tr": "Dürüstçe" }, { "en": "Frantic", "tr": "Çılgına dönmüş" }, { "en": "Fraud", "tr": "Dolandırıcılık" }, { "en": "Freedom", "tr": "Özgürlük" }
-    ];
-    fixedData["YDS"][35] = [
-        { "en": "Frequent", "tr": "Sık" }, { "en": "Friction", "tr": "Sürtünme, anlaşmazlık" }, { "en": "Friendly", "tr": "Dostça" }, { "en": "Frighten", "tr": "Korkutmak" }, { "en": "Frivolous", "tr": "Ciddiyetsiz, boş" }, { "en": "Frugal", "tr": "Tutumlu" }, { "en": "Frustrate", "tr": "Hayal kırıklığına uğratmak" }, { "en": "Fulfill", "tr": "Yerine getirmek" }, { "en": "Full", "tr": "Dolu" }, { "en": "Fumble", "tr": "Sendelemek, beceriksizce davranmak" },
-        { "en": "Function", "tr": "İşlev" }, { "en": "Fundamental", "tr": "Temel, esas" }, { "en": "Furious", "tr": "Öfkeli" }, { "en": "Furnish", "tr": "Döşemek, sağlamak" }, { "en": "Further", "tr": "Daha uzak, daha fazla" }, { "en": "Futile", "tr": "Nafile, boş" }, { "en": "Gain", "tr": "Kazanmak" }, { "en": "Gamble", "tr": "Kumar oynamak" }, { "en": "Gap", "tr": "Boşluk" }, { "en": "Garrulous", "tr": "Geveze" }
-    ];
-    fixedData["YDS"][36] = [
-        { "en": "Gather", "tr": "Toplamak, bir araya gelmek" }, { "en": "Gauge", "tr": "Ölçmek, gösterge" }, { "en": "General", "tr": "Genel" }, { "en": "Generate", "tr": "Üretmek, oluşturmak" }, { "en": "Generous", "tr": "Cömert" }, { "en": "Genius", "tr": "Dahi" }, { "en": "Genuinely", "tr": "Gerçekten" }, { "en": "Gesture", "tr": "Jest, hareket" }, { "en": "Giant", "tr": "Dev" }, { "en": "Glare", "tr": "Dik dik bakmak, göz kamaştırıcı ışık" },
-        { "en": "Glimpse", "tr": "Anlık bakış" }, { "en": "Global", "tr": "Küresel" }, { "en": "Gloomy", "tr": "Kasvetli, karamsar" }, { "en": "Glorious", "tr": "Şanlı, harika" }, { "en": "Goal", "tr": "Hedef" }, { "en": "Goodness", "tr": "İyilik" }, { "en": "Gorgeous", "tr": "Muhteşem" }, { "en": "Govern", "tr": "Yönetmek" }, { "en": "Grace", "tr": "Zarafet" }, { "en": "Gradual", "tr": "Kademeli" }
-    ];
-    fixedData["YDS"][37] = [
-        { "en": "Grant", "tr": "Hibe etmek, vermek" }, { "en": "Grasp", "tr": "Kavramak, anlamak" }, { "en": "Grateful", "tr": "Minnettar" }, { "en": "Gratify", "tr": "Memnun etmek" }, { "en": "Grave", "tr": "Mezar, ciddi" }, { "en": "Greed", "tr": "Açgözlülük" }, { "en": "Grief", "tr": "Keder, acı" }, { "en": "Grim", "tr": "Karamsar, korkunç" }, { "en": "Grind", "tr": "Öğütmek" }, { "en": "Grip", "tr": "Sıkıca tutmak" },
-        { "en": "Gross", "tr": "Brüt, iğrenç" }, { "en": "Groundless", "tr": "Dayanaksız" }, { "en": "Grow", "tr": "Büyümek" }, { "en": "Guarantee", "tr": "Garanti" }, { "en": "Guard", "tr": "Korumak" }, { "en": "Guess", "tr": "Tahmin etmek" }, { "en": "Guidance", "tr": "Rehberlik" }, { "en": "Guilty", "tr": "Suçlu" }, { "en": "Habit", "tr": "Alışkanlık" }, { "en": "Halt", "tr": "Durdurmak" }
-    ];
-    fixedData["YDS"][38] = [
-        { "en": "Handicap", "tr": "Engel" }, { "en": "Handle", "tr": "Ele almak, sap" }, { "en": "Handsome", "tr": "Yakışıklı" }, { "en": "Haphazard", "tr": "Rastgele" }, { "en": "Harass", "tr": "Taciz etmek" }, { "en": "Harbor", "tr": "Liman, barındırmak" }, { "en": "Hardship", "tr": "Zorluk" }, { "en": "Harmful", "tr": "Zararlı" }, { "en": "Harmony", "tr": "Uyum" }, { "en": "Harsh", "tr": "Sert, kaba" },
-        { "en": "Haste", "tr": "Acele" }, { "en": "Haughty", "tr": "Kibirli" }, { "en": "Hazard", "tr": "Tehlike" }, { "en": "Heal", "tr": "İyileşmek" }, { "en": "Healthy", "tr": "Sağlıklı" }, { "en": "Heap", "tr": "Yığın" }, { "en": "Hearty", "tr": "Samimi, içten" }, { "en": "Hectic", "tr": "Telaşlı, yoğun" }, { "en": "Heighten", "tr": "Yükseltmek, artırmak" }, { "en": "Heir", "tr": "Varis" }
-    ];
-    fixedData["YDS"][39] = [
-        { "en": "Helpful", "tr": "Yardımsever" }, { "en": "Heredity", "tr": "Kalıtım" }, { "en": "Hesitate", "tr": "Tereddüt etmek" }, { "en": "Hidden", "tr": "Gizli" }, { "en": "Hideous", "tr": "İğrenç, çok çirkin" }, { "en": "High", "tr": "Yüksek" }, { "en": "Highlight", "tr": "Vurgulamak" }, { "en": "Hinder", "tr": "Engellemek" }, { "en": "Hint", "tr": "İpucu" }, { "en": "Hire", "tr": "Kiralamak, işe almak" },
-        { "en": "Historian", "tr": "Tarihçi" }, { "en": "Hobby", "tr": "Hobi" }, { "en": "Hold", "tr": "Tutmak" }, { "en": "Hollow", "tr": "İçi boş" }, { "en": "Holy", "tr": "Kutsal" }, { "en": "Honest", "tr": "Dürüst" }, { "en": "Honor", "tr": "Onur" }, { "en": "Hopeful", "tr": "Umutlu" }, { "en": "Horizontal", "tr": "Yatay" }, { "en": "Horrible", "tr": "Korkunç" }
-    ];
-    fixedData["YDS"][40] = [
-        { "en": "Hospitable", "tr": "Misafirperver" }, { "en": "Hostile", "tr": "Düşmanca" }, { "en": "Huge", "tr": "Kocaman" }, { "en": "Humane", "tr": "İnsancıl" }, { "en": "Humble", "tr": "Mütevazı" }, { "en": "Humid", "tr": "Nemli" }, { "en": "Humiliate", "tr": "Aşağılamak" }, { "en": "Humor", "tr": "Mizah" }, { "en": "Hurdle", "tr": "Engel" }, { "en": "Hurry", "tr": "Acele etmek" },
-        { "en": "Hurt", "tr": "İncitmek" }, { "en": "Hypothesis", "tr": "Hipotez" }, { "en": "Idea", "tr": "Fikir" }, { "en": "Ideal", "tr": "İdeal" }, { "en": "Identical", "tr": "Aynı, özdeş" }, { "en": "Identify", "tr": "Tanımlamak" }, { "en": "Idle", "tr": "Boşta, tembel" }, { "en": "Ignorant", "tr": "Cahil" }, { "en": "Ignore", "tr": "Görmezden gelmek" }, { "en": "Illegal", "tr": "Yasadışı" }
-    ];
+    fixedData["YDS"][31] = [ { "en": "Extend", "tr": "Uzatmak, genişletmek" }, { "en": "Extensive", "tr": "Kapsamlı, yaygın" }, { "en": "Extent", "tr": "Boyut, derece" }, { "en": "Exterior", "tr": "Dış, harici" }, { "en": "Exterminate", "tr": "Yok etmek, kökünü kazımak" }, { "en": "External", "tr": "Dış, harici" }, { "en": "Extinct", "tr": "Nesli tükenmiş" }, { "en": "Extinguish", "tr": "Söndürmek" }, { "en": "Extract", "tr": "Çıkarmak, özet" }, { "en": "Extraordinary", "tr": "Olağanüstü" }, { "en": "Extravagant", "tr": "Savurgan, aşırı" }, { "en": "Extreme", "tr": "Aşırı, uç" }, { "en": "Fabricate", "tr": "Uydurmak (yalan/belge)" }, { "en": "Facilitate", "tr": "Kolaylaştırmak" }, { "en": "Faction", "tr": "Grup, hizip" }, { "en": "Factor", "tr": "Faktör, etken" }, { "en": "Fade", "tr": "Solmak, sönmek" }, { "en": "Failure", "tr": "Başarısızlık" }, { "en": "Faithful", "tr": "Sadık" }, { "en": "Fake", "tr": "Sahte" } ];
+    fixedData["YDS"][32] = [ { "en": "Fallacy", "tr": "Yanlış inanç, safsata" }, { "en": "Falsify", "tr": "Tahrif etmek, saptırmak" }, { "en": "Falter", "tr": "Sendelemek, duraksamak" }, { "en": "Famine", "tr": "Kıtlık" }, { "en": "Fancy", "tr": "Süslü, hayal etmek" }, { "en": "Fatal", "tr": "Ölümcül" }, { "en": "Fatigue", "tr": "Aşırı yorgunluk" }, { "en": "Feasible", "tr": "Mümkün, yapılabilir" }, { "en": "Feature", "tr": "Özellik" }, { "en": "Feeble", "tr": "Zayıf, güçsüz" }, { "en": "Feedback", "tr": "Geri bildirim" }, { "en": "Ferocious", "tr": "Vahşi, acımasız" }, { "en": "Fertile", "tr": "Verimli" }, { "en": "Fetch", "tr": "Gidip getirmek" }, { "en": "Feud", "tr": "Kan davası, kavga" }, { "en": "Fickle", "tr": "Maymun iştahlı, değişken" }, { "en": "Fiction", "tr": "Kurgu" }, { "en": "Fierce", "tr": "Şiddetli, azgın" }, { "en": "Figure", "tr": "Rakam, şekil" }, { "en": "Filter", "tr": "Süzmek" } ];
+    fixedData["YDS"][33] = [ { "en": "Finalize", "tr": "Sonuçlandırmak" }, { "en": "Finite", "tr": "Sınırlı, sonu olan" }, { "en": "Firm", "tr": "Sıkı, firma" }, { "en": "Fit", "tr": "Uygun, zinde" }, { "en": "Fix", "tr": "Onarmak, sabitlemek" }, { "en": "Flamboyant", "tr": "Gösterişli" }, { "en": "Flashy", "tr": "Gösterişli, cafcaflı" }, { "en": "Flaw", "tr": "Kusur, hata" }, { "en": "Flee", "tr": "Kaçmak" }, { "en": "Flexible", "tr": "Esnek" }, { "en": "Flimsy", "tr": "Derme çatma, dayanıksız" }, { "en": "Flip", "tr": "Ters dönmek/çevirmek" }, { "en": "Flourish", "tr": "Gelişmek, parlamak" }, { "en": "Fluctuate", "tr": "Dalgalanmak" }, { "en": "Fluent", "tr": "Akıcı" }, { "en": "Fluid", "tr": "Sıvı, akışkan" }, { "en": "Focus", "tr": "Odaklanmak" }, { "en": "Foe", "tr": "Düşman" }, { "en": "Fold", "tr": "Katlamak" }, { "en": "Forbid", "tr": "Yasaklamak" } ];
+    fixedData["YDS"][34] = [ { "en": "Forecast", "tr": "Tahmin etmek" }, { "en": "Foreign", "tr": "Yabancı" }, { "en": "Foresee", "tr": "Öngörmek" }, { "en": "Forever", "tr": "Sonsuza dek" }, { "en": "Forge", "tr": "Sahtesini yapmak, demir dövmek" }, { "en": "Forgive", "tr": "Affetmek" }, { "en": "Formal", "tr": "Resmi" }, { "en": "Format", "tr": "Biçim" }, { "en": "Former", "tr": "Önceki" }, { "en": "Formidable", "tr": "Zorlu, ürkütücü" }, { "en": "Formulate", "tr": "Formüle etmek" }, { "en": "Fortunate", "tr": "Şanslı" }, { "en": "Foster", "tr": "Büyütmek, geliştirmek" }, { "en": "Foundation", "tr": "Temel, vakıf" }, { "en": "Fragile", "tr": "Hassas, kırılgan" }, { "en": "Fragment", "tr": "Parça, kırıntı" }, { "en": "Frankly", "tr": "Dürüstçe" }, { "en": "Frantic", "tr": "Çılgına dönmüş" }, { "en": "Fraud", "tr": "Dolandırıcılık" }, { "en": "Freedom", "tr": "Özgürlük" } ];
+    fixedData["YDS"][35] = [ { "en": "Frequent", "tr": "Sık" }, { "en": "Friction", "tr": "Sürtünme, anlaşmazlık" }, { "en": "Friendly", "tr": "Dostça" }, { "en": "Frighten", "tr": "Korkutmak" }, { "en": "Frivolous", "tr": "Ciddiyetsiz, boş" }, { "en": "Frugal", "tr": "Tutumlu" }, { "en": "Frustrate", "tr": "Hayal kırıklığına uğratmak" }, { "en": "Fulfill", "tr": "Yerine getirmek" }, { "en": "Full", "tr": "Dolu" }, { "en": "Fumble", "tr": "Sendelemek, beceriksizce davranmak" }, { "en": "Function", "tr": "İşlev" }, { "en": "Fundamental", "tr": "Temel, esas" }, { "en": "Furious", "tr": "Öfkeli" }, { "en": "Furnish", "tr": "Döşemek, sağlamak" }, { "en": "Further", "tr": "Daha uzak, daha fazla" }, { "en": "Futile", "tr": "Nafile, boş" }, { "en": "Gain", "tr": "Kazanmak" }, { "en": "Gamble", "tr": "Kumar oynamak" }, { "en": "Gap", "tr": "Boşluk" }, { "en": "Garrulous", "tr": "Geveze" } ];
+    fixedData["YDS"][36] = [ { "en": "Gather", "tr": "Toplamak, bir araya gelmek" }, { "en": "Gauge", "tr": "Ölçmek, gösterge" }, { "en": "General", "tr": "Genel" }, { "en": "Generate", "tr": "Üretmek, oluşturmak" }, { "en": "Generous", "tr": "Cömert" }, { "en": "Genius", "tr": "Dahi" }, { "en": "Genuinely", "tr": "Gerçekten" }, { "en": "Gesture", "tr": "Jest, hareket" }, { "en": "Giant", "tr": "Dev" }, { "en": "Glare", "tr": "Dik dik bakmak, göz kamaştırıcı ışık" }, { "en": "Glimpse", "tr": "Anlık bakış" }, { "en": "Global", "tr": "Küresel" }, { "en": "Gloomy", "tr": "Kasvetli, karamsar" }, { "en": "Glorious", "tr": "Şanlı, harika" }, { "en": "Goal", "tr": "Hedef" }, { "en": "Goodness", "tr": "İyilik" }, { "en": "Gorgeous", "tr": "Muhteşem" }, { "en": "Govern", "tr": "Yönetmek" }, { "en": "Grace", "tr": "Zarafet" }, { "en": "Gradual", "tr": "Kademeli" } ];
+    fixedData["YDS"][37] = [ { "en": "Grant", "tr": "Hibe etmek, vermek" }, { "en": "Grasp", "tr": "Kavramak, anlamak" }, { "en": "Grateful", "tr": "Minnettar" }, { "en": "Gratify", "tr": "Memnun etmek" }, { "en": "Grave", "tr": "Mezar, ciddi" }, { "en": "Greed", "tr": "Açgözlülük" }, { "en": "Grief", "tr": "Keder, acı" }, { "en": "Grim", "tr": "Karamsar, korkunç" }, { "en": "Grind", "tr": "Öğütmek" }, { "en": "Grip", "tr": "Sıkıca tutmak" }, { "en": "Gross", "tr": "Brüt, iğrenç" }, { "en": "Groundless", "tr": "Dayanaksız" }, { "en": "Grow", "tr": "Büyümek" }, { "en": "Guarantee", "tr": "Garanti" }, { "en": "Guard", "tr": "Korumak" }, { "en": "Guess", "tr": "Tahmin etmek" }, { "en": "Guidance", "tr": "Rehberlik" }, { "en": "Guilty", "tr": "Suçlu" }, { "en": "Habit", "tr": "Alışkanlık" }, { "en": "Halt", "tr": "Durdurmak" } ];
+    fixedData["YDS"][38] = [ { "en": "Handicap", "tr": "Engel" }, { "en": "Handle", "tr": "Ele almak, sap" }, { "en": "Handsome", "tr": "Yakışıklı" }, { "en": "Haphazard", "tr": "Rastgele" }, { "en": "Harass", "tr": "Taciz etmek" }, { "en": "Harbor", "tr": "Liman, barındırmak" }, { "en": "Hardship", "tr": "Zorluk" }, { "en": "Harmful", "tr": "Zararlı" }, { "en": "Harmony", "tr": "Uyum" }, { "en": "Harsh", "tr": "Sert, kaba" }, { "en": "Haste", "tr": "Acele" }, { "en": "Haughty", "tr": "Kibirli" }, { "en": "Hazard", "tr": "Tehlike" }, { "en": "Heal", "tr": "İyileşmek" }, { "en": "Healthy", "tr": "Sağlıklı" }, { "en": "Heap", "tr": "Yığın" }, { "en": "Hearty", "tr": "Samimi, içten" }, { "en": "Hectic", "tr": "Telaşlı, yoğun" }, { "en": "Heighten", "tr": "Yükseltmek, artırmak" }, { "en": "Heir", "tr": "Varis" } ];
+    fixedData["YDS"][39] = [ { "en": "Helpful", "tr": "Yardımsever" }, { "en": "Heredity", "tr": "Kalıtım" }, { "en": "Hesitate", "tr": "Tereddüt etmek" }, { "en": "Hidden", "tr": "Gizli" }, { "en": "Hideous", "tr": "İğrenç, çok çirkin" }, { "en": "High", "tr": "Yüksek" }, { "en": "Highlight", "tr": "Vurgulamak" }, { "en": "Hinder", "tr": "Engellemek" }, { "en": "Hint", "tr": "İpucu" }, { "en": "Hire", "tr": "Kiralamak, işe almak" }, { "en": "Historian", "tr": "Tarihçi" }, { "en": "Hobby", "tr": "Hobi" }, { "en": "Hold", "tr": "Tutmak" }, { "en": "Hollow", "tr": "İçi boş" }, { "en": "Holy", "tr": "Kutsal" }, { "en": "Honest", "tr": "Dürüst" }, { "en": "Honor", "tr": "Onur" }, { "en": "Hopeful", "tr": "Umutlu" }, { "en": "Horizontal", "tr": "Yatay" }, { "en": "Horrible", "tr": "Korkunç" } ];
+    fixedData["YDS"][40] = [ { "en": "Hospitable", "tr": "Misafirperver" }, { "en": "Hostile", "tr": "Düşmanca" }, { "en": "Huge", "tr": "Kocaman" }, { "en": "Humane", "tr": "İnsancıl" }, { "en": "Humble", "tr": "Mütevazı" }, { "en": "Humid", "tr": "Nemli" }, { "en": "Humiliate", "tr": "Aşağılamak" }, { "en": "Humor", "tr": "Mizah" }, { "en": "Hurdle", "tr": "Engel" }, { "en": "Hurry", "tr": "Acele etmek" }, { "en": "Hurt", "tr": "İncitmek" }, { "en": "Hypothesis", "tr": "Hipotez" }, { "en": "Idea", "tr": "Fikir" }, { "en": "Ideal", "tr": "İdeal" }, { "en": "Identical", "tr": "Aynı, özdeş" }, { "en": "Identify", "tr": "Tanımlamak" }, { "en": "Idle", "tr": "Boşta, tembel" }, { "en": "Ignorant", "tr": "Cahil" }, { "en": "Ignore", "tr": "Görmezden gelmek" }, { "en": "Illegal", "tr": "Yasadışı" } ];
 
     // --- C Seviyesi Veritabanı ---
     fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
@@ -329,13 +315,19 @@
     fixedData["C"][20] = [{en:"Orchestrate", "tr": "Düzenlemek, planlamak" }, {en:"Ordeal", "tr": "Çile, zorlu deneyim" }, {en:"Ornament", "tr": "Süs, bezek" }, {en:"Orthodox", "tr": "Geleneksel, alışılagelmiş" }, {en:"Ostentatious", "tr": "Gösterişli, şatafatlı" }, {en:"Outcome", "tr": "Sonuç" }, {en:"Outdated", "tr": "Eski, zamanı geçmiş" }, {en:"Outlook", "tr": "Görünüm, bakış açısı" }, {en:"Outrageous", "tr": "Rezilce, aşırı, şoke edici" }, {en:"Overcome", "tr": "Üstesinden gelmek" }, {en:"Overlook", "tr": "Görmezden gelmek, tepeden bakmak" }, {en:"Oversee", "tr": "Denetlemek, gözetmek" }, {en:"Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" }, {en:"Paradox", "tr": "Çelişki, paradoks" }, {en:"Paramount", "tr": "En önemli, üstün" }, {en:"Partial", "tr": "Kısmi, taraflı" }, {en:"Passive", "tr": "Edilgen, pasif" }, {en:"Patronize", "tr": "Küçümsemek / Desteklemek" }, {en:"Peculiar", "tr": "Tuhaf, kendine özgü" }, {en:"Penalize", "tr": "Cezalandırmak" }];
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v28'; // Versiyon v28: YDS 31-40 Seviyeleri Eklendi
+    const DB_KEY = 'VocabApp_FixedLayout_v29'; // Versiyon v29: İlerleme Özelliği
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
         if(stored) {
             try {
                 vocabularyData = JSON.parse(stored);
+                // Eksik progress objesini tamamla
+                if(!vocabularyData.progress) vocabularyData.progress = {};
+                ["YDS", "H", "B2", "B1", "C"].forEach(cat => {
+                    if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
+                });
+
                 for(let cat in fixedData) {
                     if(!vocabularyData[cat]) vocabularyData[cat] = {};
                     for(let lvl in fixedData[cat]) {
@@ -345,12 +337,17 @@
                     }
                 }
             } catch(e) {
-                vocabularyData = JSON.parse(JSON.stringify(fixedData));
+                resetData();
             }
         } else {
-            vocabularyData = JSON.parse(JSON.stringify(fixedData));
-            saveToMemory();
+            resetData();
         }
+    }
+
+    function resetData() {
+        vocabularyData = JSON.parse(JSON.stringify(fixedData));
+        vocabularyData.progress = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
+        saveToMemory();
     }
 
     function saveToMemory() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
@@ -372,7 +369,9 @@
             try { 
                 const imported = JSON.parse(e.target.result);
                 if(imported && typeof imported === 'object') {
-                    vocabularyData = imported; 
+                    vocabularyData = imported;
+                    // Eğer eski yedekten geliyorsa progress yapısı ekle
+                    if(!vocabularyData.progress) vocabularyData.progress = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
                     saveToMemory(); 
                     alert("Yedek Başarıyla Yüklendi!"); 
                     switchTab('C', null); 
@@ -384,6 +383,7 @@
 
     // --- UYGULAMA MANTIĞI ---
     let activeCategory = 'C';
+    let activeLevelId = 0; // Seviye ID'sini tutmak için
     let currentQuestions = [];
     let currentStep = 0, correctCount = 0;
 
@@ -428,17 +428,37 @@
         const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
         
         if(!vocabularyData[cat]) vocabularyData[cat] = {};
+        if(!vocabularyData.progress) vocabularyData.progress = {};
+        if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
 
         // DÖNGÜYÜ 40'A ÇIKARDIK
         for(let i=1; i<=40; i++) {
             if(!vocabularyData[cat][i]) vocabularyData[cat][i] = [];
+            
             let count = vocabularyData[cat][i].length;
+            let progressVal = vocabularyData.progress[cat][i] || 0;
+            let isMastered = progressVal >= 2;
+            
             let status = count > 0 ? `${count} Kelime` : "Boş";
             let style = count > 0 ? "" : "opacity:0.6;";
+            let cardClass = isMastered ? "level-card completed" : "level-card";
+            
+            let progressBadge = "";
+            if(count > 0) {
+                if(isMastered) progressBadge = `<div class="mastery-badge">Tamamlandı ✅</div>`;
+                else progressBadge = `<div class="mastery-badge">${progressVal}/2 Tamamlandı</div>`;
+            }
+
             div.innerHTML += `
-                <div class="level-card" onclick="startQuiz(${i})" style="${style}">
-                    <div><span class="level-icon">${icons[(i-1)%icons.length]}</span> <span class="level-info">${i}. Seviye</span></div>
-                    <div class="level-progress">${status}</div>
+                <div class="${cardClass}" onclick="startQuiz(${i})" style="${style}">
+                    <div style="display:flex; align-items:center;">
+                        <span class="level-icon">${icons[(i-1)%icons.length]}</span> 
+                        <span class="level-info">${i}. Seviye</span>
+                    </div>
+                    <div class="level-details">
+                        <div class="level-progress">${status}</div>
+                        ${progressBadge}
+                    </div>
                 </div>`;
         }
     }
@@ -473,9 +493,9 @@
         }
 
         let matches = [];
-        
-        // Tüm veri içinde ara
         for(let cat in vocabularyData) {
+            // progress objesini atla
+            if(cat === 'progress') continue;
             for(let lvl in vocabularyData[cat]) {
                 const words = vocabularyData[cat][lvl];
                 if(Array.isArray(words)) {
@@ -558,6 +578,8 @@
         let words = vocabularyData[activeCategory][lvl];
         if(!words || words.length === 0) { alert("Bu seviye boş."); return; }
         
+        activeLevelId = lvl; // Global değişkene ata
+        
         currentQuestions = words.map(w => {
             let pool = [];
             for(let l=1; l<=40; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
@@ -568,6 +590,7 @@
         });
         currentQuestions.sort(() => Math.random() - 0.5);
         currentStep = 0; correctCount = 0;
+        document.getElementById('mastery-message').style.display = 'none'; // Mesajı gizle
         document.getElementById('quiz-screen').style.display = 'flex';
         renderQuestion();
     }
@@ -608,10 +631,24 @@
     function showResult() {
         document.getElementById('quiz-screen').style.display='none';
         document.getElementById('result-screen').style.display='flex';
+        
         let total = currentQuestions.length || 1;
         document.getElementById('final-score').innerText = `${correctCount}/${total}`;
         let p = (correctCount/total)*100, c = p >= 50 ? '#a2c638' : '#e74c3c';
         document.getElementById('score-circle').style.background = `conic-gradient(${c} 0% ${p}%, #333 ${p}% 100%)`;
+
+        // İLERLEME MANTIĞI: Eğer hepsi doğruysa
+        if(correctCount === total && total > 0) {
+            if(!vocabularyData.progress) vocabularyData.progress = {};
+            if(!vocabularyData.progress[activeCategory]) vocabularyData.progress[activeCategory] = {};
+            
+            let currentP = vocabularyData.progress[activeCategory][activeLevelId] || 0;
+            if(currentP < 2) {
+                vocabularyData.progress[activeCategory][activeLevelId] = currentP + 1;
+                saveToMemory();
+                document.getElementById('mastery-message').style.display = 'block';
+            }
+        }
     }
 
     function forceQuitQuiz() {
