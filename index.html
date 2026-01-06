@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C5 Eklendi</title>
+    <title>Kelime Uygulaması - C6 Eklendi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -228,7 +228,7 @@
         {en:"Autonomous", tr: "Özerk, bağımsız"}, {en:"Aversion", tr: "Nefret, tiksinti, kaçınma"}
     ];
 
-    // C 5 (YENİ EKLENDİ)
+    // C 5
     fixedData["C"][5] = [
       { "en": "Baffling", "tr": "Şaşırtıcı, kafa karıştırıcı" },
       { "en": "Benevolent", "tr": "Hayırsever, iyiliksever" },
@@ -252,13 +252,37 @@
       { "en": "Compliance", "tr": "Uyma, boyun eğme, itaat" }
     ];
 
-    // C 6-20 (Otomatik doldurma - 6'dan başlıyor)
-    for(let k=6; k<=20; k++) {
+    // C 6 (YENİ EKLENDİ)
+    fixedData["C"][6] = [
+      { "en": "Concede", "tr": "Kabullenmek, itiraf etmek" },
+      { "en": "Concise", "tr": "Kısa ve öz" },
+      { "en": "Condone", "tr": "Görmezden gelmek, affetmek" },
+      { "en": "Conducive", "tr": "Olanak sağlayan, yardımcı olan" },
+      { "en": "Confide", "tr": "Sırrını vermek, güvenmek" },
+      { "en": "Congenial", "tr": "Uygun, cana yakın, sempatik" },
+      { "en": "Connoisseur", "tr": "Ehlipire, uzman (sanat vb.)" },
+      { "en": "Consecutive", "tr": "Ardışık, birbirini izleyen" },
+      { "en": "Consensus", "tr": "Fikir birliği, uzlaşma" },
+      { "en": "Conspicuous", "tr": "Göze çarpan, belirgin" },
+      { "en": "Constituent", "tr": "Bileşen, kurucu unsur" },
+      { "en": "Contemplate", "tr": "Düşünmek, kafa yormak" },
+      { "en": "Contempt", "tr": "Aşağılama, hor görme" },
+      { "en": "Controversial", "tr": "Tartışmalı" },
+      { "en": "Conundrum", "tr": "Bilmecem, muamma" },
+      { "en": "Conventional", "tr": "Geleneksel, alışılagelmiş" },
+      { "en": "Converge", "tr": "Aynı noktada birleşmek" },
+      { "en": "Cordial", "tr": "Samimi, içten" },
+      { "en": "Corroborate", "tr": "Doğrulamak, desteklemek" },
+      { "en": "Counterfeit", "tr": "Sahte" }
+    ];
+
+    // C 7-20 (Otomatik doldurma - 7'den başlıyor)
+    for(let k=7; k<=20; k++) {
         fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
     }
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v7'; // v7 yaptık ki C5 hemen gözüksün
+    const DB_KEY = 'VocabApp_FixedLayout_v8'; // v8 yaptık ki C6 hemen gözüksün
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
