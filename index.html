@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C20 Tamamlandı</title>
+    <title>Kelime Uygulaması - Sözlük Eklendi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -61,11 +61,11 @@
         .tabs::-webkit-scrollbar { display: none; }
         
         .tab { 
-            padding: 0 20px; 
+            padding: 0 15px; 
             height: 100%;
             display: flex; align-items: center;
             color: #bdc3c7; 
-            font-weight: bold; font-size: 14px; 
+            font-weight: bold; font-size: 13px; 
             position: relative; cursor: pointer;
             flex-shrink: 0;
             transition: color 0.3s;
@@ -99,20 +99,37 @@
         .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
         .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; pointer-events: none; }
 
-        /* FORM VE BUTONLAR */
-        .add-word-container, .backup-container { 
+        /* SÖZLÜK & FORM */
+        .add-word-container, .backup-container, .search-container { 
             background-color: #3e5c6a; padding: 15px; 
             border-radius: 15px; margin-bottom: 20px; 
             border: 1px solid #f1c40f;
         }
         .backup-container { border-color: #3498db; border-style: dashed; }
+        .search-container { border-color: #2ecc71; }
         
-        .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
+        .form-select, .form-textarea, .search-input { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
+        .search-input { margin-bottom: 0; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: 10px center; padding-left: 35px; }
+
         .save-btn, .backup-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; font-size: 16px; }
         .save-btn { background-color: #f1c40f; color: #1a1a1a; }
         .backup-btn { width: 48%; }
         .btn-download { background-color: #27ae60; }
         .btn-upload { background-color: #3498db; }
+
+        /* SÖZLÜK SONUÇLARI */
+        .dict-result-item {
+            background-color: #354f5c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2ecc71;
+            display: flex;
+            flex-direction: column;
+        }
+        .dict-en { font-weight: bold; font-size: 18px; color: #f1c40f; margin-bottom: 4px; }
+        .dict-tr { font-size: 16px; color: white; margin-bottom: 8px; }
+        .dict-tag { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; width: fit-content; color: #bdc3c7; }
 
         /* --- TEST EKRANI --- */
         #quiz-screen { 
@@ -169,6 +186,7 @@
             <div class="tab" onclick="switchTab('B2', this)">B2</div>
             <div class="tab" onclick="switchTab('B1', this)">B1</div>
             <div class="tab active" onclick="switchTab('C', this)">C</div>
+            <div class="tab" onclick="switchTab('DICT', this)">SÖZLÜK</div>
             <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE</div>
         </div>
     </div>
@@ -208,7 +226,7 @@
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // C Seviyesi Veritabanı
+    // C Seviyesi Veritabanı (Özet)
     fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
     fixedData["C"][2] = [{en:"Debate", tr:"Tartışmak"}, {en:"Decade", tr:"On yıl"}, {en:"Decay", tr:"Çürümek"}, {en:"Deceive", tr:"Aldatmak"}, {en:"Declare", tr:"İlan etmek"}, {en:"Decline", tr:"Reddetmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deduce", tr:"Sonuç çıkarmak"}, {en:"Defect", tr:"Kusur"}, {en:"Defend", tr:"Savunmak"}, {en:"Defer", tr:"Ertelemek"}, {en:"Deficiency", tr:"Eksiklik"}, {en:"Deficit", tr:"Açık"}, {en:"Define", tr:"Tanımlamak"}, {en:"Definite", tr:"Kesin"}, {en:"Delay", tr:"Gecikmek"}, {en:"Delicate", tr:"Hassas"}, {en:"Demonstrate", tr:"Göstermek"}, {en:"Denial", tr:"İnkar"}, {en:"Denounce", tr:"Kınamak"}];
     fixedData["C"][3] = [{en:"Endeavour", tr:"Çabalamak"},{en:"Endorse", tr:"Onaylamak"},{en:"Endure", tr:"Katlanmak"},{en:"Enforce", tr:"Uygulamak"},{en:"Engender", tr:"Neden olmak"},{en:"Enigmatic", tr:"Esrarengiz"},{en:"Enormous", tr:"Devasa"},{en:"Enrage", tr:"Kızdırmak"},{en:"Ensuing", tr:"Ardından gelen"},{en:"Entail", tr:"Gerektirmek"},{en:"Ephemeral", tr:"Kısa ömürlü"},{en:"Epitome", tr:"Kusursuz örnek"},{en:"Equivocal", tr:"Belirsiz"},{en:"Erroneous", tr:"Hatalı"},{en:"Erudite", tr:"Bilgin"},{en:"Escalate", tr:"Tırmanmak"},{en:"Essential", tr:"Temel"},{en:"Establish", tr:"Kurmak"},{en:"Esteem", tr:"Saygı"},{en:"Eternal", tr:"Sonsuz"}];
@@ -228,30 +246,7 @@
     fixedData["C"][17] = [{en:"Irrational", tr:"Mantıksız"}, {en:"Irrelevant", tr:"İlgisiz, konu dışı"}, {en:"Irreparable", tr:"Onarılamaz"}, {en:"Irresistible", tr:"Karşı konulamaz"}, {en:"Isolate", tr:"Soyutlamak, ayırmak"}, {en:"Jeopardize", tr:"Tehlikeye atmak"}, {en:"Jovial", tr:"Şen, neşeli"}, {en:"Judicious", tr:"Mantıklı, akıllıca"}, {en:"Justify", tr:"Haklı çıkarmak"}, {en:"Keen", tr:"Keskin, hevesli"}, {en:"Lament", tr:"Yas tutmak, ağıt yakmak"}, {en:"Lavish", tr:"Müsrif, savurgan, lüks"}, {en:"Legitimate", tr:"Meşru, yasal"}, {en:"Lethal", tr:"Öldürücü"}, {en:"Liable", tr:"Sorumlu, eğilimli"}, {en:"Liberal", tr:"Hoşgörülü, özgürlükçü"}, {en:"Linger", tr:"Oyalanmak, can çekişmek"}, {en:"Literate", tr:"Okuryazar"}, {en:"Loathe", tr:"İğrenmek, nefret etmek"}, {en:"Lucid", tr:"Berrak, anlaşılır"}];
     fixedData["C"][18] = [{en:"Magnify", tr:"Büyütmek, abartmak"}, {en:"Malicious", tr:"Kötü niyetli, art niyetli"}, {en:"Mandatory", tr:"Zorunlu"}, {en:"Manifest", tr:"Göstermek, açıkça ortaya koymak"}, {en:"Marginal", tr:"Sınırda olan, çok az, önemsiz"}, {en:"Masterpiece", tr:"Başyapıt"}, {en:"Meagre", tr:"Yetersiz, kıt, az"}, {en:"Mediocre", tr:"Vasat, orta karar"}, {en:"Melancholy", tr:"Hüzün, keder"}, {en:"Meticulous", tr:"Titiz, kılı kırk yaran"}, {en:"Milestone", tr:"Dönüm noktası"}, {en:"Miserable", tr:"Sefil, perişan"}, {en:"Mitigate", tr:"Hafifletmek, azaltmak"}, {en:"Momentous", tr:"Çok önemli, tarihi"}, {en:"Monotonous", tr:"Tekdüze, sıkıcı"}, {en:"Mundane", tr:"Sıradan, dünyevi"}, {en:"Mutual", tr:"Karşılıklı"}, {en:"Naive", tr:"Saf, deneyimsiz"}, {en:"Nebulous", tr:"Bulutlu, belirsiz"}, {en:"Negligible", tr:"İhmal edilebilir, önemsiz"}];
     fixedData["C"][19] = [{en:"Nominal", tr:"Sembolik, çok küçük"}, {en:"Notable", tr:"Dikkate değer"}, {en:"Notify", tr:"Bildirmek"}, {en:"Notion", tr:"Kavram, fikir"}, {en:"Notorious", tr:"Kötü şöhretli"}, {en:"Novel", tr:"Yeni, alışılmamış"}, {en:"Nurture", tr:"Beslemek, geliştirmek"}, {en:"Obedient", tr:"İtaatkar"}, {en:"Objective", tr:"Nesnel / Amaç"}, {en:"Oblige", tr:"Mecbur bırakmak"}, {en:"Oblivious", tr:"Farkında olmayan"}, {en:"Obscure", tr:"Belirsiz"}, {en:"Obsolete", tr:"Modası geçmiş"}, {en:"Obstinate", tr:"İnatçı"}, {en:"Obstruction", tr:"Engel"}, {en:"Occurrence", tr:"Olay"}, {en:"Ominous", tr:"Uğursuz"}, {en:"Omission", tr:"İhmal"}, {en:"Opaque", tr:"Mat"}, {en:"Optimistic", tr:"İyimser"}];
-
-    // C 20 - FINAL SET
-    fixedData["C"][20] = [
-        { "en": "Orchestrate", "tr": "Düzenlemek, planlamak" },
-        { "en": "Ordeal", "tr": "Çile, zorlu deneyim" },
-        { "en": "Ornament", "tr": "Süs, bezek" },
-        { "en": "Orthodox", "tr": "Geleneksel, alışılagelmiş" },
-        { "en": "Ostentatious", "tr": "Gösterişli, şatafatlı" },
-        { "en": "Outcome", "tr": "Sonuç" },
-        { "en": "Outdated", "tr": "Eski, zamanı geçmiş" },
-        { "en": "Outlook", "tr": "Görünüm, bakış açısı" },
-        { "en": "Outrageous", "tr": "Rezilce, aşırı, şoke edici" },
-        { "en": "Overcome", "tr": "Üstesinden gelmek" },
-        { "en": "Overlook", "tr": "Görmezden gelmek, tepeden bakmak" },
-        { "en": "Oversee", "tr": "Denetlemek, gözetmek" },
-        { "en": "Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" },
-        { "en": "Paradox", "tr": "Çelişki, paradoks" },
-        { "en": "Paramount", "tr": "En önemli, üstün" },
-        { "en": "Partial", "tr": "Kısmi, taraflı" },
-        { "en": "Passive", "tr": "Edilgen, pasif" },
-        { "en": "Patronize", "tr": "Küçümsemek / Desteklemek" },
-        { "en": "Peculiar", "tr": "Tuhaf, kendine özgü" },
-        { "en": "Penalize", "tr": "Cezalandırmak" }
-    ];
+    fixedData["C"][20] = [{ "en": "Orchestrate", "tr": "Düzenlemek, planlamak" }, { "en": "Ordeal", "tr": "Çile, zorlu deneyim" }, { "en": "Ornament", "tr": "Süs, bezek" }, { "en": "Orthodox", "tr": "Geleneksel, alışılagelmiş" }, { "en": "Ostentatious", "tr": "Gösterişli, şatafatlı" }, { "en": "Outcome", "tr": "Sonuç" }, { "en": "Outdated", "tr": "Eski, zamanı geçmiş" }, { "en": "Outlook", "tr": "Görünüm, bakış açısı" }, { "en": "Outrageous", "tr": "Rezilce, aşırı, şoke edici" }, { "en": "Overcome", "tr": "Üstesinden gelmek" }, { "en": "Overlook", "tr": "Görmezden gelmek, tepeden bakmak" }, { "en": "Oversee", "tr": "Denetlemek, gözetmek" }, { "en": "Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" }, { "en": "Paradox", "tr": "Çelişki, paradoks" }, { "en": "Paramount", "tr": "En önemli, üstün" }, { "en": "Partial", "tr": "Kısmi, taraflı" }, { "en": "Passive", "tr": "Edilgen, pasif" }, { "en": "Patronize", "tr": "Küçümsemek / Desteklemek" }, { "en": "Peculiar", "tr": "Tuhaf, kendine özgü" }, { "en": "Penalize", "tr": "Cezalandırmak" }];
 
     let vocabularyData = {};
     const DB_KEY = 'VocabApp_FixedLayout_v24'; 
@@ -323,7 +318,7 @@
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(t => {
                 const txt = t.innerText.trim();
-                if(txt === cat || (cat === 'ADD' && txt.includes('EKLE'))) el = t;
+                if(txt === cat || (cat === 'ADD' && txt.includes('EKLE')) || (cat === 'DICT' && txt.includes('SÖZLÜK'))) el = t;
             });
         }
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -331,9 +326,13 @@
             el.classList.add('active');
             el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
+        
         if(cat === 'ADD') {
             document.getElementById('app-header-title').innerText = "Ekle / Yedekle";
             renderAddScreen();
+        } else if (cat === 'DICT') {
+            document.getElementById('app-header-title').innerText = "Sözlük";
+            renderDictionary();
         } else {
             activeCategory = cat;
             document.getElementById('app-header-title').innerText = cat;
@@ -360,6 +359,49 @@
                     <div class="level-progress">${status}</div>
                 </div>`;
         }
+    }
+
+    function renderDictionary() {
+        document.getElementById('content-container').innerHTML = `
+            <div class="search-container">
+                <input type="text" id="dict-search" class="search-input" placeholder="Kelime ara (Örn: Go, Gitmek)..." onkeyup="performSearch(this.value)">
+            </div>
+            <div id="dict-results"></div>
+        `;
+    }
+
+    function performSearch(query) {
+        const resultDiv = document.getElementById('dict-results');
+        if(!query || query.length < 2) { resultDiv.innerHTML = ""; return; }
+        
+        query = query.toLowerCase();
+        let matches = [];
+
+        for(let cat in vocabularyData) {
+            for(let lvl in vocabularyData[cat]) {
+                vocabularyData[cat][lvl].forEach(word => {
+                    if(word.en.toLowerCase().includes(query) || word.tr.toLowerCase().includes(query)) {
+                        matches.push({ ...word, cat: cat, lvl: lvl });
+                    }
+                });
+            }
+        }
+
+        if(matches.length === 0) {
+            resultDiv.innerHTML = `<div style="text-align:center; color:#bdc3c7; margin-top:20px;">Sonuç bulunamadı.</div>`;
+            return;
+        }
+
+        let html = "";
+        matches.forEach(m => {
+            html += `
+            <div class="dict-result-item">
+                <div class="dict-en">${m.en}</div>
+                <div class="dict-tr">${m.tr}</div>
+                <div class="dict-tag">${m.cat} - Seviye ${m.lvl}</div>
+            </div>`;
+        });
+        resultDiv.innerHTML = html;
     }
 
     function renderAddScreen() {
@@ -408,7 +450,7 @@
     }
 
     function startQuiz(lvl) {
-        if(activeCategory === 'ADD') return;
+        if(activeCategory === 'ADD' || activeCategory === 'DICT') return;
         let words = vocabularyData[activeCategory][lvl];
         if(!words || words.length === 0) { alert("Bu seviye boş."); return; }
         
