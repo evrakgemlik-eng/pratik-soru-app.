@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C12 Güncel</title>
+    <title>Kelime Uygulaması - C14 Güncel</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -208,60 +208,52 @@
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // C 1-3
+    // C 1-13 Kayıtlı Veriler
     fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
     fixedData["C"][2] = [{en:"Debate", tr:"Tartışmak"}, {en:"Decade", tr:"On yıl"}, {en:"Decay", tr:"Çürümek"}, {en:"Deceive", tr:"Aldatmak"}, {en:"Declare", tr:"İlan etmek"}, {en:"Decline", tr:"Reddetmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deduce", tr:"Sonuç çıkarmak"}, {en:"Defect", tr:"Kusur"}, {en:"Defend", tr:"Savunmak"}, {en:"Defer", tr:"Ertelemek"}, {en:"Deficiency", tr:"Eksiklik"}, {en:"Deficit", tr:"Açık"}, {en:"Define", tr:"Tanımlamak"}, {en:"Definite", tr:"Kesin"}, {en:"Delay", tr:"Gecikmek"}, {en:"Delicate", tr:"Hassas"}, {en:"Demonstrate", tr:"Göstermek"}, {en:"Denial", tr:"İnkar"}, {en:"Denounce", tr:"Kınamak"}];
     fixedData["C"][3] = [{en:"Endeavour", tr:"Çabalamak, gayret etmek"},{en:"Endorse", tr:"Onaylamak, desteklemek"},{en:"Endure", tr:"Katlanmak, dayanmak"},{en:"Enforce", tr:"Uygulamak, zorla yaptırmak"},{en:"Engender", tr:"Neden olmak, doğurmak"},{en:"Enigmatic", tr:"Esrarengiz, gizemli"},{en:"Enormous", tr:"Kocaman, devasa"},{en:"Enrage", tr:"Kızdırmak, çileden çıkarmak"},{en:"Ensuing", tr:"Ardından gelen, sonraki"},{en:"Entail", tr:"Gerektirmek, kapsamak"},{en:"Ephemeral", tr:"Kısa ömürlü, geçici"},{en:"Epitome", tr:"Özet, kusursuz örnek"},{en:"Equivocal", tr:"Belirsiz, şüpheli"},{en:"Erroneous", tr:"Hatalı, yanlış"},{en:"Erudite", tr:"Bilgin, çok bilgili"},{en:"Escalate", tr:"Tırmanmak, yükselmek"},{en:"Essential", tr:"Temel, çok önemli"},{en:"Establish", tr:"Kurmak, belirlemek"},{en:"Esteem", tr:"Saygı, itibar"},{en:"Eternal", tr:"Sonsuz, ebedi"}];
-
-    // C 4-9
     fixedData["C"][4] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}, {en:"Adversity", tr: "Sıkıntı, zorluk, talihsizlik"}, {en:"Aesthetic", tr: "Estetik, sanatsal"}, {en:"Altruism", tr: "Özgecilik, fedakarlık"}, {en:"Ambivalent", tr: "Kararsız, ikilemde kalmış"}, {en:"Amiable", tr: "Sevimli, cana yakın"}, {en:"Anachronism", tr: "Zaman aşımı, tarihsel hata"}, {en:"Annihilate", tr: "Yok etmek, yerle bir etmek"}, {en:"Anticipate", tr: "Beklemek, ummak, öngörmek"}, {en:"Apprehensive", tr: "Endişeli, kuruntulu"}, {en:"Arbitrary", tr: "Keyfi, rastgele"}, {en:"Arduous", tr: "Güç, çetin, çok zahmetli"}, {en:"Articulate", tr: "Düşüncelerini net ifade edebilen"}, {en:"Ascertain", tr: "Aslını öğrenmek, saptamak"}, {en:"Astute", tr: "Zeki, kurnaz, işini bilen"}, {en:"Atrocity", tr: "Vahşet, gaddarlık"}, {en:"Augment", tr: "Artırmak, çoğaltmak"}, {en:"Austere", tr: "Sert, ciddi, süssüz"}, {en:"Authentic", tr: "Gerçek, özgün"}];
     fixedData["C"][5] = [{en:"Baffling", tr:"Şaşırtıcı, kafa karıştırıcı"}, {en:"Benevolent", tr:"Hayırsever, iyiliksever"}, {en:"Benign", tr:"İyi huylu, zararsız"}, {en:"Bewilder", tr:"Şaşırtmak, hayretler içinde bırakmak"}, {en:"Bias", tr:"Önyargı, taraf tutma"}, {en:"Blatant", tr:"Bariz, arsızca, apaçık"}, {en:"Breach", tr:"İhlal etmek, yarmak"}, {en:"Brittle", tr:"Kırılgan, hassas"}, {en:"Candid", tr:"İçten, samimi, dürüst"}, {en:"Capricious", tr:"Değişken, maymun iştahlı"}, {en:"Casualty", tr:"Zayiat, kazazede"}, {en:"Chronicle", tr:"Olayları sırasıyla kaydetmek"}, {en:"Coherent", tr:"Tutarlı, uyumlu"}, {en:"Collaborate", tr:"İş birliği yapmak"}, {en:"Commence", tr:"Başlamak"}, {en:"Commend", tr:"Övmek, tavsiye etmek"}, {en:"Compelling", tr:"Zorlayıcı, ikna edici"}, {en:"Complacent", tr:"Kendi halinden memnun"}, {en:"Complement", tr:"Tamamlamak, bütünlemek"}, {en:"Compliance", tr:"Uyma, boyun eğme, itaat"}];
-    fixedData["C"][6] = [{en:"Concede", tr:"Kabullenmek, itiraf etmek"}, {en:"Concise", tr:"Kısa ve öz"}, {en:"Condone", tr:"Görmezden gelmek, affetmek"}, {en:"Conducive", tr:"Olanak sağlayan, yardımcı olan"}, {en:"Confide", tr:"Sırrını vermek, güvenmek"}, {en:"Congenial", tr:"Uygun, cana yakın, sempatik"}, {en:"Connoisseur", tr:"Ehlipire, uzman"}, {en:"Consecutive", tr:"Ardışık, birbirini izleyen"}, {en:"Consensus", tr:"Fikir birliği, uzlaşma"}, {en:"Conspicuous", tr:"Göze çarpan, belirgin"}, {en:"Constituent", tr:"Bileşen, kurucu unsur"}, {en:"Contemplate", tr:"Düşünmek, kafa yormak"}, {en:"Contempt", tr:"Aşağılama, hor görme"}, {en:"Controversial", tr:"Tartışmalı"}, {en:"Conundrum", tr:"Bilmecem, muamma"}, {en:"Conventional", tr:"Geleneksel, alışılagelmiş"}, {en:"Converge", tr:"Aynı noktada birleşmek"}, {en:"Cordial", tr:"Samimi, içten"}, {en:"Corroborate", tr:"Doğrulamak, desteklemek"}, {en:"Counterfeit", tr:"Sahte"}];
-    fixedData["C"][7] = [{en:"Crave", tr:"Çok istemek, canı çekmek"}, {en:"Credible", tr:"İnanılır, güvenilir"}, {en:"Crucial", tr:"Çok önemli, kritik"}, {en:"Culminate", tr:"Zirveye ulaşmak, sonuçlanmak"}, {en:"Culpable", tr:"Kusurlu, suçlu"}, {en:"Curb", tr:"Zapt etmek, frenlemek"}, {en:"Curtail", tr:"Kısaltmak, azaltmak"}, {en:"Cynical", tr:"Alaycı, kötümser"}, {en:"Dazzling", tr:"Göz kamaştırıcı"}, {en:"Debilitate", tr:"Zayıflatmak, güçten düşürmek"}, {en:"Decipher", tr:"Şifresini çözmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deem", tr:"Varsaymak, öyle kabul etmek"}, {en:"Deficiency", tr:"Eksiklik, yetersizlik"}, {en:"Deft", tr:"Becerikli, usta"}, {en:"Deleterious", tr:"Zararlı"}, {en:"Delineate", tr:"Tanımlamak, betimlemek"}, {en:"Denounce", tr:"Kınamak, ihbar etmek"}, {en:"Depict", tr:"Tasvir etmek, anlatmak"}, {en:"Deplete", tr:"Tüketmek, azaltmak"}];
-    fixedData["C"][8] = [{en:"Deplorable", tr:"Acıklı, içler acısı"}, {en:"Deprive (of)", tr:"Yoksun bırakmak"}, {en:"Derive (from)", tr:"-den türetmek, kaynaklanmak"}, {en:"Desolate", tr:"Issız, terkedilmiş"}, {en:"Destitute", tr:"Muhtaç, yoksul"}, {en:"Deter", tr:"Caydırmak"}, {en:"Deviate", tr:"Sapmak, yoldan çıkmak"}, {en:"Devoid (of)", tr:"-den yoksun"}, {en:"Dextrous", tr:"Becerikli, eli çabuk"}, {en:"Diffuse", tr:"Yaymak, dağıtmak"}, {en:"Dignity", tr:"Ağırbaşlılık, itibar"}, {en:"Diligent", tr:"Çalışkan, gayretli"}, {en:"Discern", tr:"Ayırt etmek, fark etmek"}, {en:"Discrepancy", tr:"Tutarsızlık, çelişki"}, {en:"Disdain", tr:"Kümsemek, hor görmek"}, {en:"Disheartened", tr:"Cesareti kırılmış"}, {en:"Disparate", tr:"Tamamen farklı, apayrı"}, {en:"Disseminate", tr:"Yaymak (bilgi, fikir)"}, {en:"Divergent", tr:"Farklılaşan, uyumsuz"}, {en:"Docile", tr:"Uysal, evcil"}];
-    fixedData["C"][9] = [{en:"Drastic", tr:"Sert, şiddetli, radikal"}, {en:"Dubious", tr:"Şüpheli, belirsiz"}, {en:"Durable", tr:"Dayanıklı"}, {en:"Dwell (on)", tr:"Üzerinde durmak, kafa yormak"}, {en:"Eager", tr:"Hevesli, istekli"}, {en:"Eccentric", tr:"Eksantrik, tuhaf"}, {en:"Edible", tr:"Yenilebilir"}, {en:"Efficacy", tr:"Etkililik, yarar"}, {en:"Elaborate", tr:"Ayrıntılı, özenle hazırlanmış"}, {en:"Eloquent", tr:"Güzel konuşan, hitabeti güçlü"}, {en:"Elusive", tr:"Ele avuca sığmaz, tarifi zor"}, {en:"Emancipate", tr:"Özgürlüğüne kavuşturmak"}, {en:"Embark (on)", tr:"Bir işe girişmek, başlamak"}, {en:"Embody", tr:"Somutlaştırmak, temsil etmek"}, {en:"Embrace", tr:"Kucaklamak, benimsemek"}, {en:"Emerge", tr:"Ortaya çıkmak"}, {en:"Eminent", tr:"Seçkin, ünlü"}, {en:"Empirical", tr:"Deneysel, gözleme dayalı"}, {en:"Emulate", tr:"Öykünmek, taklit etmek"}, {en:"Encompass", tr:"Kapsamak, çevrelemek"}];
-    
-    // C 10
-    fixedData["C"][10] = [
-        { "en": "Evade", "tr": "Kaçınmak, sakınmak" }, { "en": "Evaluate", "tr": "Değerlendirmek" }, { "en": "Evident", "tr": "Besbelli, açık" }, { "en": "Evoke", "tr": "Anımsatmak, uyandırmak" }, { "en": "Exacerbate", "tr": "Kötüleştirmek, şiddetlendirmek" }, { "en": "Exceed", "tr": "Aşmak, geçmek" }, { "en": "Excel", "tr": "Üstün olmak, sivrilmek" }, { "en": "Exert", "tr": "Kullanmak (güç, yetki vb.)" }, { "en": "Exhaustive", "tr": "Kapsamlı, detaylı" }, { "en": "Exhilarating", "tr": "Canlandırıcı, neşelendirici" }, { "en": "Exile", "tr": "Sürgün" }, { "en": "Exonerate", "tr": "Aklamak, suçsuz çıkarmak" }, { "en": "Exorbitant", "tr": "Fahiş, çok yüksek" }, { "en": "Expedite", "tr": "Hızlandırmak" }, { "en": "Explicit", "tr": "Açık, net" }, { "en": "Exploit", "tr": "Sömürmek, faydalanmak" }, { "en": "Exquisite", "tr": "Zarif, harikulade" }, { "en": "Extensive", "tr": "Kapsamlı, geniş" }, { "en": "Extinguish", "tr": "Söndürmek" }, { "en": "Extol", "tr": "Övmek, göklere çıkarmak" }
+    fixedData["C"][6] = [{en:"Concede", tr:"Kabullenmek, itiraf etmek"}, {en:"Concise", tr:"Kısa ve öz"}, {en:"Condone", tr:"Görmezden gelmek, affetmek"}, {en:"Conducive", tr:"Olanak sağlamaya yardımcı"}, {en:"Confide", tr:"Sırrını vermek, güvenmek"}, {en:"Congenial", tr:"Uygun, cana yakın"}, {en:"Connoisseur", tr:"Ehlipire, uzman"}, {en:"Consecutive", tr:"Ardışık"}, {en:"Consensus", tr:"Fikir birliği, uzlaşma"}, {en:"Conspicuous", tr:"Göze çarpan, belirgin"}, {en:"Constituent", tr:"Bileşen"}, {en:"Contemplate", tr:"Düşünmek, kafa yormak"}, {en:"Contempt", tr:"Aşağılama, hor görme"}, {en:"Controversial", tr:"Tartışmalı"}, {en:"Conundrum", tr:"Bilmecem, muamma"}, {en:"Conventional", tr:"Geleneksel"}, {en:"Converge", tr:"Aynı noktada birleşmek"}, {en:"Cordial", tr:"Samimi, içten"}, {en:"Corroborate", tr:"Doğrulamak, desteklemek"}, {en:"Counterfeit", tr:"Sahte"}];
+    fixedData["C"][7] = [{en:"Crave", tr:"Çok istemek, canı çekmek"}, {en:"Credible", tr:"İnanılır, güvenilir"}, {en:"Crucial", tr:"Çok önemli, kritik"}, {en:"Culminate", tr:"Zirveye ulaşmak"}, {en:"Culpable", tr:"Kusurlu, suçlu"}, {en:"Curb", tr:"Zapt etmek, frenlemek"}, {en:"Curtail", tr:"Kısaltmak, azaltmak"}, {en:"Cynical", tr:"Alaycı, kötümser"}, {en:"Dazzling", tr:"Göz kamaştırıcı"}, {en:"Debilitate", tr:"Zayıflatmak"}, {en:"Decipher", tr:"Şifresini çözmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deem", tr:"Varsaymak, kabul etmek"}, {en:"Deficiency", tr:"Eksiklik, yetersizlik"}, {en:"Deft", tr:"Becerikli, usta"}, {en:"Deleterious", tr:"Zararlı"}, {en:"Delineate", tr:"Tanımlamak, betimlemek"}, {en:"Denounce", tr:"Kınamak, ihbar etmek"}, {en:"Depict", tr:"Tasvir etmek, anlatmak"}, {en:"Deplete", tr:"Tüketmek, azaltmak"}];
+    fixedData["C"][8] = [{en:"Deplorable", tr:"Acıklı, içler acısı"}, {en:"Deprive (of)", tr:"Yoksun bırakmak"}, {en:"Derive (from)", tr:"-den türetmek"}, {en:"Desolate", tr:"Issız, terkedilmiş"}, {en:"Destitute", tr:"Muhtaç, yoksul"}, {en:"Deter", tr:"Caydırmak"}, {en:"Deviate", tr:"Sapmak, yoldan çıkmak"}, {en:"Devoid (of)", tr:"-den yoksun"}, {en:"Dextrous", tr:"Becerikli, eli çabuk"}, {en:"Diffuse", tr:"Yaymak, dağıtmak"}, {en:"Dignity", tr:"Ağırbaşlılık, itibar"}, {en:"Diligent", tr:"Çalışkan, gayretli"}, {en:"Discern", tr:"Ayırt etmek, fark etmek"}, {en:"Discrepancy", tr:"Tutarsızlık, çelişki"}, {en:"Disdain", tr:"Küçümsemek, hor görmek"}, {en:"Disheartened", tr:"Cesareti kırılmış"}, {en:"Disparate", tr:"Tamamen farklı, apayrı"}, {en:"Disseminate", tr:"Yaymak (bilgi, fikir)"}, {en:"Divergent", tr:"Farklılaşan, uyumsuz"}, {en:"Docile", tr:"Uysal, evcil"}];
+    fixedData["C"][9] = [{en:"Drastic", tr:"Sert, şiddetli, radikal"}, {en:"Dubious", tr:"Şüpheli, belirsiz"}, {en:"Durable", tr:"Dayanıklı"}, {en:"Dwell (on)", tr:"Üzerinde durmak, kafa yormak"}, {en:"Eager", tr:"Hevesli, istekli"}, {en:"Eccentric", tr:"Eksantrik, tuhaf"}, {en:"Edible", tr:"Yenilebilir"}, {en:"Efficacy", tr:"Etkililik, yarar"}, {en:"Elaborate", tr:"Ayrıntılı, özenli"}, {en:"Eloquent", tr:"Güzel konuşan"}, {en:"Elusive", tr:"Tarifi zor, kaçamak"}, {en:"Emancipate", tr:"Özgürlüğüne kavuşturmak"}, {en:"Embark (on)", tr:"Bir işe girişmek"}, {en:"Embody", tr:"Somutlaştırmak"}, {en:"Embrace", tr:"Kucaklamak, benimsemek"}, {en:"Emerge", tr:"Ortaya çıkmak"}, {en:"Eminent", tr:"Seçkin, ünlü"}, {en:"Empirical", tr:"Deneysel, gözleme dayalı"}, {en:"Emulate", tr:"Öykünmek, taklit etmek"}, {en:"Encompass", tr:"Kapsamak, çevrelemek"}];
+    fixedData["C"][10] = [{ "en": "Evade", "tr": "Kaçınmak, sakınmak" }, { "en": "Evaluate", "tr": "Değerlendirmek" }, { "en": "Evident", "tr": "Besbelli, açık" }, { "en": "Evoke", "tr": "Anımsatmak, uyandırmak" }, { "en": "Exacerbate", "tr": "Kötüleştirmek" }, { "en": "Exceed", "tr": "Aşmak, geçmek" }, { "en": "Excel", "tr": "Üstün olmak, sivrilmek" }, { "en": "Exert", "tr": "Kullanmak (güç vb.)" }, { "en": "Exhaustive", "tr": "Kapsamlı, detaylı" }, { "en": "Exhilarating", "tr": "Canlandırıcı" }, { "en": "Exile", "tr": "Sürgün" }, { "en": "Exonerate", "tr": "Aklamak, suçsuz çıkarmak" }, { "en": "Exorbitant", "tr": "Fahiş, çok yüksek" }, { "en": "Expedite", "tr": "Hızlandırmak" }, { "en": "Explicit", "tr": "Açık, net" }, { "en": "Exploit", "tr": "Sömürmek, faydalanmak" }, { "en": "Exquisite", "tr": "Zarif, harikulade" }, { "en": "Extensive", "tr": "Kapsamlı, geniş" }, { "en": "Extinguish", "tr": "Söndürmek" }, { "en": "Extol", "tr": "Övmek, göklere çıkarmak" }];
+    fixedData["C"][11] = [{ "en": "Fabricate", "tr": "Uydurmak, sahtesini yapmak" }, { "en": "Facilitate", "tr": "Kolaylaştırmak" }, { "en": "Fallacy", "tr": "Yanlış düşünce, safsata" }, { "en": "Famine", "tr": "Açlık, kıtlık" }, { "en": "Feasible", "tr": "Mümkün, uygulanabilir" }, { "en": "Feeble", "tr": "Cılız, güçsüz" }, { "en": "Ferocious", "tr": "Vahşi, yırtıcı" }, { "en": "Fervent", "tr": "Ateşli, coşkulu" }, { "en": "Fickle", "tr": "Kararsız, değişken" }, { "en": "Flamboyant", "tr": "Gösterişli" }, { "en": "Flaw", "tr": "Kusur, hata" }, { "en": "Flee", "tr": "Kaçmak" }, { "en": "Flimsy", "tr": "Dayanıksız, derme çatma" }, { "en": "Fluctuate", "tr": "Dalgalanmak, değişmek" }, { "en": "Forbid", "tr": "Yasaklamak" }, { "en": "Foresee", "tr": "Öngörmek" }, { "en": "Formidable", "tr": "Zorlu, ürkütücü" }, { "en": "Foster", "tr": "Büyütmek, teşvik etmek" }, { "en": "Fragile", "tr": "Kırılgan" }, { "en": "Frantic", "tr": "Çılgına dönmüş, telaşlı" }];
+    fixedData["C"][12] = [{ "en": "Frugal", "tr": "Tutumlu" }, { "en": "Frustrate", "tr": "Hayal kırıklığına uğratmak" }, { "en": "Fundamental", "tr": "Temel, esas" }, { "en": "Futile", "tr": "Nafile, boşuna" }, { "en": "Gaze", "tr": "Gözünü dikip bakmak" }, { "en": "Generate", "tr": "Üretmek, oluşturmak" }, { "en": "Generic", "tr": "Genel, kapsayıcı" }, { "en": "Genuinely", "tr": "Gerçekten, içtenlikle" }, { "en": "Glare", "tr": "Dik dik bakmak" }, { "en": "Glimpse", "tr": "Anlık bakış, göz atmak" }, { "en": "Gloomy", "tr": "Kasvetli, karanlık" }, { "en": "Gorgeous", "tr": "Muhteşem" }, { "en": "Graceful", "tr": "Zarif, hoş" }, { "en": "Gradual", "tr": "Kademeli, yavaş yavaş" }, { "en": "Grandiose", "tr": "Görkemli, iddialı" }, { "en": "Gratify", "tr": "Memnun etmek" }, { "en": "Grievance", "tr": "Şikayet, yakınma" }, { "en": "Grim", "tr": "Gaddar, asık suratlı" }, { "en": "Grudge", "tr": "Kin, hınç" }, { "en": "Gullible", "tr": "Saf, kolay kandırılan" }];
+    fixedData["C"][13] = [{ "en": "Halt", "tr": "Durdurmak, kesmek" }, { "en": "Haphazard", "tr": "Gelişigüzel, tesadüfi" }, { "en": "Harass", "tr": "Taciz etmek, bezdirmek" }, { "en": "Hasten", "tr": "Hızlandırmak, acele ettirmek" }, { "en": "Haughty", "tr": "Kibirli, mağrur" }, { "en": "Hazardous", "tr": "Tehlikeli, riskli" }, { "en": "Heir", "tr": "Varis, mirasçı" }, { "en": "Hinder", "tr": "Engellemek, aksatmak" }, { "en": "Hostile", "tr": "Düşmanca" }, { "en": "Humiliate", "tr": "Aşağılamak, rezil etmek" }, { "en": "Hypothesis", "tr": "Hipotez, varsayım" }, { "en": "Identical", "tr": "Birebir aynı" }, { "en": "Idle", "tr": "Aylak, boş, çalışmayan" }, { "en": "Ignorant", "tr": "Cahil, bilgisiz" }, { "en": "Illicit", "tr": "Yasa dışı, illegal" }, { "en": "Illusion", "tr": "Yanılsama, illüzyon" }, { "en": "Immaculate", "tr": "Lekesiz, tertemiz, hatasız" }, { "en": "Imminent", "tr": "Eli kulağında, olması yakın" }, { "en": "Impartial", "tr": "Tarafsız, nesnel" }, { "en": "Impede", "tr": "Geciktirmek, ayak bağı olmak" }];
+
+    // C 14 - YENİ EKLENEN LİSTE
+    fixedData["C"][14] = [
+        { "en": "Imperative", "tr": "Zorunlu, mecburi" },
+        { "en": "Impetus", "tr": "Dürtü, itici güç" },
+        { "en": "Implausible", "tr": "Akla yatkın olmayan" },
+        { "en": "Implicit", "tr": "İmalı, üstü kapalı" },
+        { "en": "Imply", "tr": "İma etmek" },
+        { "en": "Imposing", "tr": "Etkileyici, heybetli" },
+        { "en": "Impromptu", "tr": "Hazırlıksız, doğaçlama" },
+        { "en": "Inadvertent", "tr": "İstem dışı, kasıtsız" },
+        { "en": "Incentive", "tr": "Teşvik, güdü" },
+        { "en": "Incessant", "tr": "Aralıksız, sürekli" },
+        { "en": "Incline", "tr": "Eğilimi olmak" },
+        { "en": "Incoherent", "tr": "Tutarsız, anlaşılmaz" },
+        { "en": "Incompatible", "tr": "Uyumsuz, bağdaşmayan" },
+        { "en": "Incompetent", "tr": "Yetersiz, beceriksiz" },
+        { "en": "Inconceivable", "tr": "Hayal edilemez, akıl almaz" },
+        { "en": "Inconsistent", "tr": "Tutarsız, çelişkili" },
+        { "en": "Incredible", "tr": "İnanılmaz" },
+        { "en": "Indifferent", "tr": "Kayıtsız, ilgisiz" },
+        { "en": "Indigenous", "tr": "Yerli" },
+        { "en": "Indignant", "tr": "Dargın, kırgın, kızgın" }
     ];
 
-    // C 11
-    fixedData["C"][11] = [
-        { "en": "Fabricate", "tr": "Uydurmak, sahtesini yapmak" }, { "en": "Facilitate", "tr": "Kolaylaştırmak" }, { "en": "Fallacy", "tr": "Yanlış düşünce, safsata" }, { "en": "Famine", "tr": "Açlık, kıtlık" }, { "en": "Feasible", "tr": "Mümkün, uygulanabilir" }, { "en": "Feeble", "tr": "Cılız, güçsüz" }, { "en": "Ferocious", "tr": "Vahşi, yırtıcı" }, { "en": "Fervent", "tr": "Ateşli, coşkulu" }, { "en": "Fickle", "tr": "Maymun iştahlı, kararsız" }, { "en": "Flamboyant", "tr": "Gösterişli" }, { "en": "Flaw", "tr": "Kusur, hata" }, { "en": "Flee", "tr": "Kaçmak" }, { "en": "Flimsy", "tr": "Dayanıksız, derme çatma" }, { "en": "Fluctuate", "tr": "Dalgalanmak, değişmek" }, { "en": "Forbid", "tr": "Yasaklamak" }, { "en": "Foresee", "tr": "Öngörmek" }, { "en": "Formidable", "tr": "Zorlu, ürkütücü" }, { "en": "Foster", "tr": "Büyütmek, teşvik etmek" }, { "en": "Fragile", "tr": "Kırılgan" }, { "en": "Frantic", "tr": "Çılgına dönmüş, telaşlı" }
-    ];
-
-    // C 12 - GÜNCELLENDİ (YENİ EKLENEN LİSTE)
-    fixedData["C"][12] = [
-        { "en": "Frugal", "tr": "Tutumlu" },
-        { "en": "Frustrate", "tr": "Hayal kırıklığına uğratmak" },
-        { "en": "Fundamental", "tr": "Temel, esas" },
-        { "en": "Futile", "tr": "Nafile, boşuna" },
-        { "en": "Gaze", "tr": "Gözünü dikip bakmak" },
-        { "en": "Generate", "tr": "Üretmek, oluşturmak" },
-        { "en": "Generic", "tr": "Genel, kapsayıcı" },
-        { "en": "Genuinely", "tr": "Gerçekten, içtenlikle" },
-        { "en": "Glare", "tr": "Göz kamaştırıcı ışık, dik dik bakmak" },
-        { "en": "Glimpse", "tr": "Anlık bakış, göz atmak" },
-        { "en": "Gloomy", "tr": "Kasvetli, karanlık" },
-        { "en": "Gorgeous", "tr": "Muhteşem" },
-        { "en": "Graceful", "tr": "Zarif, hoş" },
-        { "en": "Gradual", "tr": "Kademeli, yavaş yavaş" },
-        { "en": "Grandiose", "tr": "Görkemli, iddialı" },
-        { "en": "Gratify", "tr": "Memnun etmek" },
-        { "en": "Grievance", "tr": "Şikayet, yakınma" },
-        { "en": "Grim", "tr": "Gaddar, asık suratlı, korkunç" },
-        { "en": "Grudge", "tr": "Kin, hınç" },
-        { "en": "Gullible", "tr": "Saf, kolay kandırılan" }
-    ];
-
-    // C 13-20 (Döngü 13'ten başlatıldı)
-    for(let k=13; k<=20; k++) {
+    // C 15-20 (Otomatik Taslaklar)
+    for(let k=15; k<=20; k++) {
         fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
     }
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v16'; // Sürüm v16 yapıldı
+    const DB_KEY = 'VocabApp_FixedLayout_v18'; // Sürüm v18
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -314,7 +306,7 @@
         }; reader.readAsText(file);
     }
 
-    // --- UYGULAMA ---
+    // --- UYGULAMA MANTIĞI ---
     let activeCategory = 'C';
     let currentQuestions = [];
     let currentStep = 0, correctCount = 0;
@@ -411,7 +403,7 @@
             }
         });
         if(added > 0) { saveToMemory(); alert(`${added} kelime eklendi!`); document.getElementById('bulk-txt').value = ""; } 
-        else { alert("Eklenemedi."); }
+        else { alert("Eklenemedi veya kelimeler zaten mevcut."); }
     }
 
     function startQuiz(lvl) {
@@ -420,12 +412,11 @@
         if(!words || words.length === 0) { alert("Bu seviye boş."); return; }
         
         currentQuestions = words.map(w => {
-            let others = ["Gitmek","Gelmek","Koşmak","Bakmak","Görmek","Duymak","Yazmak","Okumak","Yüzmek","Uçmak"];
             let pool = [];
             for(let l=1; l<=20; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
-            if(pool.length < 5) pool.push(...others);
+            if(pool.length < 10) pool.push("Gitmek", "Bakmak", "Koşmak", "Görmek", "Yazmak");
             let opts = [w.tr];
-            while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r) && r!==w.tr) opts.push(r); }
+            while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
             return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
         });
         currentQuestions.sort(() => Math.random() - 0.5);
