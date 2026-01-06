@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C13 Güncel</title>
+    <title>Kelime Uygulaması - C11 Güncel</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -30,7 +30,7 @@
             position: relative;
         }
         
-        /* --- BAŞLIK VE SEKMELER --- */
+        /* --- BAŞLIK VE SEKMELER (SABİT) --- */
         .fixed-header-group {
             flex-shrink: 0; 
             background-color: #354f5c;
@@ -48,6 +48,7 @@
         .app-title { font-size: 18px; font-weight: bold; }
         .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; }
         
+        /* TABS */
         .tabs { 
             display: flex; 
             overflow-x: auto; 
@@ -81,6 +82,7 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        /* KART TASARIMI */
         .level-card { 
             background-color: #3e5c6a; 
             border: 2px solid #d4a35a; 
@@ -88,13 +90,29 @@
             display: flex; align-items: center; justify-content: space-between;
             padding: 20px; margin-bottom: 15px; 
             cursor: pointer; 
+            position: relative;
             transition: transform 0.1s;
         }
-        .level-card:active { transform: scale(0.98); }
+        .level-card:active { transform: scale(0.98); background-color: #354f5c; }
         
-        .level-icon { font-size: 24px; margin-right: 15px; }
-        .level-info { font-size: 16px; font-weight: bold; }
-        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
+        .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
+        .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; pointer-events: none; }
+
+        /* FORM */
+        .add-word-container, .backup-container { 
+            background-color: #3e5c6a; padding: 15px; 
+            border-radius: 15px; margin-bottom: 20px; 
+            border: 1px solid #f1c40f;
+        }
+        .backup-container { border-color: #3498db; border-style: dashed; }
+        
+        .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
+        .save-btn, .backup-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; font-size: 16px; }
+        .save-btn { background-color: #f1c40f; color: #1a1a1a; }
+        .backup-btn { width: 48%; }
+        .btn-download { background-color: #27ae60; }
+        .btn-upload { background-color: #3498db; }
 
         /* --- TEST EKRANI --- */
         #quiz-screen { 
@@ -114,16 +132,23 @@
         .progress-track { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; }
         #progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
         
+        .quiz-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .word-to-solve { font-size: 32px; font-weight: 800; margin-bottom: 40px; color: #fff; text-align: center; }
         .options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { background-color: #333; border: none; color: #ecf0f1; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .option-btn { background-color: #333; border: none; color: #ecf0f1; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
         .option-btn.correct { background-color: #27ae60; color: white; }
         .option-btn.wrong { background-color: #e74c3c; color: white; }
+        .option-btn:disabled { cursor: default; }
 
+        /* SONUÇ EKRANI */
         #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 10000; }
-        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#f1c40f 0% 0%, #333 0% 100%); margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; }
-        .home-btn { background-color: #f1c40f; color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .result-card { background-color: #3e5c6a; width: 85%; max-width: 400px; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#f1c40f 0% 0%, #333 0% 100%); margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; position: relative; }
+        .score-circle::before { content: ""; position: absolute; width: 95px; height: 95px; background-color: #3e5c6a; border-radius: 50%; }
+        .score-text { position: relative; z-index: 2; }
+        .home-btn { background-color: #f1c40f; color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         
+        #file-input { display: none; }
         #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 10001; }
         .checkmark { width: 30px; height: 60px; border-bottom: 8px solid white; border-right: 8px solid white; transform: rotate(45deg); margin-top: -10px; }
     </style>
@@ -160,7 +185,8 @@
             <div class="progress-track"><div id="progress-fill"></div></div>
             <div style="color:#3498db; font-weight:bold; font-size:14px;" id="progress-text">1/20</div>
         </div>
-        <div style="flex-grow:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div class="quiz-content">
+            <div style="font-size:40px; margin-bottom:20px;">🔊</div>
             <div class="word-to-solve" id="target-word">...</div>
             <div class="options" id="options-container"></div>
         </div>
@@ -168,103 +194,200 @@
     </div>
 
     <div id="result-screen">
-        <div style="background-color: #3e5c6a; width: 85%; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a;">
-            <div style="font-size:24px; font-weight:bold;">Tamamlandı!</div>
-            <div class="score-circle" id="score-circle"><span id="final-score">0</span></div>
+        <div class="result-card">
+            <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
+            <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
             <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
         </div>
     </div>
 </div>
 
+<input type="file" id="file-input" accept=".json" onchange="importBackup(this)">
+
 <script>
+    /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // Geçmiş Bölümler (C10, C11, C12 gibi bölümlerinizi de saklar)
-    fixedData["C"][10] = [{en:"Evade", tr:"Kaçınmak"}, {en:"Evaluate", tr:"Değerlendirmek"}]; 
-    fixedData["C"][11] = [{en:"Fabricate", tr:"Uydurmak"}, {en:"Facilitate", tr:"Kolaylaştırmak"}];
-    fixedData["C"][12] = [{en:"Frugal", tr:"Tutumlu"}, {en:"Frustrate", tr:"Hayal kırıklığı"}];
+    // C 1-10 (Özetlenmiş)
+    fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
+    fixedData["C"][2] = [{en:"Debate", tr:"Tartışmak"}, {en:"Decade", tr:"On yıl"}, {en:"Decay", tr:"Çürümek"}, {en:"Deceive", tr:"Aldatmak"}, {en:"Declare", tr:"İlan etmek"}, {en:"Decline", tr:"Reddetmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deduce", tr:"Sonuç çıkarmak"}, {en:"Defect", tr:"Kusur"}, {en:"Defend", tr:"Savunmak"}, {en:"Defer", tr:"Ertelemek"}, {en:"Deficiency", tr:"Eksiklik"}, {en:"Deficit", tr:"Açık"}, {en:"Define", tr:"Tanımlamak"}, {en:"Definite", tr:"Kesin"}, {en:"Delay", tr:"Gecikmek"}, {en:"Delicate", tr:"Hassas"}, {en:"Demonstrate", tr:"Göstermek"}, {en:"Denial", tr:"İnkar"}, {en:"Denounce", tr:"Kınamak"}];
+    fixedData["C"][3] = [{en:"Endeavour", tr:"Çabalamak, gayret etmek"},{en:"Endorse", tr:"Onaylamak, desteklemek"},{en:"Endure", tr:"Katlanmak, dayanmak"},{en:"Enforce", tr:"Uygulamak, zorla yaptırmak"},{en:"Engender", tr:"Neden olmak, doğurmak"},{en:"Enigmatic", tr:"Esrarengiz, gizemli"},{en:"Enormous", tr:"Kocaman, devasa"},{en:"Enrage", tr:"Kızdırmak, çileden çıkarmak"},{en:"Ensuing", tr:"Ardından gelen, sonraki"},{en:"Entail", tr:"Gerektirmek, kapsamak"},{en:"Ephemeral", tr:"Kısa ömürlü, geçici"},{en:"Epitome", tr:"Özet, kusursuz örnek"},{en:"Equivocal", tr:"Belirsiz, şüpheli"},{en:"Erroneous", tr:"Hatalı, yanlış"},{en:"Erudite", tr:"Bilgin, çok bilgili"},{en:"Escalate", tr:"Tırmanmak, yükselmek"},{en:"Essential", tr:"Temel, çok önemli"},{en:"Establish", tr:"Kurmak, belirlemek"},{en:"Esteem", tr:"Saygı, itibar"},{en:"Eternal", tr:"Sonsuz, ebedi"}];
+    fixedData["C"][10] = [{en:"Evade", tr:"Kaçınmak"},{en:"Evaluate", tr:"Değerlendirmek"},{en:"Evident", tr:"Besbelli"},{en:"Evoke", tr:"Anımsatmak"},{en:"Exacerbate", tr:"Kötüleştirmek"},{en:"Exceed", tr:"Aşmak"},{en:"Excel", tr:"Üstün olmak"},{en:"Exert", tr:"Kullanmak"},{en:"Exhaustive", tr:"Kapsamlı"},{en:"Exhilarating", tr:"Canlandırıcı"},{en:"Exile", tr:"Sürgün"},{en:"Exonerate", tr:"Aklamak"},{en:"Exorbitant", tr:"Fahiş"},{en:"Expedite", tr:"Hızlandırmak"},{en:"Explicit", tr:"Açık, net"},{en:"Exploit", tr:"Sömürmek"},{en:"Exquisite", tr:"Zarif"},{en:"Extensive", tr:"Kapsamlı"},{en:"Extinguish", tr:"Söndürmek"},{en:"Extol", tr:"Övmek"}];
 
-    // C 13 - GÜNCELLENDİ (H ve I GRUBU)
-    fixedData["C"][13] = [
-        { "en": "Halt", "tr": "Durdurmak, kesmek" },
-        { "en": "Haphazard", "tr": "Gelişigüzel, tesadüfi" },
-        { "en": "Harass", "tr": "Taciz etmek, bezdirmek" },
-        { "en": "Hasten", "tr": "Hızlandırmak, acele ettirmek" },
-        { "en": "Haughty", "tr": "Kibirli, mağrur" },
-        { "en": "Hazardous", "tr": "Tehlikeli, riskli" },
-        { "en": "Heir", "tr": "Varis, mirasçı" },
-        { "en": "Hinder", "tr": "Engellemek, aksatmak" },
-        { "en": "Hostile", "tr": "Düşmanca" },
-        { "en": "Humiliate", "tr": "Aşağılamak, rezil etmek" },
-        { "en": "Hypothesis", "tr": "Hipotez, varsayım" },
-        { "en": "Identical", "tr": "Birebir aynı" },
-        { "en": "Idle", "tr": "Aylak, boş, çalışmayan" },
-        { "en": "Ignorant", "tr": "Cahil, bilgisiz" },
-        { "en": "Illicit", "tr": "Yasa dışı, illegal" },
-        { "en": "Illusion", "tr": "Yanılsama, illüzyon" },
-        { "en": "Immaculate", "tr": "Lekesiz, tertemiz, hatasız" },
-        { "en": "Imminent", "tr": "Eli kulağında, olması yakın" },
-        { "en": "Impartial", "tr": "Tarafsız, nesnel" },
-        { "en": "Impede", "tr": "Geciktirmek, ayak bağı olmak" }
+    // C 11 - GÜNCELLENDİ (YENİ LİSTE)
+    fixedData["C"][11] = [
+        { "en": "Fabricate", "tr": "Uydurmak, sahtesini yapmak" },
+        { "en": "Facilitate", "tr": "Kolaylaştırmak" },
+        { "en": "Fallacy", "tr": "Yanlış düşünce, safsata" },
+        { "en": "Famine", "tr": "Açlık, kıtlık" },
+        { "en": "Feasible", "tr": "Mümkün, uygulanabilir" },
+        { "en": "Feeble", "tr": "Cılız, güçsüz" },
+        { "en": "Ferocious", "tr": "Vahşi, yırtıcı" },
+        { "en": "Fervent", "tr": "Ateşli, coşkulu" },
+        { "en": "Fickle", "tr": "Maymun iştahlı, kararsız" },
+        { "en": "Flamboyant", "tr": "Gösterişli" },
+        { "en": "Flaw", "tr": "Kusur, hata" },
+        { "en": "Flee", "tr": "Kaçmak" },
+        { "en": "Flimsy", "tr": "Dayanıksız, derme çatma" },
+        { "en": "Fluctuate", "tr": "Dalgalanmak, değişmek" },
+        { "en": "Forbid", "tr": "Yasaklamak" },
+        { "en": "Foresee", "tr": "Öngörmek" },
+        { "en": "Formidable", "tr": "Zorlu, ürkütücü" },
+        { "en": "Foster", "tr": "Büyütmek, teşvik etmek" },
+        { "en": "Fragile", "tr": "Kırılgan" },
+        { "en": "Frantic", "tr": "Çılgına dönmüş, telaşlı" }
     ];
 
+    // Diğer boşluklar
+    for(let k=4; k<=20; k++) {
+        if(!fixedData["C"][k]) fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
+    }
+
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v17'; // Sürüm v17
+    const DB_KEY = 'VocabApp_FixedLayout_v15'; // Sürüm v15
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
         if(stored) {
-            vocabularyData = JSON.parse(stored);
-            // Sadece C13 gibi yeni eklenen sabit verileri mevcut dataya entegre et
-            if(!vocabularyData["C"]) vocabularyData["C"] = {};
-            vocabularyData["C"][13] = fixedData["C"][13];
+            try {
+                vocabularyData = JSON.parse(stored);
+                for(let cat in fixedData) {
+                    if(!vocabularyData[cat]) vocabularyData[cat] = {};
+                    for(let lvl in fixedData[cat]) {
+                        if(!vocabularyData[cat][lvl] || vocabularyData[cat][lvl].length === 0) {
+                            vocabularyData[cat][lvl] = fixedData[cat][lvl];
+                        }
+                    }
+                }
+            } catch(e) { vocabularyData = JSON.parse(JSON.stringify(fixedData)); }
         } else {
             vocabularyData = JSON.parse(JSON.stringify(fixedData));
             saveToMemory();
         }
-        renderList('C');
     }
 
     function saveToMemory() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
 
+    // --- YEDEKLEME VE İÇERİ AKTARMA ---
+    function exportBackup() {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocabularyData));
+        const dl = document.createElement('a'); 
+        dl.setAttribute("href", dataStr); dl.setAttribute("download", "kelime_yedegim.json");
+        document.body.appendChild(dl); dl.click(); dl.remove();
+    }
+    
+    function triggerImport() { document.getElementById('file-input').click(); }
+    
+    function importBackup(input) {
+        const file = input.files[0]; if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try { 
+                const imported = JSON.parse(e.target.result);
+                if(imported && typeof imported === 'object') {
+                    vocabularyData = imported; 
+                    saveToMemory(); 
+                    alert("Yedek Başarıyla Yüklendi!"); 
+                    switchTab('C', null); 
+                } else { alert("Dosya formatı hatalı."); }
+            } catch(err){ alert("Hata!"); }
+            input.value = '';
+        }; reader.readAsText(file);
+    }
+
+    // --- UYGULAMA MANTIĞI ---
     let activeCategory = 'C';
     let currentQuestions = [];
     let currentStep = 0, correctCount = 0;
 
-    window.onload = initApp;
+    window.onload = function() { 
+        initApp(); 
+        const cTab = Array.from(document.querySelectorAll('.tab')).find(t => t.innerText.trim() === 'C');
+        switchTab('C', cTab); 
+    };
 
     function switchTab(cat, el) {
+        if(!el) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => { if(t.innerText.trim().includes(cat)) el = t; });
+        }
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        el.classList.add('active');
-        activeCategory = cat;
-        document.getElementById('app-header-title').innerText = cat;
-        renderList(cat);
+        if(el) { el.classList.add('active'); el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }
+        
+        if(cat === 'ADD') {
+            document.getElementById('app-header-title').innerText = "Ekle / Yedekle";
+            renderAddScreen();
+        } else {
+            activeCategory = cat;
+            document.getElementById('app-header-title').innerText = cat;
+            renderList(cat);
+        }
+        document.querySelector('.content-area').scrollTop = 0;
     }
 
     function renderList(cat) {
         const div = document.getElementById('content-container');
         div.innerHTML = "";
+        const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
         for(let i=1; i<=20; i++) {
             let count = (vocabularyData[cat] && vocabularyData[cat][i]) ? vocabularyData[cat][i].length : 0;
+            let status = count > 0 ? `${count} Kelime` : "Boş";
             div.innerHTML += `
-                <div class="level-card" onclick="startQuiz(${i})" style="${count > 0 ? '' : 'opacity:0.5;'}">
-                    <div><span class="level-icon">📚</span> <span class="level-info">${i}. Seviye</span></div>
-                    <div class="level-progress">${count} Kelime</div>
+                <div class="level-card" onclick="startQuiz(${i})" style="${count > 0 ? '' : 'opacity:0.6;'}">
+                    <div><span class="level-icon">${icons[(i-1)%icons.length]}</span> <span class="level-info">${i}. Seviye</span></div>
+                    <div class="level-progress">${status}</div>
                 </div>`;
         }
     }
 
+    function renderAddScreen() {
+        document.getElementById('content-container').innerHTML = `
+            <div class="add-word-container">
+                <div style="font-weight:bold; color:#f1c40f; margin-bottom:10px;">Kelime Ekle</div>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <select id="t-cat" class="form-select">
+                        <option value="YDS">YDS</option><option value="H">HABER</option>
+                        <option value="B2">B2</option><option value="B1">B1</option><option value="C" selected>C</option>
+                    </select>
+                    <select id="t-lvl" class="form-select">${Array.from({length:20},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+                </div>
+                <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma&#10;Run : Koşmak" rows="5"></textarea>
+                <button class="save-btn" onclick="addWords()">Kaydet</button>
+            </div>
+            <div class="backup-container">
+                <div style="font-weight:bold; color:#3498db; margin-bottom:10px;">Yedekleme</div>
+                <div style="display:flex; justify-content:space-between; gap:10px;">
+                    <button class="backup-btn btn-download" onclick="exportBackup()">İndir</button>
+                    <button class="backup-btn btn-upload" onclick="triggerImport()">Yükle</button>
+                </div>
+            </div>`;
+    }
+
+    function addWords() {
+        const txt = document.getElementById('bulk-txt').value.trim();
+        const cat = document.getElementById('t-cat').value;
+        const lvl = parseInt(document.getElementById('t-lvl').value);
+        if(!txt) return;
+        if(!vocabularyData[cat]) vocabularyData[cat] = {};
+        if(!vocabularyData[cat][lvl]) vocabularyData[cat][lvl] = [];
+        const lines = txt.split('\n'); let added = 0;
+        lines.forEach(line => {
+            let parts = line.split(/[:=\t]/);
+            if(parts.length >= 2) {
+                let en = parts[0].trim(), tr = parts.slice(1).join(' ').trim();
+                if(en && tr) { vocabularyData[cat][lvl].push({en, tr}); added++; }
+            }
+        });
+        if(added > 0) { saveToMemory(); alert(`${added} kelime eklendi!`); document.getElementById('bulk-txt').value = ""; }
+    }
+
     function startQuiz(lvl) {
-        let words = vocabularyData[activeCategory][lvl] || [];
+        let words = (vocabularyData[activeCategory] && vocabularyData[activeCategory][lvl]) ? vocabularyData[activeCategory][lvl] : [];
         if(words.length === 0) return;
         currentQuestions = words.map(w => {
             let opts = [w.tr];
-            let pool = ["Hızlanmak", "Sabit", "Karmaşık", "Farklı", "Zayıf", "Güçlü", "Eski"];
-            // Yanlış seçenekleri daha gerçekçi yapalım
-            while(opts.length < 4) { 
-                let r = pool[Math.floor(Math.random()*pool.length)]; 
-                if(!opts.includes(r)) opts.push(r); 
-            }
+            let pool = []; Object.values(vocabularyData[activeCategory]).forEach(l => l.forEach(x => pool.push(x.tr)));
+            while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
             return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
         }).sort(() => Math.random() - 0.5);
         currentStep = 0; correctCount = 0;
@@ -280,22 +403,22 @@
         document.getElementById('progress-fill').style.width = `${((currentStep+1)/currentQuestions.length)*100}%`;
         let html = "";
         q.options.forEach(opt => { 
-            html += `<button class="option-btn" onclick="check(this, '${opt}', '${q.correct}')">${opt}</button>`; 
+            html += `<button class="option-btn" onclick="check(this, '${opt.replace(/'/g, "\\'")}', '${q.correct.replace(/'/g, "\\")}')">${opt}</button>`; 
         });
         document.getElementById('options-container').innerHTML = html;
     }
 
     function check(btn, sel, cor) {
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
         if(sel === cor) {
             btn.classList.add('correct'); correctCount++;
             document.getElementById('success-overlay').style.display='flex';
             setTimeout(()=>{ document.getElementById('success-overlay').style.display='none'; next(); }, 600);
         } else {
             btn.classList.add('wrong');
-            // Doğru olanı göster
-            const btns = document.querySelectorAll('.option-btn');
-            btns.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); });
-            setTimeout(next, 1200);
+            buttons.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); });
+            setTimeout(next, 1500);
         }
     }
     
@@ -304,15 +427,20 @@
     function showResult() {
         document.getElementById('quiz-screen').style.display='none';
         document.getElementById('result-screen').style.display='flex';
-        document.getElementById('final-score').innerText = `${correctCount}/${currentQuestions.length}`;
+        let total = currentQuestions.length || 1;
+        document.getElementById('final-score').innerText = `${correctCount}/${total}`;
+        let p = (correctCount/total)*100;
+        document.getElementById('score-circle').style.background = `conic-gradient(#f1c40f 0% ${p}%, #333 ${p}% 100%)`;
     }
 
-    function closeResultScreen() { 
-        document.getElementById('result-screen').style.display='none'; 
+    function forceQuitQuiz() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'none';
         renderList(activeCategory);
     }
 
-    function quitQuiz() { document.getElementById('quiz-screen').style.display='none'; }
+    function closeResultScreen() { forceQuitQuiz(); }
+    function quitQuiz() { if(confirm("Çıkmak istiyor musunuz?")) forceQuitQuiz(); }
 </script>
 </body>
 </html>
