@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - YDS Eklendi</title>
+    <title>Kelime Uygulaması - YDS Seviye 2 ve 3 Eklendi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -232,7 +232,7 @@
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // --- YDS VERİLERİ ---
+    // --- YDS Level 1 ---
     fixedData["YDS"][1] = [
       { "en": "Abandon", "tr": "Terk etmek, vazgeçmek" },
       { "en": "Abruptly", "tr": "Aniden, gereksizce" },
@@ -254,6 +254,54 @@
       { "en": "Alleviate", "tr": "Hafifletmek, dindirmek" },
       { "en": "Allocate", "tr": "Tahsis etmek, ayırmak" },
       { "en": "Ambiguous", "tr": "Belirsiz, muğlak" }
+    ];
+
+    // --- YDS Level 2 ---
+    fixedData["YDS"][2] = [
+      { "en": "Amend", "tr": "Değiştirmek, düzeltmek" },
+      { "en": "Amplify", "tr": "Artırmak, yükseltmek" },
+      { "en": "Annual", "tr": "Yıllık" },
+      { "en": "Anticipate", "tr": "Beklemek, ummak" },
+      { "en": "Appalling", "tr": "Korkunç, dehşet verici" },
+      { "en": "Appoint", "tr": "Atamak, tayin etmek" },
+      { "en": "Appreciate", "tr": "Takdir etmek, değerini bilmek" },
+      { "en": "Approach", "tr": "Yaklaşım, yaklaşmak" },
+      { "en": "Appropriate", "tr": "Uygun, yerinde" },
+      { "en": "Approve", "tr": "Onaylamak" },
+      { "en": "Arbitrary", "tr": "Keyfi, rastgele" },
+      { "en": "Arise", "tr": "Ortaya çıkmak, baş göstermek" },
+      { "en": "Articulate", "tr": "Düşüncelerini net ifade etmek" },
+      { "en": "Ascend", "tr": "Yükselmek, çıkmak" },
+      { "en": "Aspect", "tr": "Yön, taraf, özellik" },
+      { "en": "Assemble", "tr": "Toplamak, bir araya getirmek" },
+      { "en": "Assess", "tr": "Değerlendirmek" },
+      { "en": "Asset", "tr": "Varlık, mülk, artı değer" },
+      { "en": "Assign", "tr": "Görevlendirmek, atamak" },
+      { "en": "Assimilate", "tr": "Benimsemek, özümsemek" }
+    ];
+
+    // --- YDS Level 3 ---
+    fixedData["YDS"][3] = [
+      { "en": "Assumption", "tr": "Varsayım" },
+      { "en": "Assure", "tr": "Garanti vermek, temin etmek" },
+      { "en": "Astonishing", "tr": "Şaşırtıcı" },
+      { "en": "Attain", "tr": "Ulaşmak, erişmek" },
+      { "en": "Attribute", "tr": "Atfetmek, dayandırmak" },
+      { "en": "Authentic", "tr": "Gerçek, özgün" },
+      { "en": "Available", "tr": "Mevcut, hazır" },
+      { "en": "Awareness", "tr": "Farkındalık" },
+      { "en": "Baffle", "tr": "Şaşırtmak, aklını karıştırmak" },
+      { "en": "Barren", "tr": "Kurak, verimsiz" },
+      { "en": "Baseless", "tr": "Dayanaksız, asılsız" },
+      { "en": "Benefit", "tr": "Fayda, yarar sağlamak" },
+      { "en": "Bewilder", "tr": "Şaşırtmak, hayretler içinde bırakmak" },
+      { "en": "Bias", "tr": "Önyargı, taraf tutma" },
+      { "en": "Bizarre", "tr": "Garip, tuhaf" },
+      { "en": "Blame", "tr": "Suçlamak" },
+      { "en": "Blast", "tr": "Patlama" },
+      { "en": "Blend", "tr": "Karıştırmak, harmanlamak" },
+      { "en": "Boost", "tr": "Artırmak, yükseltmek" },
+      { "en": "Breach", "tr": "İhlal, ihlal etmek" }
     ];
 
     // --- C Seviyesi Veritabanı ---
@@ -302,7 +350,7 @@
     ];
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v24'; 
+    const DB_KEY = 'VocabApp_FixedLayout_v25'; // Versiyonu v25 yaptım ki yeni kelimeler otomatik yüklensin
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
