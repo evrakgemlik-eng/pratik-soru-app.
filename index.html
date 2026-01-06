@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C9 Eklendi</title>
+    <title>Kelime Uygulaması - C3 Güncel</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -208,10 +208,33 @@
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // C 1-3
+    // C 1-2
     fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
     fixedData["C"][2] = [{en:"Debate", tr:"Tartışmak"}, {en:"Decade", tr:"On yıl"}, {en:"Decay", tr:"Çürümek"}, {en:"Deceive", tr:"Aldatmak"}, {en:"Declare", tr:"İlan etmek"}, {en:"Decline", tr:"Reddetmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deduce", tr:"Sonuç çıkarmak"}, {en:"Defect", tr:"Kusur"}, {en:"Defend", tr:"Savunmak"}, {en:"Defer", tr:"Ertelemek"}, {en:"Deficiency", tr:"Eksiklik"}, {en:"Deficit", tr:"Açık"}, {en:"Define", tr:"Tanımlamak"}, {en:"Definite", tr:"Kesin"}, {en:"Delay", tr:"Gecikmek"}, {en:"Delicate", tr:"Hassas"}, {en:"Demonstrate", tr:"Göstermek"}, {en:"Denial", tr:"İnkar"}, {en:"Denounce", tr:"Kınamak"}];
-    fixedData["C"][3] = [{en:"Derive", tr:"Türetmek"}, {en:"Detect", tr:"Tespit etmek"}, {en:"Deter", tr:"Caydırmak"}, {en:"Deviate", tr:"Sapmak"}]; 
+    
+    // C 3 - GÜNCELLENDİ (E HARFİ)
+    fixedData["C"][3] = [
+      { "en": "Endeavour", "tr": "Çabalamak, gayret etmek" },
+      { "en": "Endorse", "tr": "Onaylamak, desteklemek" },
+      { "en": "Endure", "tr": "Katlanmak, dayanmak" },
+      { "en": "Enforce", "tr": "Uygulamak, zorla yaptırmak" },
+      { "en": "Engender", "tr": "Neden olmak, doğurmak" },
+      { "en": "Enigmatic", "tr": "Esrarengiz, gizemli" },
+      { "en": "Enormous", "tr": "Kocaman, devasa" },
+      { "en": "Enrage", "tr": "Kızdırmak, çileden çıkarmak" },
+      { "en": "Ensuing", "tr": "Ardından gelen, sonraki" },
+      { "en": "Entail", "tr": "Gerektirmek, kapsamak" },
+      { "en": "Ephemeral", "tr": "Kısa ömürlü, geçici" },
+      { "en": "Epitome", "tr": "Özet, kusursuz örnek" },
+      { "en": "Equivocal", "tr": "Belirsiz, şüpheli" },
+      { "en": "Erroneous", "tr": "Hatalı, yanlış" },
+      { "en": "Erudite", "tr": "Bilgin, çok bilgili" },
+      { "en": "Escalate", "tr": "Tırmanmak, yükselmek" },
+      { "en": "Essential", "tr": "Temel, çok önemli" },
+      { "en": "Establish", "tr": "Kurmak, belirlemek" },
+      { "en": "Esteem", "tr": "Saygı, itibar" },
+      { "en": "Eternal", "tr": "Sonsuz, ebedi" }
+    ];
     
     // C 4
     fixedData["C"][4] = [
@@ -324,7 +347,7 @@
       { "en": "Docile", "tr": "Uysal, evcil" }
     ];
 
-    // C 9 (YENİ EKLENDİ)
+    // C 9
     fixedData["C"][9] = [
       { "en": "Drastic", "tr": "Sert, şiddetli, radikal" },
       { "en": "Dubious", "tr": "Şüpheli, belirsiz" },
@@ -348,13 +371,13 @@
       { "en": "Encompass", "tr": "Kapsamak, çevrelemek" }
     ];
 
-    // C 10-20 (Otomatik doldurma - 10'dan başlıyor)
+    // C 10-20
     for(let k=10; k<=20; k++) {
         fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
     }
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v11'; // v11 yaptık ki C9 hemen gözüksün
+    const DB_KEY = 'VocabApp_FixedLayout_v13'; // v13: Sürüm yükseltildi (Veri yenilemek için)
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -537,21 +560,24 @@
         
         let html = "";
         q.options.forEach(opt => { 
-            let safeOpt = opt.replace(/'/g, "\\'"), safeCorrect = q.correct.replace(/'/g, "\\'");
-            html += `<button class="option-btn" onclick="check(this, '${safeOpt}', '${safeCorrect}')">${opt}</button>`; 
+            let safeOpt = opt.replace(/'/g, "\\'");
+            let safeCorrect = q.correct.replace(/'/g, "\\'");
+            html += `<button class="option-btn" data-answer="${safeOpt}" onclick="check(this, '${safeOpt}', '${safeCorrect}')">${opt}</button>`; 
         });
         document.getElementById('options-container').innerHTML = html;
     }
 
     function check(btn, sel, cor) {
-        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-        if(sel === cor) {
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
+        
+        if(sel.trim() === cor.trim()) {
             btn.classList.add('correct'); correctCount++;
             document.getElementById('success-overlay').style.display='flex';
             setTimeout(()=>{ document.getElementById('success-overlay').style.display='none'; next(); }, 600);
         } else {
             btn.classList.add('wrong');
-            document.querySelectorAll('.option-btn').forEach(b => { if(b.innerText === cor) b.classList.add('correct'); });
+            buttons.forEach(b => { if(b.getAttribute('data-answer') === cor) b.classList.add('correct'); });
             setTimeout(next, 1500);
         }
     }
