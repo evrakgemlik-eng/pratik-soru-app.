@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - C15 Güncel</title>
+    <title>Kelime Uygulaması - C16 Güncel</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -224,7 +224,7 @@
     fixedData["C"][13] = [{en:"Halt", tr:"Durdurmak"}, {en:"Haphazard", tr:"Gelişigüzel"}, {en:"Harass", tr:"Taciz etmek"}, {en:"Hasten", tr:"Hızlandırmak"}, {en:"Haughty", tr:"Kibirli"}, {en:"Hazardous", tr:"Tehlikeli"}, {en:"Heir", tr:"Mirasçı"}, {en:"Hinder", tr:"Engellemek"}, {en:"Hostile", tr:"Düşmanca"}, {en:"Humiliate", tr:"Aşağılamak"}, {en:"Hypothesis", tr:"Varsayım"}, {en:"Identical", tr:"Birebir aynı"}, {en:"Idle", tr:"Aylak, boş"}, {en:"Ignorant", tr:"Cahil"}, {en:"Illicit", tr:"Yasa dışı"}, {en:"Illusion", tr:"Yanılsama"}, {en:"Immaculate", tr:"Lekesiz"}, {en:"Imminent", tr:"Eli kulağında"}, {en:"Impartial", tr:"Tarafsız"}, {en:"Impede", tr:"Geciktirmek"}];
     fixedData["C"][14] = [{en:"Imperative", tr:"Zorunlu"}, {en:"Impetus", tr:"İtici güç"}, {en:"Implausible", tr:"Akla yatkın olmayan"}, {en:"Implicit", tr:"İmalı"}, {en:"Imply", tr:"İma etmek"}, {en:"Imposing", tr:"Heybetli"}, {en:"Impromptu", tr:"Doğaçlama"}, {en:"Inadvertent", tr:"İstem dışı"}, {en:"Incentive", tr:"Teşvik"}, {en:"Incessant", tr:"Aralıksız"}, {en:"Incline", tr:"Eğilimi olmak"}, {en:"Incoherent", tr:"Tutarsız"}, {en:"Incompatible", tr:"Uyumsuz"}, {en:"Incompetent", tr:"Yetersiz"}, {en:"Inconceivable", tr:"Hayal edilemez"}, {en:"Inconsistent", tr:"Çelişkili"}, {en:"Incredible", tr:"İnanılmaz"}, {en:"Indifferent", tr:"Kayıtsız"}, {en:"Indigenous", tr:"Yerli"}, {en:"Indignant", tr:"Dargın, kırgın"}];
 
-    // C 15 - YENİ EKLENEN LİSTE
+    // C 15
     fixedData["C"][15] = [
         { "en": "Indispensable", "tr": "Vazgeçilmez, çok gerekli" },
         { "en": "Induce", "tr": "Sebep olmak, ikna etmek" },
@@ -248,13 +248,38 @@
         { "en": "Insignificant", "tr": "Önemsiz" }
     ];
 
-    // C 16-20 (Otomatik Taslaklar)
-    for(let k=16; k<=20; k++) {
+    // C 16 - GÜNCEL EKLENEN
+    fixedData["C"][16] = [
+        { "en": "Insolent", "tr": "Küstah, saygısız" },
+        { "en": "Inspire", "tr": "İlham vermek" },
+        { "en": "Instigate", "tr": "Kışkırtmak, başlatmak" },
+        { "en": "Insulate", "tr": "Yalıtmak" },
+        { "en": "Intact", "tr": "El değmemiş, bozulmamış" },
+        { "en": "Intangible", "tr": "Manevi, elle tutulamaz" },
+        { "en": "Integrity", "tr": "Dürüstlük, bütünlük" },
+        { "en": "Intense", "tr": "Yoğun, şiddetli" },
+        { "en": "Intervene", "tr": "Müdahale etmek" },
+        { "en": "Intricate", "tr": "Karmaşık, girift" },
+        { "en": "Intriguing", "tr": "Merak uyandırıcı" },
+        { "en": "Invade", "tr": "İstila etmek" },
+        { "en": "Invalid", "tr": "Geçersiz" },
+        { "en": "Invaluable", "tr": "Paha biçilemez" },
+        { "en": "Invariably", "tr": "Değişmez şekilde, daima" },
+        { "en": "Inventory", "tr": "Envanter, stok listesi" },
+        { "en": "Invert", "tr": "Tersine çevirmek" },
+        { "en": "Investigate", "tr": "Araştırmak, soruşturmak" },
+        { "en": "Invisible", "tr": "Görünmez" },
+        { "en": "Invoke", "tr": "Çağırmak, yardım istemek" }
+    ];
+
+    // C 17-20 (Otomatik Taslaklar)
+    for(let k=17; k<=20; k++) {
         fixedData["C"][k] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
     }
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v19'; // Versiyon v19
+    // SÜRÜMÜ 'v20' YAPTIM KI YENI VERILER GORUNSUN
+    const DB_KEY = 'VocabApp_FixedLayout_v20'; 
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
