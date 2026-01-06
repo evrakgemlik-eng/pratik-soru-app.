@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - İlerleme Takipli</title>
+    <title>Kelime Uygulaması - YDS Eklendi</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -36,7 +36,6 @@
             background-color: #354f5c;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 10;
-            padding-bottom: 5px;
         }
 
         header.home-header { 
@@ -66,28 +65,13 @@
             height: 100%;
             display: flex; align-items: center;
             color: #bdc3c7; 
-            font-weight: bold; font-size: 13px; 
+            font-weight: bold; font-size: 14px; 
             position: relative; cursor: pointer;
             flex-shrink: 0;
             transition: color 0.3s;
         }
         .tab.active { color: #f1c40f; background-color: rgba(255,255,255,0.05); }
         .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #f1c40f; }
-
-        /* --- GENEL İLERLEME ÇUBUĞU (YENİ) --- */
-        .category-progress-wrapper {
-            padding: 5px 20px 10px 20px;
-            background-color: #354f5c;
-        }
-        .cp-header {
-            display: flex; justify-content: space-between; font-size: 12px; color: #bdc3c7; margin-bottom: 5px;
-        }
-        .cp-track {
-            width: 100%; height: 10px; background-color: #2c3e50; border-radius: 5px; overflow: hidden;
-        }
-        .cp-fill {
-            height: 100%; background: linear-gradient(90deg, #f1c40f, #f39c12); width: 0%; transition: width 0.5s ease;
-        }
 
         /* --- İÇERİK ALANI --- */
         .content-area { 
@@ -113,44 +97,45 @@
         
         .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
         .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
-        .level-progress-text { color: #ecf0f1; font-size: 12px; opacity: 0.8; pointer-events: none; margin-top: 4px;}
-        
-        /* Seviye kartındaki minik badge */
-        .mastery-badge {
-            background-color: #27ae60; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 5px; display: none;
-        }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; pointer-events: none; }
 
-        /* SÖZLÜK & FORM */
-        .add-word-container, .backup-container, .search-container { 
+        /* FORM VE BUTONLAR */
+        .add-word-container, .backup-container { 
             background-color: #3e5c6a; padding: 15px; 
             border-radius: 15px; margin-bottom: 20px; 
             border: 1px solid #f1c40f;
         }
         .backup-container { border-color: #3498db; border-style: dashed; }
-        .search-container { border-color: #2ecc71; }
         
-        .form-select, .form-textarea, .search-input { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
-        .search-input { margin-bottom: 0; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>'); background-repeat: no-repeat; background-position: 10px center; padding-left: 35px; }
-
+        .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
         .save-btn, .backup-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; font-size: 16px; }
         .save-btn { background-color: #f1c40f; color: #1a1a1a; }
         .backup-btn { width: 48%; }
         .btn-download { background-color: #27ae60; }
         .btn-upload { background-color: #3498db; }
 
-        /* SÖZLÜK SONUÇLARI */
-        .dict-result-item {
-            background-color: #354f5c;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #2ecc71;
-            display: flex;
-            flex-direction: column;
+        /* --- SÖZLÜK TASARIMI --- */
+        .dict-container { padding-bottom: 20px; }
+        .search-input { 
+            width: 100%; padding: 15px; 
+            background-color: #2c3e50; border: 2px solid #f1c40f; 
+            border-radius: 30px; color: white; 
+            font-size: 16px; margin-bottom: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23f1c40f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            padding-left: 50px;
         }
-        .dict-en { font-weight: bold; font-size: 18px; color: #f1c40f; margin-bottom: 4px; }
-        .dict-tr { font-size: 16px; color: white; margin-bottom: 8px; }
-        .dict-tag { font-size: 11px; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 4px; width: fit-content; color: #bdc3c7; }
+        .dict-result-card {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px; border-radius: 10px;
+            margin-bottom: 10px; border-left: 4px solid #3498db;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .dict-en { font-size: 18px; font-weight: bold; color: #fff; }
+        .dict-tr { font-size: 16px; color: #bdc3c7; margin-top: 4px; }
+        .dict-tag { font-size: 11px; background: #f1c40f; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .no-result { text-align: center; color: #95a5a6; margin-top: 30px; }
 
         /* --- TEST EKRANI --- */
         #quiz-screen { 
@@ -210,19 +195,6 @@
             <div class="tab" onclick="switchTab('DICT', this)">SÖZLÜK</div>
             <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE</div>
         </div>
-
-        <div class="category-progress-wrapper" id="cat-progress-box">
-            <div class="cp-header">
-                <span id="cp-learned-text">0 Kelime Öğrenildi</span>
-                <span id="cp-percent-text">%0</span>
-            </div>
-            <div class="cp-track">
-                <div class="cp-fill" id="cp-fill-bar"></div>
-            </div>
-            <div style="text-align:center; font-size:10px; color:#95a5a6; margin-top:3px;">
-                (Bir seviye 2 kez hatasız tamamlanınca öğrenilmiş sayılır)
-            </div>
-        </div>
     </div>
 
     <div class="content-area" id="content-container"></div>
@@ -249,7 +221,6 @@
         <div class="result-card">
             <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
             <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
-            <div id="mastery-msg" style="color:#f1c40f; font-size:14px; margin-bottom:10px; height:20px;"></div>
             <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
         </div>
     </div>
@@ -261,7 +232,31 @@
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // C Seviyesi Veritabanı
+    // --- YDS VERİLERİ ---
+    fixedData["YDS"][1] = [
+      { "en": "Abandon", "tr": "Terk etmek, vazgeçmek" },
+      { "en": "Abruptly", "tr": "Aniden, gereksizce" },
+      { "en": "Abundance", "tr": "Bolluk, bereket" },
+      { "en": "Accelerate", "tr": "Hızlandırmak" },
+      { "en": "Accommodate", "tr": "Barındırmak, yerleştirmek" },
+      { "en": "Accurately", "tr": "Doğru bir şekilde" },
+      { "en": "Acknowledge", "tr": "Kabul etmek, tanımak" },
+      { "en": "Adapt", "tr": "Uyarlamak, uymak" },
+      { "en": "Adequate", "tr": "Yeterli, kafi" },
+      { "en": "Adhere", "tr": "Bağlı kalmak, sadık kalmak" },
+      { "en": "Adjust", "tr": "Ayarlamak, uymak" },
+      { "en": "Administer", "tr": "Yönetmek, idare etmek" },
+      { "en": "Adolescence", "tr": "Ergenlik" },
+      { "en": "Adopt", "tr": "Benimsemek, evlat edinmek" },
+      { "en": "Adverse", "tr": "Zıt, kötü, olumsuz" },
+      { "en": "Advocate", "tr": "Savunmak, desteklemek" },
+      { "en": "Aggravate", "tr": "Kötüleştirmek, şiddetlendirmek" },
+      { "en": "Alleviate", "tr": "Hafifletmek, dindirmek" },
+      { "en": "Allocate", "tr": "Tahsis etmek, ayırmak" },
+      { "en": "Ambiguous", "tr": "Belirsiz, muğlak" }
+    ];
+
+    // --- C Seviyesi Veritabanı ---
     fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
     fixedData["C"][2] = [{en:"Debate", tr:"Tartışmak"}, {en:"Decade", tr:"On yıl"}, {en:"Decay", tr:"Çürümek"}, {en:"Deceive", tr:"Aldatmak"}, {en:"Declare", tr:"İlan etmek"}, {en:"Decline", tr:"Reddetmek"}, {en:"Dedicate", tr:"Adamak"}, {en:"Deduce", tr:"Sonuç çıkarmak"}, {en:"Defect", tr:"Kusur"}, {en:"Defend", tr:"Savunmak"}, {en:"Defer", tr:"Ertelemek"}, {en:"Deficiency", tr:"Eksiklik"}, {en:"Deficit", tr:"Açık"}, {en:"Define", tr:"Tanımlamak"}, {en:"Definite", tr:"Kesin"}, {en:"Delay", tr:"Gecikmek"}, {en:"Delicate", tr:"Hassas"}, {en:"Demonstrate", tr:"Göstermek"}, {en:"Denial", tr:"İnkar"}, {en:"Denounce", tr:"Kınamak"}];
     fixedData["C"][3] = [{en:"Endeavour", tr:"Çabalamak"},{en:"Endorse", tr:"Onaylamak"},{en:"Endure", tr:"Katlanmak"},{en:"Enforce", tr:"Uygulamak"},{en:"Engender", tr:"Neden olmak"},{en:"Enigmatic", tr:"Esrarengiz"},{en:"Enormous", tr:"Devasa"},{en:"Enrage", tr:"Kızdırmak"},{en:"Ensuing", tr:"Ardından gelen"},{en:"Entail", tr:"Gerektirmek"},{en:"Ephemeral", tr:"Kısa ömürlü"},{en:"Epitome", tr:"Kusursuz örnek"},{en:"Equivocal", tr:"Belirsiz"},{en:"Erroneous", tr:"Hatalı"},{en:"Erudite", tr:"Bilgin"},{en:"Escalate", tr:"Tırmanmak"},{en:"Essential", tr:"Temel"},{en:"Establish", tr:"Kurmak"},{en:"Esteem", tr:"Saygı"},{en:"Eternal", tr:"Sonsuz"}];
@@ -281,15 +276,35 @@
     fixedData["C"][17] = [{en:"Irrational", tr:"Mantıksız"}, {en:"Irrelevant", tr:"İlgisiz, konu dışı"}, {en:"Irreparable", tr:"Onarılamaz"}, {en:"Irresistible", tr:"Karşı konulamaz"}, {en:"Isolate", tr:"Soyutlamak, ayırmak"}, {en:"Jeopardize", tr:"Tehlikeye atmak"}, {en:"Jovial", tr:"Şen, neşeli"}, {en:"Judicious", tr:"Mantıklı, akıllıca"}, {en:"Justify", tr:"Haklı çıkarmak"}, {en:"Keen", tr:"Keskin, hevesli"}, {en:"Lament", tr:"Yas tutmak, ağıt yakmak"}, {en:"Lavish", tr:"Müsrif, savurgan, lüks"}, {en:"Legitimate", tr:"Meşru, yasal"}, {en:"Lethal", tr:"Öldürücü"}, {en:"Liable", tr:"Sorumlu, eğilimli"}, {en:"Liberal", tr:"Hoşgörülü, özgürlükçü"}, {en:"Linger", tr:"Oyalanmak, can çekişmek"}, {en:"Literate", tr:"Okuryazar"}, {en:"Loathe", tr:"İğrenmek, nefret etmek"}, {en:"Lucid", tr:"Berrak, anlaşılır"}];
     fixedData["C"][18] = [{en:"Magnify", tr:"Büyütmek, abartmak"}, {en:"Malicious", tr:"Kötü niyetli, art niyetli"}, {en:"Mandatory", tr:"Zorunlu"}, {en:"Manifest", tr:"Göstermek, açıkça ortaya koymak"}, {en:"Marginal", tr:"Sınırda olan, çok az, önemsiz"}, {en:"Masterpiece", tr:"Başyapıt"}, {en:"Meagre", tr:"Yetersiz, kıt, az"}, {en:"Mediocre", tr:"Vasat, orta karar"}, {en:"Melancholy", tr:"Hüzün, keder"}, {en:"Meticulous", tr:"Titiz, kılı kırk yaran"}, {en:"Milestone", tr:"Dönüm noktası"}, {en:"Miserable", tr:"Sefil, perişan"}, {en:"Mitigate", tr:"Hafifletmek, azaltmak"}, {en:"Momentous", tr:"Çok önemli, tarihi"}, {en:"Monotonous", tr:"Tekdüze, sıkıcı"}, {en:"Mundane", tr:"Sıradan, dünyevi"}, {en:"Mutual", tr:"Karşılıklı"}, {en:"Naive", tr:"Saf, deneyimsiz"}, {en:"Nebulous", tr:"Bulutlu, belirsiz"}, {en:"Negligible", tr:"İhmal edilebilir, önemsiz"}];
     fixedData["C"][19] = [{en:"Nominal", tr:"Sembolik, çok küçük"}, {en:"Notable", tr:"Dikkate değer"}, {en:"Notify", tr:"Bildirmek"}, {en:"Notion", tr:"Kavram, fikir"}, {en:"Notorious", tr:"Kötü şöhretli"}, {en:"Novel", tr:"Yeni, alışılmamış"}, {en:"Nurture", tr:"Beslemek, geliştirmek"}, {en:"Obedient", tr:"İtaatkar"}, {en:"Objective", tr:"Nesnel / Amaç"}, {en:"Oblige", tr:"Mecbur bırakmak"}, {en:"Oblivious", tr:"Farkında olmayan"}, {en:"Obscure", tr:"Belirsiz"}, {en:"Obsolete", tr:"Modası geçmiş"}, {en:"Obstinate", tr:"İnatçı"}, {en:"Obstruction", tr:"Engel"}, {en:"Occurrence", tr:"Olay"}, {en:"Ominous", tr:"Uğursuz"}, {en:"Omission", tr:"İhmal"}, {en:"Opaque", tr:"Mat"}, {en:"Optimistic", tr:"İyimser"}];
-    fixedData["C"][20] = [{ "en": "Orchestrate", "tr": "Düzenlemek, planlamak" }, { "en": "Ordeal", "tr": "Çile, zorlu deneyim" }, { "en": "Ornament", "tr": "Süs, bezek" }, { "en": "Orthodox", "tr": "Geleneksel, alışılagelmiş" }, { "en": "Ostentatious", "tr": "Gösterişli, şatafatlı" }, { "en": "Outcome", "tr": "Sonuç" }, { "en": "Outdated", "tr": "Eski, zamanı geçmiş" }, { "en": "Outlook", "tr": "Görünüm, bakış açısı" }, { "en": "Outrageous", "tr": "Rezilce, aşırı, şoke edici" }, { "en": "Overcome", "tr": "Üstesinden gelmek" }, { "en": "Overlook", "tr": "Görmezden gelmek, tepeden bakmak" }, { "en": "Oversee", "tr": "Denetlemek, gözetmek" }, { "en": "Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" }, { "en": "Paradox", "tr": "Çelişki, paradoks" }, { "en": "Paramount", "tr": "En önemli, üstün" }, { "en": "Partial", "tr": "Kısmi, taraflı" }, { "en": "Passive", "tr": "Edilgen, pasif" }, { "en": "Patronize", "tr": "Küçümsemek / Desteklemek" }, { "en": "Peculiar", "tr": "Tuhaf, kendine özgü" }, { "en": "Penalize", "tr": "Cezalandırmak" }];
+
+    // C 20 - FINAL SET
+    fixedData["C"][20] = [
+        { "en": "Orchestrate", "tr": "Düzenlemek, planlamak" },
+        { "en": "Ordeal", "tr": "Çile, zorlu deneyim" },
+        { "en": "Ornament", "tr": "Süs, bezek" },
+        { "en": "Orthodox", "tr": "Geleneksel, alışılagelmiş" },
+        { "en": "Ostentatious", "tr": "Gösterişli, şatafatlı" },
+        { "en": "Outcome", "tr": "Sonuç" },
+        { "en": "Outdated", "tr": "Eski, zamanı geçmiş" },
+        { "en": "Outlook", "tr": "Görünüm, bakış açısı" },
+        { "en": "Outrageous", "tr": "Rezilce, aşırı, şoke edici" },
+        { "en": "Overcome", "tr": "Üstesinden gelmek" },
+        { "en": "Overlook", "tr": "Görmezden gelmek, tepeden bakmak" },
+        { "en": "Oversee", "tr": "Denetlemek, gözetmek" },
+        { "en": "Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" },
+        { "en": "Paradox", "tr": "Çelişki, paradoks" },
+        { "en": "Paramount", "tr": "En önemli, üstün" },
+        { "en": "Partial", "tr": "Kısmi, taraflı" },
+        { "en": "Passive", "tr": "Edilgen, pasif" },
+        { "en": "Patronize", "tr": "Küçümsemek / Desteklemek" },
+        { "en": "Peculiar", "tr": "Tuhaf, kendine özgü" },
+        { "en": "Penalize", "tr": "Cezalandırmak" }
+    ];
 
     let vocabularyData = {};
-    let userProgress = {}; // { "C": { "1": 0, "2": 2 }, "B1": { ... } } -> Sayılar kaç kez bitirildiğini tutar.
     const DB_KEY = 'VocabApp_FixedLayout_v24'; 
-    const PROG_KEY = 'VocabApp_Progress_v1';
 
     function initApp() {
-        // Kelimeleri Yükle
         const stored = localStorage.getItem(DB_KEY);
         if(stored) {
             try {
@@ -302,34 +317,22 @@
                         }
                     }
                 }
-            } catch(e) { vocabularyData = JSON.parse(JSON.stringify(fixedData)); }
+            } catch(e) {
+                vocabularyData = JSON.parse(JSON.stringify(fixedData));
+            }
         } else {
             vocabularyData = JSON.parse(JSON.stringify(fixedData));
             saveToMemory();
         }
-
-        // İlerlemeyi Yükle
-        const progStored = localStorage.getItem(PROG_KEY);
-        if(progStored) {
-            try { userProgress = JSON.parse(progStored); } catch(e) { userProgress = {}; }
-        } else { userProgress = {}; }
     }
 
-    function saveToMemory() { 
-        localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); 
-    }
-    
-    function saveProgress() {
-        localStorage.setItem(PROG_KEY, JSON.stringify(userProgress));
-    }
+    function saveToMemory() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
 
     // --- YEDEKLEME ---
     function exportBackup() {
-        // İlerleme verisini de yedek dosyasının içine gömüyoruz
-        const combined = { vocab: vocabularyData, progress: userProgress };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(combined));
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocabularyData));
         const dl = document.createElement('a'); 
-        dl.setAttribute("href", dataStr); dl.setAttribute("download", "kelime_ve_ilerleme_yedegim.json");
+        dl.setAttribute("href", dataStr); dl.setAttribute("download", "kelime_yedegim.json");
         document.body.appendChild(dl); dl.click(); dl.remove();
     }
     
@@ -341,26 +344,19 @@
         reader.onload = function(e) {
             try { 
                 const imported = JSON.parse(e.target.result);
-                // Eski yedek formatını destekle (sadece vocab ise)
-                if(imported.vocab && imported.progress) {
-                    vocabularyData = imported.vocab;
-                    userProgress = imported.progress;
-                    alert("Kelimeler ve İlerleme Başarıyla Yüklendi!");
-                } else {
-                    vocabularyData = imported; // Eski format
-                    alert("Kelimeler Yüklendi (İlerleme verisi bulunamadı).");
-                }
-                saveToMemory(); 
-                saveProgress();
-                switchTab('C', null); 
-            } catch(err){ alert("Hata! Dosya bozuk olabilir."); }
+                if(imported && typeof imported === 'object') {
+                    vocabularyData = imported; 
+                    saveToMemory(); 
+                    alert("Yedek Başarıyla Yüklendi!"); 
+                    switchTab('C', null); 
+                } else { alert("Dosya formatı hatalı."); }
+            } catch(err){ alert("Hata!"); }
             input.value = '';
         }; reader.readAsText(file);
     }
 
     // --- UYGULAMA MANTIĞI ---
     let activeCategory = 'C';
-    let currentQuizLvl = 1;
     let currentQuestions = [];
     let currentStep = 0, correctCount = 0;
 
@@ -384,48 +380,19 @@
             el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
         
-        const progBox = document.getElementById('cat-progress-box');
+        activeCategory = cat;
         
         if(cat === 'ADD') {
             document.getElementById('app-header-title').innerText = "Ekle / Yedekle";
-            progBox.style.display = 'none';
             renderAddScreen();
         } else if (cat === 'DICT') {
             document.getElementById('app-header-title').innerText = "Sözlük";
-            progBox.style.display = 'none';
             renderDictionary();
         } else {
-            activeCategory = cat;
             document.getElementById('app-header-title').innerText = cat;
-            progBox.style.display = 'block';
-            updateCategoryProgress(cat);
             renderList(cat);
         }
         document.querySelector('.content-area').scrollTop = 0;
-    }
-
-    function updateCategoryProgress(cat) {
-        if(!vocabularyData[cat]) return;
-        
-        let totalWords = 0;
-        let learnedWords = 0;
-
-        for(let i=1; i<=20; i++) {
-            if(vocabularyData[cat][i]) {
-                const wordCount = vocabularyData[cat][i].length;
-                totalWords += wordCount;
-                
-                // İlerleme kontrolü: Eğer bu kategori ve seviye tanımlıysa ve count >= 2 ise
-                if(userProgress[cat] && userProgress[cat][i] >= 2) {
-                    learnedWords += wordCount;
-                }
-            }
-        }
-
-        const percent = totalWords > 0 ? Math.floor((learnedWords / totalWords) * 100) : 0;
-        document.getElementById('cp-learned-text').innerText = `${learnedWords}/${totalWords} Kelime Öğrenildi`;
-        document.getElementById('cp-percent-text').innerText = `%${percent}`;
-        document.getElementById('cp-fill-bar').style.width = `${percent}%`;
     }
 
     function renderList(cat) {
@@ -440,66 +407,77 @@
             let count = vocabularyData[cat][i].length;
             let status = count > 0 ? `${count} Kelime` : "Boş";
             let style = count > 0 ? "" : "opacity:0.6;";
-            
-            // Mastery Check
-            let masteryCount = (userProgress[cat] && userProgress[cat][i]) ? userProgress[cat][i] : 0;
-            let badgeHtml = "";
-            if(masteryCount >= 2) badgeHtml = `<span class="mastery-badge">TAMAMLANDI</span>`;
-            else if(masteryCount === 1) badgeHtml = `<span class="mastery-badge" style="background-color:#f39c12">1/2</span>`;
-
             div.innerHTML += `
                 <div class="level-card" onclick="startQuiz(${i})" style="${style}">
-                    <div>
-                        <span class="level-icon">${icons[(i-1)%icons.length]}</span> 
-                        <span class="level-info">${i}. Seviye ${badgeHtml}</span>
-                        <div class="level-progress-text">${status}</div>
-                    </div>
-                    <div style="font-size:20px; color:#95a5a6;">›</div>
+                    <div><span class="level-icon">${icons[(i-1)%icons.length]}</span> <span class="level-info">${i}. Seviye</span></div>
+                    <div class="level-progress">${status}</div>
                 </div>`;
         }
     }
 
+    // --- SÖZLÜK FONKSİYONLARI ---
     function renderDictionary() {
-        document.getElementById('content-container').innerHTML = `
-            <div class="search-container">
-                <input type="text" id="dict-search" class="search-input" placeholder="Kelime ara (Örn: Go, Gitmek)..." onkeyup="performSearch(this.value)">
+        const div = document.getElementById('content-container');
+        div.innerHTML = `
+            <div class="dict-container">
+                <input type="text" class="search-input" placeholder="İngilizce veya Türkçe ara..." onkeyup="runSearch(this.value)">
+                <div id="dict-results">
+                    <div class="no-result" style="margin-top:50px;">
+                        <div style="font-size:40px; margin-bottom:10px;">🔍</div>
+                        <div>Aramak istediğiniz kelimeyi yazın.</div>
+                    </div>
+                </div>
             </div>
-            <div id="dict-results"></div>
         `;
     }
 
-    function performSearch(query) {
-        const resultDiv = document.getElementById('dict-results');
-        if(!query || query.length < 2) { resultDiv.innerHTML = ""; return; }
+    function runSearch(query) {
+        query = query.trim().toLowerCase();
+        const resultsDiv = document.getElementById('dict-results');
         
-        query = query.toLowerCase();
-        let matches = [];
+        if(query.length < 2) {
+            resultsDiv.innerHTML = `
+                <div class="no-result" style="margin-top:50px;">
+                    <div style="font-size:40px; margin-bottom:10px;">🔍</div>
+                    <div>Aramak istediğiniz kelimeyi yazın.</div>
+                </div>`;
+            return;
+        }
 
+        let matches = [];
+        
+        // Tüm veri içinde ara
         for(let cat in vocabularyData) {
             for(let lvl in vocabularyData[cat]) {
-                vocabularyData[cat][lvl].forEach(word => {
-                    if(word.en.toLowerCase().includes(query) || word.tr.toLowerCase().includes(query)) {
-                        matches.push({ ...word, cat: cat, lvl: lvl });
-                    }
-                });
+                const words = vocabularyData[cat][lvl];
+                if(Array.isArray(words)) {
+                    words.forEach(w => {
+                        if(w.en.toLowerCase().includes(query) || w.tr.toLowerCase().includes(query)) {
+                            matches.push({ ...w, tag: `${cat} - Seviye ${lvl}` });
+                        }
+                    });
+                }
             }
         }
 
         if(matches.length === 0) {
-            resultDiv.innerHTML = `<div style="text-align:center; color:#bdc3c7; margin-top:20px;">Sonuç bulunamadı.</div>`;
+            resultsDiv.innerHTML = `<div class="no-result">Sonuç bulunamadı.</div>`;
             return;
         }
 
         let html = "";
         matches.forEach(m => {
             html += `
-            <div class="dict-result-item">
-                <div class="dict-en">${m.en}</div>
-                <div class="dict-tr">${m.tr}</div>
-                <div class="dict-tag">${m.cat} - Seviye ${m.lvl}</div>
-            </div>`;
+                <div class="dict-result-card">
+                    <div>
+                        <div class="dict-en">${m.en}</div>
+                        <div class="dict-tr">${m.tr}</div>
+                    </div>
+                    <div class="dict-tag">${m.tag}</div>
+                </div>
+            `;
         });
-        resultDiv.innerHTML = html;
+        resultsDiv.innerHTML = html;
     }
 
     function renderAddScreen() {
@@ -552,7 +530,6 @@
         let words = vocabularyData[activeCategory][lvl];
         if(!words || words.length === 0) { alert("Bu seviye boş."); return; }
         
-        currentQuizLvl = lvl;
         currentQuestions = words.map(w => {
             let pool = [];
             for(let l=1; l<=20; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
@@ -605,29 +582,6 @@
         document.getElementById('result-screen').style.display='flex';
         let total = currentQuestions.length || 1;
         document.getElementById('final-score').innerText = `${correctCount}/${total}`;
-        
-        // MASTERY LOGIC
-        let msg = "";
-        if(correctCount === total) {
-            // Tam puan alındı
-            if(!userProgress[activeCategory]) userProgress[activeCategory] = {};
-            if(!userProgress[activeCategory][currentQuizLvl]) userProgress[activeCategory][currentQuizLvl] = 0;
-            
-            // Eğer daha önce 2 kez tamamlanmadıysa artır
-            if(userProgress[activeCategory][currentQuizLvl] < 2) {
-                userProgress[activeCategory][currentQuizLvl]++;
-                saveProgress();
-                let now = userProgress[activeCategory][currentQuizLvl];
-                if(now === 1) msg = "Harika! 1. kez tam hatasız bitirdin. (Hedef: 2)";
-                if(now === 2) msg = "Tebrikler! Bu seviye artık 'Öğrenildi' sayılıyor!";
-            } else {
-                msg = "Mükemmel! Bu seviyeyi zaten ustalıkla bitirdin.";
-            }
-        } else {
-            msg = "Öğrenildi sayılması için hepsini doğru yapmalısın.";
-        }
-        document.getElementById('mastery-msg').innerText = msg;
-
         let p = (correctCount/total)*100, c = p >= 50 ? '#a2c638' : '#e74c3c';
         document.getElementById('score-circle').style.background = `conic-gradient(${c} 0% ${p}%, #333 ${p}% 100%)`;
     }
@@ -635,9 +589,6 @@
     function forceQuitQuiz() {
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'none';
-        
-        // Ana ekrana dönünce ilerlemeyi güncelle
-        updateCategoryProgress(activeCategory);
         renderList(activeCategory);
     }
 
