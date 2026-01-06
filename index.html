@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - Scroll Fix</title>
+    <title>Kelime Uygulaması - Final Fix</title>
     <style>
-        /* --- TEMEL AYARLAR --- */
+        /* --- TEMEL SIFIRLAMA --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
             margin: 0; padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
             background-color: #2c3e50; 
             color: white; 
-            /* height: 100vh; <-- BU KALDIRILDI, ARTIK SAYFA UZAYABİLİR */
             width: 100%;
-            display: flex; justify-content: center; 
+            min-height: 100vh;
+            overflow-x: hidden; /* Yan taşmayı engelle */
         }
 
+        /* Ana Taşıyıcı: Ortalamak yerine tam genişlik veriyoruz mobilde sorun çıkmasın */
         .app-container { 
             width: 100%; 
             max-width: 600px; 
-            min-height: 100vh; /* En az ekran kadar boyu olsun */
+            margin: 0 auto; /* Tablet/PC için ortala */
             background-color: #4a6a7a; 
+            min-height: 100vh;
             display: flex; 
             flex-direction: column; 
-            position: relative; 
         }
         
-        /* --- SABİT ÜST KISIM (HEADER & TABS) --- */
-        .sticky-wrapper {
-            position: sticky; /* Yukarı yapışması için */
+        /* --- YAPIŞKAN BAŞLIK ALANI --- */
+        .sticky-header-group {
+            position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 1000; /* En üstte kalsın */
             background-color: #354f5c;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         header.home-header { 
@@ -45,16 +46,14 @@
         .app-title { font-size: 18px; font-weight: bold; }
         .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 18px; }
         
-        /* TABS (Yan yan kayan menü) */
+        /* TABS (Sekmeler) */
         .tabs { 
             display: flex; 
             overflow-x: auto; 
             white-space: nowrap; 
             padding: 0; 
             background-color: #354f5c;
-            /* Scrollbar gizleme */
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
+            scrollbar-width: none; /* Scrollbar gizle */
         }
         .tabs::-webkit-scrollbar { display: none; }
         
@@ -63,33 +62,38 @@
             color: #bdc3c7; 
             font-weight: bold; font-size: 14px; 
             position: relative; cursor: pointer;
+            user-select: none; /* Yazı seçilmesin buton gibi davransın */
         }
         .tab.active { color: #f1c40f; }
         .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background-color: #f1c40f; }
 
-        /* --- İÇERİK ALANI (Scroll Sorunu Burada Çözüldü) --- */
+        /* --- İÇERİK ALANI --- */
         .content-area { 
             padding: 15px; 
-            padding-bottom: 100px; /* En altta boşluk kalsın */
-            flex-grow: 1; 
+            padding-bottom: 100px; /* Alt boşluk */
+            flex-grow: 1;
+            z-index: 1; /* Header'ın altında kalsın ama tıklanabilsin */
         }
 
-        /* KART TASARIMLARI */
+        /* KART TASARIMI */
         .level-card { 
             background-color: #3e5c6a; 
             border: 2px solid #d4a35a; 
             border-radius: 12px; 
             display: flex; align-items: center; justify-content: space-between;
-            padding: 18px; margin-bottom: 12px; 
+            padding: 20px; margin-bottom: 15px; 
             cursor: pointer; 
-            transition: transform 0.1s;
+            position: relative; /* Tıklama alanı için */
+            transition: background-color 0.2s;
         }
-        .level-card:active { transform: scale(0.98); background-color: #354f5c; }
-        .level-icon { font-size: 24px; margin-right: 15px; }
-        .level-info { font-size: 16px; font-weight: bold; }
-        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
+        /* Dokunma Efekti */
+        .level-card:active { background-color: #354f5c; transform: scale(0.98); }
+        
+        .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
+        .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; pointer-events: none; }
 
-        /* FORM ALANI */
+        /* FORM ALANLARI */
         .add-word-container { background-color: #3e5c6a; padding: 15px; border-radius: 15px; border: 2px solid #f1c40f; margin-bottom: 20px; }
         .backup-container { background-color: #2c3e50; padding: 15px; border-radius: 15px; border: 2px dashed #3498db; margin-bottom: 20px; }
         
@@ -105,16 +109,24 @@
         .btn-download { background-color: #27ae60; }
         .btn-upload { background-color: #3498db; }
 
-        /* --- TAM EKRAN MODALLAR (Test & Sonuç) --- */
+        /* --- TEST EKRANI (MODAL) --- */
         #quiz-screen { 
-            display: none; flex-direction: column; 
+            display: none; 
+            flex-direction: column; 
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background-color: #1a1a1a; z-index: 100; padding: 20px;
-            overflow-y: auto; /* Test ekranı da taşarsa scroll olsun */
+            background-color: #1a1a1a; 
+            z-index: 2000; /* Her şeyin üstünde */
+            padding: 20px;
+            overflow-y: auto;
         }
         
         .quiz-header { display: flex; justify-content: space-between; align-items: center; height: 50px; margin-bottom: 20px; flex-shrink: 0; }
-        .close-btn { font-size: 32px; color: #e74c3c; cursor: pointer; padding: 10px; font-weight: bold; }
+        .close-btn { 
+            font-size: 36px; color: #e74c3c; 
+            cursor: pointer; padding: 10px; 
+            line-height: 1; /* Dikey ortalama */
+            font-weight: bold;
+        }
 
         .progress-container { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; flex-shrink: 0; }
         .progress-track { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; }
@@ -123,11 +135,17 @@
         .quiz-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 40px; }
         .word-to-solve { font-size: 32px; font-weight: 800; margin-bottom: 40px; color: #fff; text-align: center; }
         .options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { background-color: #333; border: none; color: #ecf0f1; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        .option-btn { 
+            background-color: #333; border: none; color: #ecf0f1; 
+            padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; 
+            cursor: pointer; position: relative; z-index: 2005; /* Tıklanabilirlik garantisi */
+        }
+        .option-btn:active { background-color: #444; }
         .option-btn.correct { background-color: #27ae60; color: white; }
         .option-btn.wrong { background-color: #e74c3c; color: white; }
 
-        #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 110; }
+        /* SONUÇ EKRANI */
+        #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 2100; }
         .result-card { background-color: #3e5c6a; width: 85%; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
         .score-circle { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#f1c40f 0% 0%, #333 0% 100%); margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; position: relative; }
         .score-circle::before { content: ""; position: absolute; width: 95px; height: 95px; background-color: #3e5c6a; border-radius: 50%; }
@@ -135,7 +153,7 @@
         .home-btn { background-color: #f1c40f; color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         
         #file-input { display: none; }
-        #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 105; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 2010; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         .checkmark { width: 30px; height: 60px; border-bottom: 8px solid white; border-right: 8px solid white; transform: rotate(45deg); margin-top: -10px; }
     </style>
 </head>
@@ -143,7 +161,7 @@
 
 <div class="app-container">
     
-    <div class="sticky-wrapper">
+    <div class="sticky-header-group">
         <header class="home-header">
             <div style="font-size:24px;">⚙️</div>
             <div class="app-title" id="app-header-title">C - Seviyesi</div>
@@ -205,7 +223,7 @@
     fixedData["C"][4] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_ScrollFix_v2';
+    const DB_KEY = 'VocabApp_MobileFixed_v3';
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -382,6 +400,7 @@
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'none';
         document.getElementById('home-screen').style.display = 'flex'; // ANASAYFAYA DÖN
+        document.getElementById('home-screen').style.flexDirection = 'column'; // Flex yönünü garantiye al
     }
 
     function closeResultScreen() { forceQuitQuiz(); renderList(activeCategory); }
