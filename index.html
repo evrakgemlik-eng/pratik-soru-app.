@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - Fixed Header</title>
+    <title>Kelime Uygulaması - Final Fix v2</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -14,7 +14,8 @@
             background-color: #2c3e50; 
             color: white; 
             width: 100%;
-            min-height: 100vh;
+            height: 100vh; /* Mobilde taşmayı önlemek için fixledik */
+            overflow: hidden; /* Ana scroll'u kapattık, içerik scroll olacak */
         }
 
         .app-container { 
@@ -22,42 +23,38 @@
             max-width: 600px; 
             margin: 0 auto; 
             background-color: #4a6a7a; 
-            min-height: 100vh;
-            position: relative;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
         
-        /* --- SABİT BAŞLIK (SORUN ÇÖZÜCÜ KISIM) --- */
+        /* --- BAŞLIK VE SEKMELER (SABİT) --- */
         .fixed-header-group {
-            position: fixed; /* Ekranın tepesine çiviler */
-            top: 0;
-            width: 100%;
-            max-width: 600px; /* PC'de çok genişlemesin */
-            z-index: 1000; /* Her şeyin üstünde */
+            flex-shrink: 0; /* Asla küçülmesin */
             background-color: #354f5c;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 10;
         }
 
         header.home-header { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: 15px 20px; 
-            height: 60px; /* Sabit yükseklik */
+            height: 60px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .app-title { font-size: 18px; font-weight: bold; }
         .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
         
-        /* TABS (Sekmeler) */
+        /* TABS */
         .tabs { 
             display: flex; 
             overflow-x: auto; 
             white-space: nowrap; 
             padding: 0; 
-            height: 50px; /* Sabit yükseklik */
+            height: 50px; 
             align-items: center;
-            background-color: #354f5c;
             scrollbar-width: none; 
         }
         .tabs::-webkit-scrollbar { display: none; }
@@ -74,14 +71,13 @@
         .tab.active { color: #f1c40f; background-color: rgba(255,255,255,0.05); }
         .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #f1c40f; }
 
-        /* --- İÇERİK ALANI --- */
+        /* --- İÇERİK ALANI (SCROLL BURADA OLACAK) --- */
         .content-area { 
-            /* Header yüksekliği kadar yukarıdan boşluk bırakıyoruz (60px + 50px + boşluk) */
-            padding-top: 130px; 
-            padding-left: 15px;
-            padding-right: 15px;
-            padding-bottom: 50px;
             flex-grow: 1;
+            overflow-y: auto; /* Sadece burası kayacak */
+            padding: 15px;
+            padding-bottom: 50px;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* KART TASARIMI */
@@ -92,43 +88,38 @@
             display: flex; align-items: center; justify-content: space-between;
             padding: 20px; margin-bottom: 15px; 
             cursor: pointer; 
-            transition: transform 0.1s;
+            position: relative;
         }
-        .level-card:active { transform: scale(0.97); background-color: #4a6a7a; }
+        .level-card:active { transform: scale(0.98); background-color: #354f5c; }
         
-        .level-icon { font-size: 24px; margin-right: 15px; }
-        .level-info { font-size: 16px; font-weight: bold; }
-        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
+        .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
+        .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; pointer-events: none; }
 
-        /* EKLEME EKRANI */
+        /* FORM */
         .add-word-container, .backup-container { 
             background-color: #3e5c6a; padding: 15px; 
             border-radius: 15px; margin-bottom: 20px; 
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid #f1c40f;
         }
-        .add-word-container { border-color: #f1c40f; }
         .backup-container { border-color: #3498db; border-style: dashed; }
         
-        .form-select, .form-textarea { 
-            width: 100%; padding: 12px; 
-            background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; 
-            color: white; font-size: 16px; margin-bottom: 10px; box-sizing: border-box;
-        }
-        
-        .save-btn, .backup-btn { 
-            width: 100%; padding: 14px; border: none; border-radius: 10px; 
-            font-size: 16px; font-weight: bold; cursor: pointer; color: white;
-        }
+        .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; }
+        .save-btn, .backup-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; }
         .save-btn { background-color: #f1c40f; color: #1a1a1a; }
-        .backup-btn { width: 48%; font-size: 14px; }
+        .backup-btn { width: 48%; }
         .btn-download { background-color: #27ae60; }
         .btn-upload { background-color: #3498db; }
 
-        /* --- TEST EKRANI --- */
+        /* --- TEST EKRANI (TAM EKRAN KAPLAYACAK) --- */
         #quiz-screen { 
-            display: none; flex-direction: column; 
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background-color: #1a1a1a; z-index: 2000; padding: 20px; overflow-y: auto;
+            display: none; /* JS ile flex yapılacak */
+            flex-direction: column; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background-color: #1a1a1a; 
+            z-index: 9999; /* En üstte */
+            padding: 20px;
         }
         
         .quiz-header { display: flex; justify-content: space-between; align-items: center; height: 50px; margin-bottom: 20px; }
@@ -145,7 +136,8 @@
         .option-btn.correct { background-color: #27ae60; color: white; }
         .option-btn.wrong { background-color: #e74c3c; color: white; }
 
-        #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 2100; }
+        /* SONUÇ EKRANI */
+        #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 10000; }
         .result-card { background-color: #3e5c6a; width: 85%; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
         .score-circle { width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(#f1c40f 0% 0%, #333 0% 100%); margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; position: relative; }
         .score-circle::before { content: ""; position: absolute; width: 95px; height: 95px; background-color: #3e5c6a; border-radius: 50%; }
@@ -153,7 +145,7 @@
         .home-btn { background-color: #f1c40f; color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 20px; }
         
         #file-input { display: none; }
-        #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 2010; }
+        #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 10001; }
         .checkmark { width: 30px; height: 60px; border-bottom: 8px solid white; border-right: 8px solid white; transform: rotate(45deg); margin-top: -10px; }
     </style>
 </head>
@@ -174,7 +166,7 @@
             <div class="tab" onclick="switchTab('B2', this)">B2</div>
             <div class="tab" onclick="switchTab('B1', this)">B1</div>
             <div class="tab active" onclick="switchTab('C', this)">C</div>
-            <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE/YEDEKLE</div>
+            <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE</div>
         </div>
     </div>
 
@@ -220,7 +212,7 @@
     fixedData["C"][4] = [{en:"Enable", tr:"Olanak sağlamak"}, {en:"Ensure", tr:"Sağlamak"}];
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedHeader_v4';
+    const DB_KEY = 'VocabApp_FixedLayout_v5';
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -265,11 +257,9 @@
     window.onload = function() { initApp(); switchTab('C', document.querySelector('.tabs .tab.active')); };
 
     function switchTab(cat, el) {
-        // Sekme renklerini güncelle
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         if(el) {
             el.classList.add('active');
-            // Seçili sekmeyi ortala (scroll)
             el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
         
@@ -281,8 +271,7 @@
             document.getElementById('app-header-title').innerText = cat;
             renderList(cat);
         }
-        // Sayfayı en üste kaydır
-        window.scrollTo(0,0);
+        document.querySelector('.content-area').scrollTop = 0;
     }
 
     function renderList(cat) {
@@ -290,7 +279,6 @@
         div.innerHTML = "";
         const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
         
-        // Eğer kategori boşsa (henüz oluşturulmadıysa)
         if(!vocabularyData[cat]) vocabularyData[cat] = {};
 
         for(let i=1; i<=20; i++) {
@@ -353,9 +341,8 @@
         currentQuestions = words.map(w => {
             let others = ["Gitmek","Gelmek","Koşmak","Bakmak","Görmek","Duymak","Yazmak"];
             let pool = [];
-            // Rastgele şık havuzu (Sadece dolu olanlardan)
             for(let l=1; l<=20; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
-            if(pool.length < 5) pool.push(...others); // Havuz boşsa yedekleri kullan
+            if(pool.length < 5) pool.push(...others);
             
             let opts = [w.tr];
             while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
@@ -363,8 +350,9 @@
         });
 
         currentStep = 0; correctCount = 0;
-        document.getElementById('home-screen').style.display = 'none';
-        document.getElementById('quiz-screen').style.display = 'flex';
+        // Test ekranını görünür yap ve Flex moduna al
+        const quizScreen = document.getElementById('quiz-screen');
+        quizScreen.style.display = 'flex';
         renderQuestion();
     }
 
@@ -408,7 +396,6 @@
     function forceQuitQuiz() {
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'none';
-        document.getElementById('home-screen').style.display = 'flex'; 
     }
 
     function closeResultScreen() { forceQuitQuiz(); renderList(activeCategory); }
