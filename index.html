@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - İlerleme Takibi</title>
+    <title>Kelime Uygulaması - YDS 60 Seviye</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -315,7 +315,7 @@
     fixedData["C"][20] = [{en:"Orchestrate", "tr": "Düzenlemek, planlamak" }, {en:"Ordeal", "tr": "Çile, zorlu deneyim" }, {en:"Ornament", "tr": "Süs, bezek" }, {en:"Orthodox", "tr": "Geleneksel, alışılagelmiş" }, {en:"Ostentatious", "tr": "Gösterişli, şatafatlı" }, {en:"Outcome", "tr": "Sonuç" }, {en:"Outdated", "tr": "Eski, zamanı geçmiş" }, {en:"Outlook", "tr": "Görünüm, bakış açısı" }, {en:"Outrageous", "tr": "Rezilce, aşırı, şoke edici" }, {en:"Overcome", "tr": "Üstesinden gelmek" }, {en:"Overlook", "tr": "Görmezden gelmek, tepeden bakmak" }, {en:"Oversee", "tr": "Denetlemek, gözetmek" }, {en:"Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" }, {en:"Paradox", "tr": "Çelişki, paradoks" }, {en:"Paramount", "tr": "En önemli, üstün" }, {en:"Partial", "tr": "Kısmi, taraflı" }, {en:"Passive", "tr": "Edilgen, pasif" }, {en:"Patronize", "tr": "Küçümsemek / Desteklemek" }, {en:"Peculiar", "tr": "Tuhaf, kendine özgü" }, {en:"Penalize", "tr": "Cezalandırmak" }];
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v29'; // Versiyon v29: İlerleme Özelliği
+    const DB_KEY = 'VocabApp_FixedLayout_v30'; // Versiyon v30: YDS 60 Seviye
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -431,8 +431,10 @@
         if(!vocabularyData.progress) vocabularyData.progress = {};
         if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
 
-        // DÖNGÜYÜ 40'A ÇIKARDIK
-        for(let i=1; i<=40; i++) {
+        // SADECE YDS İÇİN 60, DİĞERLERİ İÇİN 40
+        let maxLvl = (cat === 'YDS') ? 60 : 40;
+
+        for(let i=1; i<=maxLvl; i++) {
             if(!vocabularyData[cat][i]) vocabularyData[cat][i] = [];
             
             let count = vocabularyData[cat][i].length;
@@ -537,7 +539,7 @@
                         <option value="YDS">YDS</option><option value="H">HABER</option>
                         <option value="B2">B2</option><option value="B1">B1</option><option value="C" selected>C</option>
                     </select>
-                    <select id="t-lvl" class="form-select">${Array.from({length:40},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+                    <select id="t-lvl" class="form-select">${Array.from({length:60},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
                 </div>
                 <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma&#10;Run : Koşmak" rows="5"></textarea>
                 <button class="save-btn" onclick="addWords()">Kaydet</button>
@@ -582,7 +584,9 @@
         
         currentQuestions = words.map(w => {
             let pool = [];
-            for(let l=1; l<=40; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
+            // Şıkları oluştururken de 60'a kadar bakalım
+            let maxRand = (activeCategory === 'YDS') ? 60 : 40;
+            for(let l=1; l<=maxRand; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
             if(pool.length < 10) pool.push("Gitmek", "Bakmak", "Koşmak", "Görmek", "Yazmak");
             let opts = [w.tr];
             while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
