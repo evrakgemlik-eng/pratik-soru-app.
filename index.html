@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - v35 (Genişletilmiş - 60 Seviye)</title>
+    <title>Kelime Uygulaması - v36 (60 Seviye Sabit)</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -302,7 +302,6 @@
     }
 
     // --- OTOMATİK DOLDURMA (BOŞ GÖRÜNMEMESİ İÇİN) ---
-    // YDS'nin ara seviyeleri ve diğer kategoriler boş kalmasın diye örnek veri ekliyoruz.
     const sampleWords = [
         {"en": "Example", "tr": "Örnek"}, {"en": "Test", "tr": "Deneme"},
         {"en": "Word", "tr": "Kelime"}, {"en": "Success", "tr": "Başarı"},
@@ -310,11 +309,11 @@
         {"en": "Smart", "tr": "Zeki"}, {"en": "Learn", "tr": "Öğrenmek"},
         {"en": "Read", "tr": "Okumak"}, {"en": "Write", "tr": "Yazmak"}
     ];
-    // YDS 2-60 arasını doldur (Eski hali 40 idi, 51-60 için genişletildi)
+    // DÜZELTME: Bu döngü 60'a kadar çıkmalı!
     for(let i=2; i<=60; i++) {
         if(!fixedData["YDS"][i]) fixedData["YDS"][i] = sampleWords;
     }
-    // Diğer kategorileri doldur (Boş kalmasın diye)
+    // Diğer kategorileri doldur
     ["H", "B2", "B1"].forEach(cat => {
         for(let i=1; i<=30; i++) {
             fixedData[cat][i] = sampleWords;
@@ -322,7 +321,8 @@
     });
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedList_v35';
+    // DÜZELTME: İsim v36 olarak güncellendi (Eski veriyi temizlemek için şart)
+    const DB_KEY = 'VocabApp_FixedList_v36';
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -333,7 +333,6 @@
                 ["YDS", "H", "B2", "B1", "C"].forEach(cat => {
                     if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
                 });
-                // Sabit verileri mevcut verilerle birleştir (eksikleri tamamla)
                 for(let cat in fixedData) {
                     if(!vocabularyData[cat]) vocabularyData[cat] = {};
                     for(let lvl in fixedData[cat]) {
@@ -412,7 +411,7 @@
         div.innerHTML = "";
         const icons = ["???","??","??","??","??","??","??","??"];
         
-        // DEĞİŞİKLİK BURADA: YDS için 60 yapıldı
+        // DÜZELTME: YDS için 60 yapıldı
         let maxLvl = (cat === 'YDS') ? 60 : (cat === 'C' ? 20 : 30);
 
         for(let i=1; i<=maxLvl; i++) {
@@ -438,18 +437,15 @@
         }
     }
 
-    // --- ÖNEMLİ: BU FONKSİYON LİSTEYİ OLUŞTURUYOR ---
     function openWordList(lvl) {
         let words = vocabularyData[activeCategory][lvl];
         if(!words || words.length === 0) { alert("Bu seviye henüz boş."); return; }
         
         activeLevelId = lvl;
-        // Başlıkta kaç kelime olduğunu göster
         document.getElementById('list-title').innerText = `${activeCategory} - Seviye ${lvl} (${words.length})`;
         const contentDiv = document.getElementById('list-content-area');
         contentDiv.innerHTML = "";
         
-        // BÜTÜN kelimeleri listele (Veritabanındaki sırasıyla)
         words.forEach(w => {
             contentDiv.innerHTML += `
                 <div class="word-row">
@@ -459,9 +455,7 @@
                     <div class="word-tr">${w.tr}</div>
                 </div>`;
         });
-        // Butonu hazırla
         document.getElementById('btn-start-quiz-from-list').onclick = () => startQuiz(lvl);
-        // Ekranı göster
         document.getElementById('list-screen').style.display = 'flex';
     }
 
@@ -477,11 +471,9 @@
 
     function startQuiz(lvl) {
         let words = vocabularyData[activeCategory][lvl];
-        // Quiz için kelimeleri karıştır
         currentQuestions = words.map(w => {
             let pool = [];
             for(let l in vocabularyData[activeCategory]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
-            // Seçenek oluştur
             let opts = [w.tr];
             while(opts.length < 4) { 
                 let r = pool.length > 0 ? pool[Math.floor(Math.random()*pool.length)] : "Hata"; 
@@ -489,14 +481,11 @@
             }
             return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
         });
-        // Soruların sırasını da karıştır
         currentQuestions.sort(() => Math.random() - 0.5);
-        
         currentStep = 0;
         correctCount = 0;
-        closeListScreen(); // Listeyi kapat
+        closeListScreen(); 
         document.getElementById('quiz-screen').style.display = 'flex';
-        // Quizi aç
         renderQuestion();
     }
 
@@ -552,7 +541,7 @@
     function speakCurrentWord() { speak(document.getElementById('target-word').innerText); }
 
     function renderAddScreen() {
-        // DEĞİŞİKLİK BURADA: Select 60'a kadar uzatıldı
+        // DÜZELTME: Select 60'a kadar uzatıldı
         document.getElementById('content-container').innerHTML = `
             <div class="add-word-container">
                 <div style="font-weight:bold; color:#f1c40f; margin-bottom:10px;">Kelime Ekle</div>
