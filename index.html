@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -191,29 +192,6 @@
         #file-input { display: none; }
         #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120px; height: 120px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 10001; }
         .checkmark { width: 30px; height: 60px; border-bottom: 8px solid white; border-right: 8px solid white; transform: rotate(45deg); margin-top: -10px; }
-    /* --- YENİ EKLENEN STİLLER (LİSTE VE TEST İÇİN) --- */
-        .word-list-group { margin-bottom: 20px; }
-        .word-list-header { 
-            background: #34495e; padding: 10px; 
-            font-weight: bold; color: #f1c40f; 
-            border-radius: 8px 8px 0 0; margin-top: 15px; 
-        }
-        .word-row { 
-            background: rgba(0,0,0,0.1); padding: 12px; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-            display: flex; justify-content: space-between;
-        }
-        .word-row:last-child { border-radius: 0 0 8px 8px; }
-        .word-en { font-weight: bold; color: #fff; width: 45%; }
-        .word-tr { color: #bdc3c7; width: 50%; text-align: right; }
-
-        /* Test Sekmesi Kategori Seçici */
-        .quiz-cat-btn {
-            display: inline-block; padding: 10px 20px; margin: 5px;
-            background: #34495e; color: white; border-radius: 20px;
-            cursor: pointer; border: 1px solid #546e7a;
-        }
-        .quiz-cat-btn.selected { background: #f1c40f; color: black; border-color: #f1c40f; }
     </style>
 </head>
 <body>
@@ -227,13 +205,12 @@
         </header>
 
         <div class="tabs">
-<div class="tabs">
-            <div class="tab active" onclick="switchTab('TEST', this)">🧠 TEST MERKEZİ</div>
             <div class="tab" onclick="switchTab('YDS', this)">YDS</div>
             <div class="tab" onclick="switchTab('H', this)">HABER</div>
             <div class="tab" onclick="switchTab('B2', this)">B2</div>
             <div class="tab" onclick="switchTab('B1', this)">B1</div>
-            <div class="tab" onclick="switchTab('C', this)">C</div>
+            <div class="tab active" onclick="switchTab('C', this)">C</div>
+            <div class="tab" onclick="switchTab('DICT', this)">SÖZLÜK</div>
             <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE</div>
         </div>
     </div>
@@ -529,195 +506,108 @@
                 </div>`;
             return;
         }
-let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v32';
 
-    function initApp() {
-        const stored = localStorage.getItem(DB_KEY);
-        if(stored) {
-            try {
-                vocabularyData = JSON.parse(stored);
-                if(!vocabularyData.progress) vocabularyData.progress = {};
-                ["YDS", "H", "B2", "B1", "C"].forEach(cat => {
-                    if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
-                });
-                for(let cat in fixedData) {
-                    if(!vocabularyData[cat]) vocabularyData[cat] = {};
-                    for(let lvl in fixedData[cat]) {
-                        if(!vocabularyData[cat][lvl] || vocabularyData[cat][lvl].length === 0) {
-                            vocabularyData[cat][lvl] = fixedData[cat][lvl];
+        let matches = [];
+        for(let cat in vocabularyData) {
+            // progress objesini atla
+            if(cat === 'progress') continue;
+            for(let lvl in vocabularyData[cat]) {
+                const words = vocabularyData[cat][lvl];
+                if(Array.isArray(words)) {
+                    words.forEach(w => {
+                        if(w.en.toLowerCase().includes(query) || w.tr.toLowerCase().includes(query)) {
+                            matches.push({ ...w, tag: `${cat} - Seviye ${lvl}` });
                         }
-                    }
+                    });
                 }
-            } catch(e) { resetData(); }
-        } else { resetData(); }
-    }
-
-    function resetData() {
-        vocabularyData = JSON.parse(JSON.stringify(fixedData));
-        vocabularyData.progress = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
-        saveToMemory();
-    }
-
-    function saveToMemory() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
-
-    function exportBackup() {
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(vocabularyData));
-        const dl = document.createElement('a'); 
-        dl.setAttribute("href", dataStr); dl.setAttribute("download", "kelime_yedegim.json");
-        document.body.appendChild(dl); dl.click(); dl.remove();
-    }
-    
-    function triggerImport() { document.getElementById('file-input').click(); }
-    
-    function importBackup(input) {
-        const file = input.files[0]; if(!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try { 
-                const imported = JSON.parse(e.target.result);
-                if(imported && typeof imported === 'object') {
-                    vocabularyData = imported;
-                    if(!vocabularyData.progress) vocabularyData.progress = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
-                    saveToMemory(); 
-                    alert("Yedek Yüklendi!"); 
-                    switchTab('TEST', null); 
-                }
-            } catch(err){ alert("Hata!"); }
-            input.value = '';
-        }; reader.readAsText(file);
-    }
-
-    let activeCategory = 'YDS';
-    let quizCategory = 'YDS';
-    let activeLevelId = 0;
-    let currentQuestions = [];
-    let currentStep = 0, correctCount = 0;
-
-    window.onload = function() { 
-        initApp(); 
-        const testTab = Array.from(document.querySelectorAll('.tab')).find(t => t.innerText.includes('TEST'));
-        switchTab('TEST', testTab); 
-    };
-
-    function switchTab(cat, el) {
-        if(!el) {
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => { if(t.innerText.includes(cat)) el = t; });
-        }
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        if(el) {
-            el.classList.add('active');
-            el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-        
-        const headerTitle = document.getElementById('app-header-title');
-        if(cat === 'TEST') {
-            headerTitle.innerText = "Test Merkezi";
-            renderQuizCenter();
-        } else if(cat === 'ADD') {
-            headerTitle.innerText = "Ekle / Yedekle";
-            renderAddScreen();
-        } else {
-            headerTitle.innerText = cat + " Listesi";
-            activeCategory = cat;
-            renderWordList(cat);
-        }
-        document.getElementById('content-container').scrollTop = 0;
-    }
-
-    function renderWordList(cat) {
-        const div = document.getElementById('content-container');
-        div.innerHTML = "";
-        if(!vocabularyData[cat]) return;
-        let hasWords = false;
-        for(let i=1; i<=50; i++) {
-            const words = vocabularyData[cat][i];
-            if(words && words.length > 0) {
-                hasWords = true;
-                let html = `<div class="word-list-group"><div class="word-list-header">Seviye ${i}</div>`;
-                words.forEach(w => {
-                    html += `<div class="word-row"><span class="word-en">${w.en}</span><span class="word-tr">${w.tr}</span></div>`;
-                });
-                html += `</div>`;
-                div.innerHTML += html;
             }
         }
-        if(!hasWords) div.innerHTML = `<div class="no-result">Bu kategoride kelime yok.</div>`;
-    }
 
-    function renderQuizCenter() {
-        const div = document.getElementById('content-container');
-        const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
-        let cats = ["YDS", "H", "B2", "B1", "C"];
-        let html = `<div style="padding:10px; text-align:center; overflow-x:auto; white-space:nowrap;">`;
-        cats.forEach(c => {
-            let sel = (quizCategory === c) ? 'selected' : '';
-            html += `<div class="quiz-cat-btn ${sel}" onclick="changeQuizCategory('${c}')">${c}</div>`;
-        });
-        html += `</div><hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin-bottom:15px;">`;
-        
-        let cat = quizCategory;
-        let maxLvl = (cat === 'YDS') ? 50 : 40;
-        for(let i=1; i<=maxLvl; i++) {
-            let count = (vocabularyData[cat] && vocabularyData[cat][i]) ? vocabularyData[cat][i].length : 0;
-            let prog = (vocabularyData.progress[cat] && vocabularyData.progress[cat][i]) ? vocabularyData.progress[cat][i] : 0;
-            let mastered = prog >= 2;
-            html += `<div class="level-card ${mastered?'completed':''}" onclick="startQuiz(${i})" style="${count==0?'opacity:0.5':''}">
-                <div style="display:flex; align-items:center;"><span class="level-icon">${icons[(i-1)%8]}</span><span class="level-info">${i}. Test</span></div>
-                <div class="level-details"><div class="level-progress">${count} Kelime</div><div class="mastery-badge">${mastered?'Bitti ✅':prog+'/2'}</div></div>
-            </div>`;
+        if(matches.length === 0) {
+            resultsDiv.innerHTML = `<div class="no-result">Sonuç bulunamadı.</div>`;
+            return;
         }
-        div.innerHTML = html;
-    }
 
-    function changeQuizCategory(cat) { quizCategory = cat; renderQuizCenter(); }
+        let html = "";
+        matches.forEach(m => {
+            html += `
+                <div class="dict-result-card">
+                    <div>
+                        <div class="dict-en">${m.en}</div>
+                        <div class="dict-tr">${m.tr}</div>
+                    </div>
+                    <div class="dict-tag">${m.tag}</div>
+                </div>
+            `;
+        });
+        resultsDiv.innerHTML = html;
+    }
 
     function renderAddScreen() {
-        document.getElementById('content-container').innerHTML = `<div class="add-word-container">
-            <div style="font-weight:bold; color:#f1c40f; margin-bottom:10px;">Kelime Ekle</div>
-            <div style="display:flex; gap:10px; margin-bottom:10px;">
-                <select id="t-cat" class="form-select"><option value="YDS">YDS</option><option value="H">HABER</option><option value="B2">B2</option><option value="B1">B1</option><option value="C" selected>C</option></select>
-                <select id="t-lvl" class="form-select">${Array.from({length:50},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+        document.getElementById('content-container').innerHTML = `
+            <div class="add-word-container">
+                <div style="font-weight:bold; color:#f1c40f; margin-bottom:10px;">Kelime Ekle</div>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <select id="t-cat" class="form-select">
+                        <option value="YDS">YDS</option><option value="H">HABER</option>
+                        <option value="B2">B2</option><option value="B1">B1</option><option value="C" selected>C</option>
+                    </select>
+                    <select id="t-lvl" class="form-select">${Array.from({length:50},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+                </div>
+                <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma&#10;Run : Koşmak" rows="5"></textarea>
+                <button class="save-btn" onclick="addWords()">Kaydet</button>
             </div>
-            <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma" rows="5"></textarea>
-            <button class="save-btn" onclick="addWords()">Kaydet</button>
-        </div>
-        <div class="backup-container">
-            <div style="display:flex; justify-content:space-between; gap:10px;">
-                <button class="backup-btn btn-download" onclick="exportBackup()">İndir</button>
-                <button class="backup-btn btn-upload" onclick="triggerImport()">Yükle</button>
-            </div>
-        </div>`;
+            <div class="backup-container">
+                <div style="font-weight:bold; color:#3498db; margin-bottom:10px;">Yedekleme</div>
+                <div style="display:flex; justify-content:space-between; gap:10px;">
+                    <button class="backup-btn btn-download" onclick="exportBackup()">İndir</button>
+                    <button class="backup-btn btn-upload" onclick="triggerImport()">Yükle</button>
+                </div>
+            </div>`;
     }
 
     function addWords() {
         const txt = document.getElementById('bulk-txt').value.trim();
         const cat = document.getElementById('t-cat').value;
         const lvl = parseInt(document.getElementById('t-lvl').value);
-        if(!txt) return;
+        if(!txt) { alert("Lütfen kelime giriniz."); return; }
+        
+        if(!vocabularyData[cat]) vocabularyData[cat] = {};
+        if(!vocabularyData[cat][lvl]) vocabularyData[cat][lvl] = [];
+
         const lines = txt.split('\n'); let added = 0;
         lines.forEach(line => {
-            let parts = line.split(/[:=]/);
+            let parts = line.split(/[:=\t]/);
             if(parts.length >= 2) {
-                let en = parts[0].trim(), tr = parts[1].trim();
-                vocabularyData[cat][lvl].push({en, tr}); added++;
+                let en = parts[0].trim(), tr = parts.slice(1).join(' ').trim();
+                let exists = vocabularyData[cat][lvl].some(w => w.en.toLowerCase() === en.toLowerCase());
+                if(en && tr && !exists) { vocabularyData[cat][lvl].push({en, tr}); added++; }
             }
         });
-        if(added > 0) { saveToMemory(); alert(added + " eklendi"); document.getElementById('bulk-txt').value = ""; }
+        if(added > 0) { saveToMemory(); alert(`${added} kelime eklendi!`); document.getElementById('bulk-txt').value = ""; } 
+        else { alert("Eklenemedi veya kelimeler zaten mevcut."); }
     }
 
     function startQuiz(lvl) {
-        let words = vocabularyData[quizCategory][lvl];
-        if(!words || words.length === 0) return;
-        activeCategory = quizCategory; activeLevelId = lvl;
+        if(activeCategory === 'ADD' || activeCategory === 'DICT') return;
+        let words = vocabularyData[activeCategory][lvl];
+        if(!words || words.length === 0) { alert("Bu seviye boş."); return; }
+        
+        activeLevelId = lvl; // Global değişkene ata
+        
         currentQuestions = words.map(w => {
-            let pool = ["Gitmek", "Bakmak", "Koşmak", "Görmek"];
+            let pool = [];
+            // Şıkları oluştururken YDS ise 50, değilse 40
+            let maxRand = (activeCategory === 'YDS') ? 50 : 40;
+            for(let l=1; l<=maxRand; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
+            if(pool.length < 10) pool.push("Gitmek", "Bakmak", "Koşmak", "Görmek", "Yazmak");
             let opts = [w.tr];
             while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
             return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
         });
+        currentQuestions.sort(() => Math.random() - 0.5);
         currentStep = 0; correctCount = 0;
+        document.getElementById('mastery-message').style.display = 'none'; // Mesajı gizle
         document.getElementById('quiz-screen').style.display = 'flex';
         renderQuestion();
     }
@@ -726,32 +616,66 @@ let vocabularyData = {};
         if(currentStep >= currentQuestions.length) { showResult(); return; }
         let q = currentQuestions[currentStep];
         document.getElementById('target-word').innerText = q.en;
-        document.getElementById('progress-text').innerText = (currentStep+1) + "/" + currentQuestions.length;
-        document.getElementById('progress-fill').style.width = ((currentStep+1)/currentQuestions.length)*100 + "%";
+        document.getElementById('progress-text').innerText = `${currentStep+1}/${currentQuestions.length}`;
+        document.getElementById('progress-fill').style.width = `${((currentStep+1)/currentQuestions.length)*100}%`;
+        
         let html = "";
         q.options.forEach(opt => { 
-            html += `<button class="option-btn" onclick="check(this, '${opt}', '${q.correct}')">${opt}</button>`; 
+            let safeOpt = opt.replace(/'/g, "\\'");
+            let safeCorrect = q.correct.replace(/'/g, "\\'");
+            html += `<button class="option-btn" data-answer="${safeOpt}" onclick="check(this, '${safeOpt}', '${safeCorrect}')">${opt}</button>`; 
         });
         document.getElementById('options-container').innerHTML = html;
     }
 
     function check(btn, sel, cor) {
-        if(sel === cor) { btn.classList.add('correct'); correctCount++; setTimeout(next, 600); }
-        else { btn.classList.add('wrong'); setTimeout(next, 1000); }
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
+        
+        if(sel.trim() === cor.trim()) {
+            btn.classList.add('correct'); correctCount++;
+            document.getElementById('success-overlay').style.display='flex';
+            setTimeout(()=>{ document.getElementById('success-overlay').style.display='none'; next(); }, 600);
+        } else {
+            btn.classList.add('wrong');
+            buttons.forEach(b => { if(b.getAttribute('data-answer') === cor) b.classList.add('correct'); });
+            setTimeout(next, 1500);
+        }
     }
+    
     function next() { currentStep++; renderQuestion(); }
+    
     function showResult() {
         document.getElementById('quiz-screen').style.display='none';
         document.getElementById('result-screen').style.display='flex';
-        document.getElementById('final-score').innerText = correctCount + "/" + currentQuestions.length;
-        if(correctCount === currentQuestions.length) {
-            let p = vocabularyData.progress[activeCategory][activeLevelId] || 0;
-            vocabularyData.progress[activeCategory][activeLevelId] = p + 1;
-            saveToMemory();
+        
+        let total = currentQuestions.length || 1;
+        document.getElementById('final-score').innerText = `${correctCount}/${total}`;
+        let p = (correctCount/total)*100, c = p >= 50 ? '#a2c638' : '#e74c3c';
+        document.getElementById('score-circle').style.background = `conic-gradient(${c} 0% ${p}%, #333 ${p}% 100%)`;
+
+        // İLERLEME MANTIĞI: Eğer hepsi doğruysa
+        if(correctCount === total && total > 0) {
+            if(!vocabularyData.progress) vocabularyData.progress = {};
+            if(!vocabularyData.progress[activeCategory]) vocabularyData.progress[activeCategory] = {};
+            
+            let currentP = vocabularyData.progress[activeCategory][activeLevelId] || 0;
+            if(currentP < 2) {
+                vocabularyData.progress[activeCategory][activeLevelId] = currentP + 1;
+                saveToMemory();
+                document.getElementById('mastery-message').style.display = 'block';
+            }
         }
     }
-    function closeResultScreen() { document.getElementById('result-screen').style.display='none'; renderQuizCenter(); }
-    function quitQuiz() { document.getElementById('quiz-screen').style.display='none'; }
+
+    function forceQuitQuiz() {
+        document.getElementById('quiz-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'none';
+        renderList(activeCategory);
+    }
+
+    function closeResultScreen() { forceQuitQuiz(); }
+    function quitQuiz() { if(confirm("Testi sonlandırmak istiyor musunuz?")) forceQuitQuiz(); }
 </script>
 </body>
 </html>
