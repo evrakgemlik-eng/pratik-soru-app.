@@ -3,166 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - v37 (60 Seviye - Fix)</title>
+    <title>Kelime Uygulaması - v38 (Yedekleme Aktif)</title>
     <style>
-        /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #2c3e50; color: white; height: 100dvh; overflow: hidden; }
+        .app-container { width: 100%; max-width: 600px; margin: 0 auto; background-color: #4a6a7a; height: 100%; display: flex; flex-direction: column; position: relative; }
         
-        body { 
-            margin: 0; padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background-color: #2c3e50; 
-            color: white; 
-            width: 100%;
-            height: 100vh; 
-            height: 100dvh;
-            overflow: hidden; 
-        }
-
-        .app-container { 
-            width: 100%; max-width: 600px; 
-            margin: 0 auto; 
-            background-color: #4a6a7a; 
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        
-        .fixed-header-group {
-            flex-shrink: 0;
-            background-color: #354f5c;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 10;
-        }
-
-        header.home-header { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 20px; 
-            height: 60px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .app-title { font-size: 18px; font-weight: bold; }
-        .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-size: 20px; color: #333; }
-        
-        .tabs { 
-            display: flex; overflow-x: auto; 
-            white-space: nowrap; 
-            padding: 0; 
-            height: 50px; 
-            align-items: center;
-            scrollbar-width: none;
-        }
+        /* HEADER & TABS */
+        .fixed-header-group { background-color: #354f5c; box-shadow: 0 2px 10px rgba(0,0,0,0.3); z-index: 10; }
+        header.home-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; height: 60px; }
+        .tabs { display: flex; overflow-x: auto; height: 50px; align-items: center; scrollbar-width: none; }
         .tabs::-webkit-scrollbar { display: none; }
-        
-        .tab { 
-            padding: 0 15px; height: 100%;
-            display: flex; align-items: center;
-            color: #bdc3c7; 
-            font-weight: bold; font-size: 14px; 
-            position: relative; cursor: pointer;
-            flex-shrink: 0; transition: color 0.3s;
-        }
-        .tab.active { color: #f1c40f; background-color: rgba(255,255,255,0.05); }
-        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%;
-            height: 4px; background-color: #f1c40f; }
+        .tab { padding: 0 15px; height: 100%; display: flex; align-items: center; color: #bdc3c7; font-weight: bold; font-size: 13px; cursor: pointer; flex-shrink: 0; }
+        .tab.active { color: #f1c40f; border-bottom: 4px solid #f1c40f; }
 
-        .content-area { 
-            flex-grow: 1; overflow-y: auto; 
-            padding: 15px;
-            padding-bottom: 80px;
-            -webkit-overflow-scrolling: touch;
-        }
+        /* CONTENT */
+        .content-area { flex-grow: 1; overflow-y: auto; padding: 15px; padding-bottom: 80px; }
+        .level-card { background-color: #3e5c6a; border: 2px solid #d4a35a; border-radius: 12px; display: flex; align-items: center; justify-content: space-between; padding: 18px; margin-bottom: 12px; cursor: pointer; }
+        .level-card.completed { background-color: #27ae60; border-color: #2ecc71; }
+        .level-icon { font-size: 22px; margin-right: 12px; }
 
-        .level-card { 
-            background-color: #3e5c6a; border: 2px solid #d4a35a; 
-            border-radius: 12px; 
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 20px; margin-bottom: 15px; 
-            cursor: pointer; 
-            position: relative; transition: transform 0.1s;
-        }
-        .level-card:active { transform: scale(0.98); background-color: #354f5c; }
-        
-        .level-card.completed {
-            background-color: #27ae60; border-color: #2ecc71;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
-        }
+        /* LIST SCREEN */
+        #list-screen { display: none; flex-direction: column; position: fixed; inset: 0; background-color: #2c3e50; z-index: 5000; }
+        .list-header { padding: 15px; display: flex; align-items: center; background-color: #354f5c; }
+        .back-btn { font-size: 24px; background: none; border: none; color: white; cursor: pointer; padding: 5px 15px; }
+        .list-content { flex-grow: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
+        .word-row { display: flex; justify-content: space-between; padding: 15px; margin-bottom: 8px; background: rgba(255,255,255,0.05); border-radius: 8px; }
 
-        .level-icon { font-size: 24px; margin-right: 15px; }
-        .level-info { font-size: 16px; font-weight: bold; }
-        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
-        .mastery-badge { 
-            font-size: 11px; background-color: rgba(0,0,0,0.3); 
-            padding: 3px 8px; border-radius: 10px; margin-top: 4px; display: inline-block;
-        }
+        /* QUIZ SCREEN */
+        #quiz-screen { display: none; flex-direction: column; position: fixed; inset: 0; background-color: #1a1a1a; z-index: 9999; padding: 20px; }
+        .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .progress-track { flex-grow: 1; height: 10px; background: #333; margin: 0 15px; border-radius: 5px; overflow: hidden; }
+        #progress-fill { height: 100%; background: #3498db; width: 0%; transition: 0.3s; }
+        .options { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .option-btn { background: #333; border: none; color: white; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; }
+        .option-btn.correct { background: #27ae60; }
+        .option-btn.wrong { background: #e74c3c; }
 
-        /* --- KELİME LİSTESİ EKRANI --- */
-        #list-screen {
-            display: none; flex-direction: column;
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #2c3e50;
-            z-index: 5000;
-        }
-        .list-header {
-            padding: 15px; display: flex; align-items: center; justify-content: space-between;
-            background-color: #354f5c; border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .back-btn { font-size: 28px; cursor: pointer; background:none; border:none; color:white; padding: 5px 15px; }
-        
-        .list-content {
-            flex-grow: 1; overflow-y: auto; padding: 15px;
-            padding-bottom: 100px;
-        }
-        .word-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 18px 15px; margin-bottom: 10px;
-            background-color: rgba(255,255,255,0.08);
-            border-radius: 8px; border-left: 4px solid #f1c40f;
-        }
-        .word-eng { font-weight: bold; font-size: 17px; color: #fff; display:flex; align-items:center; gap:8px; }
-        .word-tr { color: #bdc3c7; font-size: 15px; font-style: italic; }
-        
-        .fixed-bottom-btn-container {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 20px; background: linear-gradient(to top, #2c3e50 80%, transparent);
-        }
-        .start-quiz-btn {
-            width: 100%; padding: 16px; background-color: #27ae60; color: white;
-            border: none; border-radius: 12px; font-size: 18px; font-weight: bold;
-        }
+        /* BUTTONS */
+        .fixed-bottom-btn-container { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px; background: linear-gradient(transparent, #2c3e50); }
+        .start-quiz-btn { width: 100%; padding: 16px; background: #27ae60; border: none; color: white; border-radius: 12px; font-size: 18px; font-weight: bold; }
+        .save-btn { width: 100%; padding: 12px; background: #f1c40f; border: none; border-radius: 8px; font-weight: bold; margin-bottom: 20px; }
+        .backup-group { display: flex; gap: 10px; margin-top: 10px; }
+        .backup-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; color: white; font-weight: bold; font-size: 12px; cursor: pointer; }
+        .btn-dl { background: #2980b9; }
+        .btn-ul { background: #8e44ad; }
 
-        /* --- TEST EKRANI --- */
-        #quiz-screen { 
-            display: none; flex-direction: column; 
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background-color: #1a1a1a; z-index: 9999; padding: 20px;
-        }
-        .quiz-header { display: flex; justify-content: space-between; align-items: center; height: 50px; }
-        .close-btn { font-size: 32px; color: #e74c3c; cursor: pointer; }
-        .progress-track { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; margin: 0 15px; }
-        #progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
+        #success-overlay { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 80px; height: 80px; background: #27ae60; border-radius: 50%; z-index: 10002; justify-content: center; align-items: center; }
+        .checkmark { width: 20px; height: 40px; border-bottom: 6px solid white; border-right: 6px solid white; transform: rotate(45deg); margin-top: -5px; }
         
-        .quiz-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .word-to-solve { font-size: 32px; font-weight: 800; margin-bottom: 40px; text-align: center; }
-        .options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { background-color: #333; border: none; color: #ecf0f1; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; }
-        .option-btn.correct { background-color: #27ae60; }
-        .option-btn.wrong { background-color: #e74c3c; }
-
-        /* SONUÇ EKRANI */
-        #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #1a1a1a; z-index: 10000; }
-        .result-card { background-color: #3e5c6a; width: 85%; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
-        .score-circle { width: 100px; height: 100px; border-radius: 50%; background: #f1c40f; color: #1a1a1a; margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; }
-        .home-btn { background-color: #f1c40f; color: #1a1a1a; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; margin-top: 20px; }
-        
-        .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; }
-        .save-btn { width: 100%; padding: 14px; background-color: #f1c40f; border: none; border-radius: 10px; font-weight: bold; }
-        
-        #success-overlay { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background-color: #27ae60; border-radius: 20px; justify-content: center; align-items: center; z-index: 10001; }
-        .checkmark { width: 25px; height: 50px; border-bottom: 8px solid white; border-right: 8px solid white; transform: rotate(45deg); }
+        #result-screen { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 10005; flex-direction: column; align-items: center; justify-content: center; }
+        .form-select, .form-textarea { width: 100%; padding: 10px; margin-bottom: 10px; background: #2c3e50; color: white; border: 1px solid #555; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -170,18 +61,15 @@
 <div class="app-container">
     <div class="fixed-header-group">
         <header class="home-header">
-            <div style="font-size:24px;">📖</div>
-            <div class="app-title" id="app-header-title">YDS KELİME</div>
-            <div class="profile-pic">👤</div>
+            <div style="font-size:24px;">📚</div>
+            <div style="font-weight:bold;">KELİME v38</div>
+            <div style="font-size:24px;">👤</div>
         </header>
-
         <div class="tabs">
             <div class="tab active" onclick="switchTab('YDS', this)">YDS</div>
             <div class="tab" onclick="switchTab('H', this)">HABER</div>
             <div class="tab" onclick="switchTab('B2', this)">B2</div>
-            <div class="tab" onclick="switchTab('B1', this)">B1</div>
             <div class="tab" onclick="switchTab('C', this)">C</div>
-            <div class="tab" onclick="switchTab('DICT', this)">SÖZLÜK</div>
             <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE</div>
         </div>
     </div>
@@ -189,73 +77,67 @@
     <div class="content-area" id="content-container"></div>
 
     <div id="list-screen">
-        <header class="list-header">
+        <div class="list-header">
             <button class="back-btn" onclick="closeListScreen()">⬅</button>
-            <div style="font-weight:bold; font-size:18px;" id="list-title">Seviye 1</div>
-            <div style="width:45px;"></div>
-        </header>
+            <h3 id="list-title" style="margin:0; flex-grow:1; text-align:center;">Liste</h3>
+        </div>
         <div class="list-content" id="list-content-area"></div>
         <div class="fixed-bottom-btn-container">
-            <button class="start-quiz-btn" id="btn-start-quiz-from-list">TESTE BAŞLA</button>
+            <button class="start-quiz-btn" id="btn-start-quiz">TESTİ BAŞLAT</button>
         </div>
     </div>
 
     <div id="quiz-screen">
-        <header class="quiz-header">
-            <div class="close-btn" onclick="quitQuiz()">✕</div>
+        <div class="quiz-header">
+            <div style="font-size:24px;" onclick="quitQuiz()">✕</div>
             <div class="progress-track"><div id="progress-fill"></div></div>
-            <div style="color:#3498db; font-weight:bold; min-width: 40px;" id="progress-text">1/20</div>
-        </header>
-        <div class="quiz-content">
-            <div style="font-size:40px; margin-bottom:20px; cursor:pointer;" onclick="speakCurrentWord()">🔊</div>
-            <div class="word-to-solve" id="target-word">...</div>
+            <div id="progress-text">0/0</div>
+        </div>
+        <div style="text-align:center; flex-grow:1; display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:40px; margin-bottom:20px;" onclick="speakCurrent()">🔊</div>
+            <h1 id="target-word" style="font-size:36px; margin:0 0 40px 0;">...</h1>
             <div class="options" id="options-container"></div>
         </div>
         <div id="success-overlay"><div class="checkmark"></div></div>
     </div>
 
     <div id="result-screen">
-        <div class="result-card">
-            <h2>Tebrikler!</h2>
-            <div class="score-circle" id="final-score">0/0</div>
-            <div id="mastery-msg" style="color:#f1c40f; margin:10px 0; display:none;">YENİ SEVİYE AÇILDI!</div>
-            <button class="home-btn" onclick="closeResultScreen()">ANA SAYFA</button>
-        </div>
+        <h2 style="color:#f1c40f">Tamamlandı!</h2>
+        <h1 id="final-score" style="font-size:48px;">0/0</h1>
+        <button class="start-quiz-btn" style="width:200px; background:#f1c40f; color:black;" onclick="location.reload()">ANA MENÜ</button>
     </div>
 </div>
 
+<input type="file" id="file-input" style="display:none" onchange="importData(this)">
+
 <script>
+    const DB_KEY = 'VocabApp_v38_Final';
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedList_v37'; // Sürüm v37 - Temiz kurulum sağlar
-
-    const sample = [
-        {"en":"Abandon","tr":"Terk etmek"},{"en":"Abruptly","tr":"Aniden"},{"en":"Abundance","tr":"Bolluk"},{"en":"Accelerate","tr":"Hızlandırmak"},{"en":"Accommodate","tr":"Barındırmak"},{"en":"Accurately","tr":"Doğru şekilde"},{"en":"Acknowledge","tr":"Kabul etmek"},{"en":"Adapt","tr":"Uyarlamak"},{"en":"Adequate","tr":"Yeterli"},{"en":"Adhere","tr":"Bağlı kalmak"}
-    ];
-
-    function initApp() {
-        const stored = localStorage.getItem(DB_KEY);
-        if(stored) {
-            vocabularyData = JSON.parse(stored);
-        } else {
-            // İlk kurulum: 60 Seviyeli YDS yapısı
-            vocabularyData = { "progress": { "YDS":{}, "H":{}, "B2":{}, "B1":{}, "C":{} }, "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
-            for(let i=1; i<=60; i++) vocabularyData["YDS"][i] = [...sample];
-            for(let cat of ["H","B2","B1"]) { for(let i=1; i<=30; i++) vocabularyData[cat][i] = [...sample]; }
-            for(let i=1; i<=20; i++) vocabularyData["C"][i] = [...sample];
-            saveToMemory();
-        }
-    }
-
-    function saveToMemory() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
-
     let activeCategory = 'YDS';
-    let activeLevelId = 1;
+    let activeLevel = 1;
     let currentQuestions = [];
     let currentStep = 0;
-    let correctCount = 0;
+    let corrects = 0;
 
-    window.onload = () => { initApp(); switchTab('YDS', document.querySelector('.tab')); };
+    // --- BAŞLATMA ---
+    function init() {
+        const saved = localStorage.getItem(DB_KEY);
+        if(saved) {
+            vocabularyData = JSON.parse(saved);
+        } else {
+            vocabularyData = { progress: { YDS:{} }, YDS:{} };
+            // YDS 60 seviye oluştur
+            for(let i=1; i<=60; i++) {
+                vocabularyData.YDS[i] = [{en:"Sample", tr:"Örnek"}];
+            }
+            save();
+        }
+        switchTab('YDS', document.querySelector('.tab'));
+    }
 
+    function save() { localStorage.setItem(DB_KEY, JSON.stringify(vocabularyData)); }
+
+    // --- NAVİGASYON ---
     function switchTab(cat, el) {
         activeCategory = cat;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -266,64 +148,55 @@
 
         if(cat === 'ADD') {
             renderAddScreen();
-        } else if(cat === 'DICT') {
-            renderDictionary();
         } else {
-            let max = cat === 'YDS' ? 60 : (cat === 'C' ? 20 : 30);
-            const icons = ["📕","📗","📘","📙","📓","📒"];
-            for(let i=1; i<=max; i++) {
-                let isDone = (vocabularyData.progress[cat][i] || 0) >= 2;
+            let limit = cat === 'YDS' ? 60 : 20;
+            for(let i=1; i<=limit; i++) {
+                let isDone = (vocabularyData.progress[cat] && vocabularyData.progress[cat][i] >= 1);
                 container.innerHTML += `
-                    <div class="level-card ${isDone ? 'completed' : ''}" onclick="openWordList(${i})">
+                    <div class="level-card ${isDone ? 'completed' : ''}" onclick="openList(${i})">
                         <div style="display:flex; align-items:center;">
-                            <span class="level-icon">${icons[i%6]}</span>
-                            <span class="level-info">${i}. Seviye</span>
+                            <span class="level-icon">📘</span>
+                            <b>${i}. Seviye</b>
                         </div>
-                        <div style="text-align:right">
-                            <div class="level-progress">10 Kelime</div>
-                            ${isDone ? '<div class="mastery-badge">✓ Tamamlandı</div>' : ''}
-                        </div>
+                        <span>${isDone ? '✅' : '>>'}</span>
                     </div>`;
             }
         }
     }
 
-    function openWordList(lvl) {
-        activeLevelId = lvl;
-        const words = vocabularyData[activeCategory][lvl] || [];
-        document.getElementById('list-title').innerText = activeCategory + " - Seviye " + lvl;
+    // --- LİSTE VE QUIZ ---
+    function openList(lvl) {
+        activeLevel = lvl;
+        const words = (vocabularyData[activeCategory] && vocabularyData[activeCategory][lvl]) ? vocabularyData[activeCategory][lvl] : [];
+        document.getElementById('list-title').innerText = `${activeCategory} - ${lvl}. Seviye`;
         const area = document.getElementById('list-content-area');
-        area.innerHTML = words.map(w => `
-            <div class="word-row">
-                <div class="word-eng"><span>🔊</span> ${w.en}</div>
-                <div class="word-tr">${w.tr}</div>
-            </div>`).join('');
-        
-        document.getElementById('btn-start-quiz-from-list').onclick = () => startQuiz(words);
+        area.innerHTML = words.map(w => `<div class="word-row"><b>${w.en}</b> <i>${w.tr}</i></div>`).join('');
+        document.getElementById('btn-start-quiz').onclick = () => startQuiz(words);
         document.getElementById('list-screen').style.display = 'flex';
     }
 
-    function closeListScreen() { 
-        document.getElementById('list-screen').style.display = 'none'; 
-    }
+    function closeListScreen() { document.getElementById('list-screen').style.display = 'none'; }
 
     function startQuiz(words) {
+        if(words.length < 2) { alert("Yeterli kelime yok!"); return; }
         currentQuestions = words.map(w => {
             let opts = [w.tr];
             while(opts.length < 4) {
                 let r = words[Math.floor(Math.random()*words.length)].tr;
                 if(!opts.includes(r)) opts.push(r);
             }
-            return { en: w.en, correct: w.tr, options: opts.sort(() => Math.random()-0.5) };
+            return { en: w.en, correct: w.tr, options: opts.sort(()=>Math.random()-0.5) };
         });
-        currentStep = 0; correctCount = 0;
+        currentStep = 0; corrects = 0;
         document.getElementById('list-screen').style.display = 'none';
         document.getElementById('quiz-screen').style.display = 'flex';
         renderQuestion();
     }
 
     function renderQuestion() {
-        if(currentStep >= currentQuestions.length) { finishQuiz(); return; }
+        if(currentStep >= currentQuestions.length) { 
+            showFinal(); return; 
+        }
         let q = currentQuestions[currentStep];
         document.getElementById('target-word').innerText = q.en;
         document.getElementById('progress-text').innerText = (currentStep+1) + "/" + currentQuestions.length;
@@ -335,47 +208,50 @@
     }
 
     function checkAnswer(btn, sel, cor) {
+        const btns = document.querySelectorAll('.option-btn');
+        btns.forEach(b => b.disabled = true);
         if(sel === cor) {
-            btn.classList.add('correct'); correctCount++;
+            btn.classList.add('correct'); corrects++;
             document.getElementById('success-overlay').style.display = 'flex';
-            setTimeout(() => { document.getElementById('success-overlay').style.display = 'none'; nextQ(); }, 600);
+            setTimeout(() => { document.getElementById('success-overlay').style.display = 'none'; next(); }, 600);
         } else {
             btn.classList.add('wrong');
-            setTimeout(nextQ, 1000);
+            setTimeout(next, 1000);
         }
     }
 
-    function nextQ() { currentStep++; renderQuestion(); }
+    function next() { currentStep++; renderQuestion(); }
 
-    function finishQuiz() {
+    function showFinal() {
         document.getElementById('quiz-screen').style.display = 'none';
         document.getElementById('result-screen').style.display = 'flex';
-        document.getElementById('final-score').innerText = correctCount + "/" + currentQuestions.length;
-        
-        if(correctCount === currentQuestions.length) {
-            let p = vocabularyData.progress[activeCategory][activeLevelId] || 0;
-            vocabularyData.progress[activeCategory][activeLevelId] = p + 1;
-            saveToMemory();
-            document.getElementById('mastery-msg').style.display = 'block';
+        document.getElementById('final-score').innerText = corrects + "/" + currentQuestions.length;
+        if(corrects === currentQuestions.length) {
+            if(!vocabularyData.progress[activeCategory]) vocabularyData.progress[activeCategory] = {};
+            vocabularyData.progress[activeCategory][activeLevel] = 1;
+            save();
         }
     }
 
-    function closeResultScreen() {
-        document.getElementById('result-screen').style.display = 'none';
-        switchTab(activeCategory, null);
-    }
+    function quitQuiz() { if(confirm("Çıkılsın mı?")) location.reload(); }
 
-    function quitQuiz() { if(confirm("Çıkılsın mı?")) document.getElementById('quiz-screen').style.display = 'none'; }
-    
+    // --- EKLEME VE YEDEKLEME ---
     function renderAddScreen() {
         document.getElementById('content-container').innerHTML = `
-            <div style="background:#3e5c6a; padding:20px; border-radius:15px;">
+            <div style="background:rgba(0,0,0,0.2); padding:20px; border-radius:15px;">
                 <h3>Kelime Ekle</h3>
-                <select id="add-lvl" class="form-select">
-                    ${Array.from({length:60}, (_,i)=>`<option value="${i+1}">${i+1}. Seviye</option>`).join('')}
-                </select>
-                <textarea id="add-txt" class="form-textarea" rows="5" placeholder="Word : Anlamı"></textarea>
+                <select id="add-lvl" class="form-select">${Array.from({length:60},(_,i)=>`<option value="${i+1}">${i+1}. Seviye</option>`).join('')}</select>
+                <textarea id="add-txt" class="form-textarea" rows="5" placeholder="Kelime : Anlamı"></textarea>
                 <button class="save-btn" onclick="processAdd()">KAYDET</button>
+                
+                <hr style="border:0; border-top:1px solid #555; margin:20px 0;">
+                
+                <h3>Veri Yönetimi</h3>
+                <p style="font-size:12px; color:#bdc3c7;">İlerlemenizi kaybetmemek için düzenli yedek alın.</p>
+                <div class="backup-group">
+                    <button class="backup-btn btn-dl" onclick="exportData()">YEDEĞİ İNDİR (JSON)</button>
+                    <button class="backup-btn btn-ul" onclick="document.getElementById('file-input').click()">YEDEĞİ YÜKLE</button>
+                </div>
             </div>`;
     }
 
@@ -383,35 +259,51 @@
         let lvl = document.getElementById('add-lvl').value;
         let txt = document.getElementById('add-txt').value;
         if(!txt) return;
+        if(!vocabularyData[activeCategory]) vocabularyData[activeCategory] = {};
+        if(!vocabularyData[activeCategory][lvl]) vocabularyData[activeCategory][lvl] = [];
+        
         txt.split('\n').forEach(line => {
             let p = line.split(':');
-            if(p.length===2) vocabularyData[activeCategory][lvl].push({en:p[0].trim(), tr:p[1].trim()});
+            if(p.length === 2) vocabularyData[activeCategory][lvl].push({en:p[0].trim(), tr:p[1].trim()});
         });
-        saveToMemory(); alert("Eklendi!");
+        save(); alert("Başarıyla eklendi!");
+        document.getElementById('add-txt').value = "";
     }
 
-    function renderDictionary() {
-        document.getElementById('content-container').innerHTML = `
-            <input type="text" placeholder="Ara..." style="width:100%; padding:15px; border-radius:25px; border:none;" onkeyup="dictSearch(this.value)">
-            <div id="dict-results" style="margin-top:20px;"></div>`;
+    // --- YEDEKLEME FONKSİYONLARI ---
+    function exportData() {
+        const blob = new Blob([JSON.stringify(vocabularyData)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kelime_yedek_${new Date().toLocaleDateString()}.json`;
+        a.click();
     }
 
-    function dictSearch(val) {
-        if(val.length < 2) return;
-        let res = "";
-        for(let lvl in vocabularyData[activeCategory]) {
-            vocabularyData[activeCategory][lvl].forEach(w => {
-                if(w.en.toLowerCase().includes(val.toLowerCase()))
-                    res += `<div style="padding:10px; border-bottom:1px solid #546e7a">${w.en} : ${w.tr}</div>`;
-            });
-        }
-        document.getElementById('dict-results').innerHTML = res;
+    function importData(input) {
+        const file = input.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const imported = JSON.parse(e.target.result);
+                if(confirm("Mevcut veriler silinecek, emin misiniz?")) {
+                    vocabularyData = imported;
+                    save();
+                    alert("Yükleme başarılı!");
+                    location.reload();
+                }
+            } catch(err) { alert("Hatalı dosya formatı!"); }
+        };
+        reader.readAsText(file);
     }
 
-    function speakCurrentWord() {
+    function speakCurrent() {
         let msg = new SpeechSynthesisUtterance(document.getElementById('target-word').innerText);
         msg.lang = 'en-US'; window.speechSynthesis.speak(msg);
     }
+
+    init();
 </script>
 </body>
 </html>
