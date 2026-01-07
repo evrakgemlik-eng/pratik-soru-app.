@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - Liste Görünümü</title>
+    <title>Kelime Uygulaması - YDS 50 Seviye</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -35,7 +35,7 @@
             flex-shrink: 0; 
             background-color: #354f5c;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 20;
+            z-index: 10;
         }
 
         header.home-header { 
@@ -77,88 +77,53 @@
         .content-area { 
             flex-grow: 1;
             overflow-y: auto; 
+            padding: 15px;
             padding-bottom: 80px;
             -webkit-overflow-scrolling: touch;
+        }
+
+        /* KART TASARIMI */
+        .level-card { 
+            background-color: #3e5c6a; 
+            border: 2px solid #d4a35a; 
+            border-radius: 12px; 
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px; margin-bottom: 15px; 
+            cursor: pointer; 
             position: relative;
-        }
-
-        /* --- YENİ EKLENEN: LİSTE VE NAVİGASYON STİLLERİ --- */
-        .sticky-level-header {
-            position: sticky;
-            top: 0;
-            background-color: #3e5c6a;
-            padding: 15px;
-            border-bottom: 2px solid #f1c40f;
-            z-index: 10;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-
-        .level-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .nav-arrow-btn {
-            background-color: #2c3e50;
-            border: 1px solid #7f8c8d;
-            color: white;
-            width: 40px; height: 40px;
-            border-radius: 8px;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        .level-indicator {
-            text-align: center;
-        }
-        
-        .level-title-text { font-size: 18px; font-weight: bold; color: #fff; }
-        .level-status-text { font-size: 12px; color: #bdc3c7; margin-top: 2px; }
-
-        .start-quiz-btn {
-            width: 100%;
-            background-color: #e74c3c; /* Kırmızımsı buton dikkat çekmek için */
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            box-shadow: 0 4px 0 #c0392b;
             transition: transform 0.1s;
         }
-        .start-quiz-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #c0392b; }
-
-        /* KELİME LİSTESİ */
-        .word-list {
-            padding: 10px;
-        }
-
-        .word-item {
-            background-color: rgba(255,255,255,0.05);
-            margin-bottom: 8px;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #f1c40f;
-            display: flex;
-            flex-direction: column;
-        }
+        .level-card:active { transform: scale(0.98); background-color: #354f5c; }
         
-        .word-en { font-size: 18px; font-weight: bold; color: #f1c40f; margin-bottom: 4px; }
-        .word-tr { font-size: 16px; color: #ecf0f1; }
+        /* TAMAMLANMIŞ (YEŞİL) KART STİLİ */
+        .level-card.completed {
+            background-color: #27ae60;
+            border-color: #2ecc71;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        }
 
-        /* ESKİ STİLLER (Form vb. için) */
+        .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
+        .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
+        
+        .level-details { text-align: right; pointer-events: none; }
+        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
+        .mastery-badge { 
+            font-size: 11px; 
+            background-color: rgba(0,0,0,0.3); 
+            padding: 3px 8px; 
+            border-radius: 10px; 
+            margin-top: 4px; 
+            display: inline-block;
+        }
+
+        /* FORM VE BUTONLAR */
         .add-word-container, .backup-container { 
             background-color: #3e5c6a; padding: 15px; 
-            border-radius: 15px; margin: 20px; 
+            border-radius: 15px; margin-bottom: 20px; 
             border: 1px solid #f1c40f;
         }
         .backup-container { border-color: #3498db; border-style: dashed; }
+        
         .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
         .save-btn, .backup-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; font-size: 16px; }
         .save-btn { background-color: #f1c40f; color: #1a1a1a; }
@@ -166,25 +131,55 @@
         .btn-download { background-color: #27ae60; }
         .btn-upload { background-color: #3498db; }
 
-        /* SÖZLÜK */
-        .dict-container { padding: 20px; }
-        .search-input { width: 100%; padding: 15px; background-color: #2c3e50; border: 2px solid #f1c40f; border-radius: 30px; color: white; font-size: 16px; margin-bottom: 20px; padding-left: 20px; }
-        .dict-result-card { background-color: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #3498db; }
+        /* --- SÖZLÜK TASARIMI --- */
+        .dict-container { padding-bottom: 20px; }
+        .search-input { 
+            width: 100%; padding: 15px; 
+            background-color: #2c3e50; border: 2px solid #f1c40f; 
+            border-radius: 30px; color: white; 
+            font-size: 16px; margin-bottom: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23f1c40f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: 15px center;
+            padding-left: 50px;
+        }
+        .dict-result-card {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px; border-radius: 10px;
+            margin-bottom: 10px; border-left: 4px solid #3498db;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .dict-en { font-size: 18px; font-weight: bold; color: #fff; }
+        .dict-tr { font-size: 16px; color: #bdc3c7; margin-top: 4px; }
+        .dict-tag { font-size: 11px; background: #f1c40f; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .no-result { text-align: center; color: #95a5a6; margin-top: 30px; }
 
-        /* TEST EKRANI */
-        #quiz-screen { display: none; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #1a1a1a; z-index: 9999; padding: 20px; }
+        /* --- TEST EKRANI --- */
+        #quiz-screen { 
+            display: none; 
+            flex-direction: column; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background-color: #1a1a1a; 
+            z-index: 9999; 
+            padding: 20px;
+        }
+        
         .quiz-header { display: flex; justify-content: space-between; align-items: center; height: 50px; margin-bottom: 20px; }
         .close-btn { font-size: 32px; color: #e74c3c; cursor: pointer; padding: 10px; font-weight: bold; }
+
         .progress-container { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; }
         .progress-track { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; }
         #progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
+        
         .quiz-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .word-to-solve { font-size: 32px; font-weight: 800; margin-bottom: 40px; color: #fff; text-align: center; }
         .options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
         .option-btn { background-color: #333; border: none; color: #ecf0f1; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
         .option-btn.correct { background-color: #27ae60; color: white; }
         .option-btn.wrong { background-color: #e74c3c; color: white; }
-        
+        .option-btn:disabled { cursor: default; }
+
         /* SONUÇ EKRANI */
         #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 10000; }
         .result-card { background-color: #3e5c6a; width: 85%; max-width: 400px; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
@@ -205,7 +200,7 @@
         <header class="home-header">
             <div style="font-size:24px;">⚙️</div>
             <div class="app-title" id="app-header-title">C - Seviyesi</div>
-            <div class="profile-pic">👨🏻💼</div>
+            <div class="profile-pic">👨🏻‍💼</div>
         </header>
 
         <div class="tabs">
@@ -219,8 +214,7 @@
         </div>
     </div>
 
-    <div class="content-area" id="content-container">
-        </div>
+    <div class="content-area" id="content-container"></div>
 
     <div id="quiz-screen">
         <header class="quiz-header">
@@ -245,7 +239,7 @@
             <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
             <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
             <div id="mastery-message" style="margin-top:10px; font-weight:bold; color:#f1c40f; display:none;">🎉 Mükemmel! İlerleme Kaydedildi.</div>
-            <button class="home-btn" onclick="closeResultScreen()">Listeye Dön</button>
+            <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
         </div>
     </div>
 </div>
@@ -298,17 +292,17 @@
     fixedData["YDS"][39] = [ { "en": "Helpful", "tr": "Yardımsever" }, { "en": "Heredity", "tr": "Kalıtım" }, { "en": "Hesitate", "tr": "Tereddüt etmek" }, { "en": "Hidden", "tr": "Gizli" }, { "en": "Hideous", "tr": "İğrenç, çok çirkin" }, { "en": "High", "tr": "Yüksek" }, { "en": "Highlight", "tr": "Vurgulamak" }, { "en": "Hinder", "tr": "Engellemek" }, { "en": "Hint", "tr": "İpucu" }, { "en": "Hire", "tr": "Kiralamak, işe almak" }, { "en": "Historian", "tr": "Tarihçi" }, { "en": "Hobby", "tr": "Hobi" }, { "en": "Hold", "tr": "Tutmak" }, { "en": "Hollow", "tr": "İçi boş" }, { "en": "Holy", "tr": "Kutsal" }, { "en": "Honest", "tr": "Dürüst" }, { "en": "Honor", "tr": "Onur" }, { "en": "Hopeful", "tr": "Umutlu" }, { "en": "Horizontal", "tr": "Yatay" }, { "en": "Horrible", "tr": "Korkunç" } ];
     fixedData["YDS"][40] = [ { "en": "Hospitable", "tr": "Misafirperver" }, { "en": "Hostile", "tr": "Düşmanca" }, { "en": "Huge", "tr": "Kocaman" }, { "en": "Humane", "tr": "İnsancıl" }, { "en": "Humble", "tr": "Mütevazı" }, { "en": "Humid", "tr": "Nemli" }, { "en": "Humiliate", "tr": "Aşağılamak" }, { "en": "Humor", "tr": "Mizah" }, { "en": "Hurdle", "tr": "Engel" }, { "en": "Hurry", "tr": "Acele etmek" }, { "en": "Hurt", "tr": "İncitmek" }, { "en": "Hypothesis", "tr": "Hipotez" }, { "en": "Idea", "tr": "Fikir" }, { "en": "Ideal", "tr": "İdeal" }, { "en": "Identical", "tr": "Aynı, özdeş" }, { "en": "Identify", "tr": "Tanımlamak" }, { "en": "Idle", "tr": "Boşta, tembel" }, { "en": "Ignorant", "tr": "Cahil" }, { "en": "Ignore", "tr": "Görmezden gelmek" }, { "en": "Illegal", "tr": "Yasadışı" } ];
 
-    // --- YENİ EKLENEN 51 - 60 (L - O) ---
-    fixedData["YDS"][51] = [ { "en": "Legendary", "tr": "Efsanevi" }, { "en": "Legislate", "tr": "Yasa çıkarmak" }, { "en": "Legitimate", "tr": "Meşru, yasal" }, { "en": "Leisure", "tr": "Boş vakit" }, { "en": "Lend", "tr": "Ödünç vermek" }, { "en": "Lengthen", "tr": "Uzatmak" }, { "en": "Lenient", "tr": "Hoşgörülü, yumuşak yüzlü" }, { "en": "Lessen", "tr": "Azaltmak" }, { "en": "Lethal", "tr": "Öldürücü" }, { "en": "Liable", "tr": "Sorumlu, eğilimli" }, { "en": "Liberal", "tr": "Özgürlükçü, bol" }, { "en": "Liberate", "tr": "Özgürleştirmek" }, { "en": "Likelihood", "tr": "Olasılık" }, { "en": "Limit", "tr": "Sınırlandırmak" }, { "en": "Linger", "tr": "Oyalanmak, kalmak" }, { "en": "Link", "tr": "Bağlantı" }, { "en": "Liquid", "tr": "Sıvı" }, { "en": "Literacy", "tr": "Okuryazarlık" }, { "en": "Literal", "tr": "Kelimesi kelimesine" }, { "en": "Liveable", "tr": "Yaşanabilir" } ];
-    fixedData["YDS"][52] = [ { "en": "Load", "tr": "Yüklemek" }, { "en": "Loan", "tr": "Borç, kredi" }, { "en": "Loathe", "tr": "Nefret etmek" }, { "en": "Local", "tr": "Yerel" }, { "en": "Locate", "tr": "Yerini belirlemek" }, { "en": "Lofty", "tr": "Yüce, yüksek" }, { "en": "Logical", "tr": "Mantıklı" }, { "en": "Lonely", "tr": "Yalnız" }, { "en": "Longing", "tr": "Özlem, hasret" }, { "en": "Loose", "tr": "Gevşek" }, { "en": "Loot", "tr": "Yağmalamak" }, { "en": "Loss", "tr": "Kayıp" }, { "en": "Loyalty", "tr": "Sadakat" }, { "en": "Lucid", "tr": "Açık, net" }, { "en": "Lucrative", "tr": "Karlı, kazançlı" }, { "en": "Ludicrous", "tr": "Gülünç, saçma" }, { "en": "Luminous", "tr": "Parlak, ışık saçan" }, { "en": "Lure", "tr": "Cezbetmek, yemlemek" }, { "en": "Lush", "tr": "Gür, verimli (bitki)" }, { "en": "Magnificent", "tr": "Muhteşem" } ];
-    fixedData["YDS"][53] = [ { "en": "Magnify", "tr": "Büyütmek" }, { "en": "Magnitude", "tr": "Büyüklük, şiddet" }, { "en": "Maintain", "tr": "Sürdürmek, bakım yapmak" }, { "en": "Majestic", "tr": "Görkemli" }, { "en": "Major", "tr": "Ana, başlıca" }, { "en": "Malfunction", "tr": "Arıza, bozukluk" }, { "en": "Malice", "tr": "Kötü niyet, haset" }, { "en": "Malignant", "tr": "Kötü huylu (tümör vb.)" }, { "en": "Manageable", "tr": "Yönetilebilir" }, { "en": "Mandatory", "tr": "Zorunlu" }, { "en": "Manifest", "tr": "Göstermek, beyan etmek" }, { "en": "Manipulate", "tr": "Yönlendirmek, manipüle etmek" }, { "en": "Manual", "tr": "El ile yapılan" }, { "en": "Manufacture", "tr": "Üretmek" }, { "en": "Margin", "tr": "Kenar, pay" }, { "en": "Marine", "tr": "Denizle ilgili" }, { "en": "Markedly", "tr": "Belirgin bir şekilde" }, { "en": "Marvelous", "tr": "Harika" }, { "en": "Massive", "tr": "Devasa" }, { "en": "Mastery", "tr": "Ustalık" } ];
-    fixedData["YDS"][54] = [ { "en": "Matchless", "tr": "Eşsiz" }, { "en": "Materialize", "tr": "Gerçekleşmek, somutlaşmak" }, { "en": "Mature", "tr": "Olgun" }, { "en": "Maximum", "tr": "Azami" }, { "en": "Meager", "tr": "Kıt, az" }, { "en": "Mean", "tr": "Anlamına gelmek, kaba" }, { "en": "Meaningful", "tr": "Anlamlı" }, { "en": "Measure", "tr": "Ölçmek, önlem" }, { "en": "Mediate", "tr": "Arabuluculuk etmek" }, { "en": "Medical", "tr": "Tıbbi" }, { "en": "Mediocre", "tr": "Sıradan, vasat" }, { "en": "Meditate", "tr": "Derin düşünmek, meditasyon" }, { "en": "Melancholy", "tr": "Hüzün" }, { "en": "Melt", "tr": "Erimek" }, { "en": "Memorable", "tr": "Unutulmaz" }, { "en": "Menace", "tr": "Tehdit" }, { "en": "Mend", "tr": "Onarmak, düzelmek" }, { "en": "Mental", "tr": "Zihinsel" }, { "en": "Mention", "tr": "Bahsetmek" }, { "en": "Merciful", "tr": "Merhametli" } ];
-    fixedData["YDS"][55] = [ { "en": "Merciless", "tr": "Acımasız" }, { "en": "Merely", "tr": "Sadece, yalnızca" }, { "en": "Merge", "tr": "Birleşmek" }, { "en": "Merit", "tr": "Erdem, liyakat" }, { "en": "Meticulous", "tr": "Titiz" }, { "en": "Microscopic", "tr": "Mikroskobik" }, { "en": "Middle", "tr": "Orta" }, { "en": "Mighty", "tr": "Güçlü" }, { "en": "Migrate", "tr": "Göç etmek" }, { "en": "Mild", "tr": "Hafif, yumuşak" }, { "en": "Military", "tr": "Askeri" }, { "en": "Mimic", "tr": "Taklit etmek" }, { "en": "Mindful", "tr": "Dikkate alan, farkında" }, { "en": "Minimize", "tr": "Minimize etmek, küçültmek" }, { "en": "Minor", "tr": "Küçük, önemsiz" }, { "en": "Miracle", "tr": "Mucize" }, { "en": "Mischief", "tr": "Yaramazlık" }, { "en": "Miserable", "tr": "Perişan, zavallı" }, { "en": "Misleading", "tr": "Yanıltıcı" }, { "en": "Mission", "tr": "Görev" } ];
-    fixedData["YDS"][56] = [ { "en": "Mistake", "tr": "Hata" }, { "en": "Mitigate", "tr": "Hafifletmek, azaltmak" }, { "en": "Mix", "tr": "Karıştırmak" }, { "en": "Moan", "tr": "İnlemek" }, { "en": "Mobile", "tr": "Hareketli" }, { "en": "Mock", "tr": "Alay etmek" }, { "en": "Moderate", "tr": "Ilımlı, orta" }, { "en": "Modern", "tr": "Modern" }, { "en": "Modest", "tr": "Mütevazı" }, { "en": "Modify", "tr": "Değiştirmek" }, { "en": "Moist", "tr": "Nemli" }, { "en": "Momentum", "tr": "Hız, ivme" }, { "en": "Monetary", "tr": "Parasal" }, { "en": "Monitor", "tr": "İzlemek, gözlemlemek" }, { "en": "Monopoly", "tr": "Tekel" }, { "en": "Monotonous", "tr": "Tekdüze" }, { "en": "Monster", "tr": "Canavar" }, { "en": "Monument", "tr": "Anıt" }, { "en": "Mood", "tr": "Ruh hali" }, { "en": "Moral", "tr": "Ahlaki" } ];
-    fixedData["YDS"][57] = [ { "en": "Mortal", "tr": "Ölümlü" }, { "en": "Motivate", "tr": "Motive etmek" }, { "en": "Motive", "tr": "Güdü, neden" }, { "en": "Mourn", "tr": "Yas tutmak" }, { "en": "Movement", "tr": "Hareket" }, { "en": "Muddy", "tr": "Çamurlu" }, { "en": "Multiple", "tr": "Çoklu" }, { "en": "Multiply", "tr": "Çoğaltmak, çarpmak" }, { "en": "Multitude", "tr": "Çokluk, kalabalık" }, { "en": "Mundane", "tr": "Dünyevi, sıradan" }, { "en": "Municipal", "tr": "Belediyeye ait" }, { "en": "Murder", "tr": "Cinayet" }, { "en": "Murmur", "tr": "Mırıldanmak" }, { "en": "Muscle", "tr": "Kas" }, { "en": "Mutual", "tr": "Karşılıklı" }, { "en": "Mystery", "tr": "Gizem" }, { "en": "Myth", "tr": "Efsane, mit" }, { "en": "Naive", "tr": "Saf, deneyimsiz" }, { "en": "Naked", "tr": "Çıplak" }, { "en": "Narrate", "tr": "Anlatmak" } ];
-    fixedData["YDS"][58] = [ { "en": "Narrow", "tr": "Dar" }, { "en": "Nasty", "tr": "Pis, kötü" }, { "en": "Native", "tr": "Yerli" }, { "en": "Natural", "tr": "Doğal" }, { "en": "Nausea", "tr": "Bulantı" }, { "en": "Navigable", "tr": "Gemiyle gidilebilir" }, { "en": "Near", "tr": "Yakın" }, { "en": "Necessary", "tr": "Gerekli" }, { "en": "Needle", "tr": "İğne" }, { "en": "Negative", "tr": "Olumsuz" }, { "en": "Neglect", "tr": "İhmal etmek" }, { "en": "Negotiate", "tr": "Müzakere etmek" }, { "en": "Neighbor", "tr": "Komşu" }, { "en": "Nerve", "tr": "Sinir, cesaret" }, { "en": "Neutral", "tr": "Tarafsız" }, { "en": "Newcomer", "tr": "Yeni gelen" }, { "en": "Niche", "tr": "Uygun yer" }, { "en": "Nimble", "tr": "Çevik" }, { "en": "Noble", "tr": "Soylu" }, { "en": "Nocturnal", "tr": "Geceye özgü" } ];
-    fixedData["YDS"][59] = [ { "en": "Nominate", "tr": "Aday göstermek" }, { "en": "Nonsense", "tr": "Saçma" }, { "en": "Normal", "tr": "Normal" }, { "en": "Notable", "tr": "Kayda değer" }, { "en": "Notify", "tr": "Bildirmek" }, { "en": "Notion", "tr": "Kavram, görüş" }, { "en": "Notorious", "tr": "Kötü şöhretli" }, { "en": "Nourish", "tr": "Beslemek" }, { "en": "Novel", "tr": "Roman, yeni" }, { "en": "Novice", "tr": "Acemi" }, { "en": "Nuisance", "tr": "Dert, baş belası" }, { "en": "Nullify", "tr": "Geçersiz kılmak" }, { "en": "Numerous", "tr": "Pek çok" }, { "en": "Nurture", "tr": "Büyütmek, beslemek" }, { "en": "Nutrition", "tr": "Beslenme" }, { "en": "Obedient", "tr": "İtaatkar" }, { "en": "Object", "tr": "Nesne, itiraz etmek" }, { "en": "Objective", "tr": "Nesnel, hedef" }, { "en": "Oblige", "tr": "Zorunda bırakmak" }, { "en": "Oblique", "tr": "Eğik" } ];
-    fixedData["YDS"][60] = [ { "en": "Obliterate", "tr": "Yok etmek, silmek" }, { "en": "Oblivion", "tr": "Unutulma, farkında olmama" }, { "en": "Obnoxious", "tr": "İğrenç, çok itici" }, { "en": "Obscure", "tr": "Belirsiz, gizlemek" }, { "en": "Observation", "tr": "Gözlem" }, { "en": "Obsession", "tr": "Takıntı" }, { "en": "Obsolete", "tr": "Modası geçmiş" }, { "en": "Obstacle", "tr": "Engel" }, { "en": "Obstinate", "tr": "İnatçı" }, { "en": "Obtain", "tr": "Elde etmek" }, { "en": "Obvious", "tr": "Açık, bariz" }, { "en": "Occasion", "tr": "Durum, vesile" }, { "en": "Occupy", "tr": "İşgal etmek, meşgul etmek" }, { "en": "Occur", "tr": "Meydana gelmek" }, { "en": "Odd", "tr": "Tuhaf, tek (sayı)" }, { "en": "Odour", "tr": "Koku" }, { "en": "Offend", "tr": "Gücendirmek, suç işlemek" }, { "en": "Offer", "tr": "Teklif etmek" }, { "en": "Official", "tr": "Resmi" }, { "en": "Offset", "tr": "Dengelemek" } ];
+    // --- ESKİ 51-60 ARASINI 41-50'YE KAYDIRDIK ---
+    fixedData["YDS"][41] = [ { "en": "Legendary", "tr": "Efsanevi" }, { "en": "Legislate", "tr": "Yasa çıkarmak" }, { "en": "Legitimate", "tr": "Meşru, yasal" }, { "en": "Leisure", "tr": "Boş vakit" }, { "en": "Lend", "tr": "Ödünç vermek" }, { "en": "Lengthen", "tr": "Uzatmak" }, { "en": "Lenient", "tr": "Hoşgörülü, yumuşak yüzlü" }, { "en": "Lessen", "tr": "Azaltmak" }, { "en": "Lethal", "tr": "Öldürücü" }, { "en": "Liable", "tr": "Sorumlu, eğilimli" }, { "en": "Liberal", "tr": "Özgürlükçü, bol" }, { "en": "Liberate", "tr": "Özgürleştirmek" }, { "en": "Likelihood", "tr": "Olasılık" }, { "en": "Limit", "tr": "Sınırlandırmak" }, { "en": "Linger", "tr": "Oyalanmak, kalmak" }, { "en": "Link", "tr": "Bağlantı" }, { "en": "Liquid", "tr": "Sıvı" }, { "en": "Literacy", "tr": "Okuryazarlık" }, { "en": "Literal", "tr": "Kelimesi kelimesine" }, { "en": "Liveable", "tr": "Yaşanabilir" } ];
+    fixedData["YDS"][42] = [ { "en": "Load", "tr": "Yüklemek" }, { "en": "Loan", "tr": "Borç, kredi" }, { "en": "Loathe", "tr": "Nefret etmek" }, { "en": "Local", "tr": "Yerel" }, { "en": "Locate", "tr": "Yerini belirlemek" }, { "en": "Lofty", "tr": "Yüce, yüksek" }, { "en": "Logical", "tr": "Mantıklı" }, { "en": "Lonely", "tr": "Yalnız" }, { "en": "Longing", "tr": "Özlem, hasret" }, { "en": "Loose", "tr": "Gevşek" }, { "en": "Loot", "tr": "Yağmalamak" }, { "en": "Loss", "tr": "Kayıp" }, { "en": "Loyalty", "tr": "Sadakat" }, { "en": "Lucid", "tr": "Açık, net" }, { "en": "Lucrative", "tr": "Karlı, kazançlı" }, { "en": "Ludicrous", "tr": "Gülünç, saçma" }, { "en": "Luminous", "tr": "Parlak, ışık saçan" }, { "en": "Lure", "tr": "Cezbetmek, yemlemek" }, { "en": "Lush", "tr": "Gür, verimli (bitki)" }, { "en": "Magnificent", "tr": "Muhteşem" } ];
+    fixedData["YDS"][43] = [ { "en": "Magnify", "tr": "Büyütmek" }, { "en": "Magnitude", "tr": "Büyüklük, şiddet" }, { "en": "Maintain", "tr": "Sürdürmek, bakım yapmak" }, { "en": "Majestic", "tr": "Görkemli" }, { "en": "Major", "tr": "Ana, başlıca" }, { "en": "Malfunction", "tr": "Arıza, bozukluk" }, { "en": "Malice", "tr": "Kötü niyet, haset" }, { "en": "Malignant", "tr": "Kötü huylu (tümör vb.)" }, { "en": "Manageable", "tr": "Yönetilebilir" }, { "en": "Mandatory", "tr": "Zorunlu" }, { "en": "Manifest", "tr": "Göstermek, beyan etmek" }, { "en": "Manipulate", "tr": "Yönlendirmek, manipüle etmek" }, { "en": "Manual", "tr": "El ile yapılan" }, { "en": "Manufacture", "tr": "Üretmek" }, { "en": "Margin", "tr": "Kenar, pay" }, { "en": "Marine", "tr": "Denizle ilgili" }, { "en": "Markedly", "tr": "Belirgin bir şekilde" }, { "en": "Marvelous", "tr": "Harika" }, { "en": "Massive", "tr": "Devasa" }, { "en": "Mastery", "tr": "Ustalık" } ];
+    fixedData["YDS"][44] = [ { "en": "Matchless", "tr": "Eşsiz" }, { "en": "Materialize", "tr": "Gerçekleşmek, somutlaşmak" }, { "en": "Mature", "tr": "Olgun" }, { "en": "Maximum", "tr": "Azami" }, { "en": "Meager", "tr": "Kıt, az" }, { "en": "Mean", "tr": "Anlamına gelmek, kaba" }, { "en": "Meaningful", "tr": "Anlamlı" }, { "en": "Measure", "tr": "Ölçmek, önlem" }, { "en": "Mediate", "tr": "Arabuluculuk etmek" }, { "en": "Medical", "tr": "Tıbbi" }, { "en": "Mediocre", "tr": "Sıradan, vasat" }, { "en": "Meditate", "tr": "Derin düşünmek, meditasyon" }, { "en": "Melancholy", "tr": "Hüzün" }, { "en": "Melt", "tr": "Erimek" }, { "en": "Memorable", "tr": "Unutulmaz" }, { "en": "Menace", "tr": "Tehdit" }, { "en": "Mend", "tr": "Onarmak, düzelmek" }, { "en": "Mental", "tr": "Zihinsel" }, { "en": "Mention", "tr": "Bahsetmek" }, { "en": "Merciful", "tr": "Merhametli" } ];
+    fixedData["YDS"][45] = [ { "en": "Merciless", "tr": "Acımasız" }, { "en": "Merely", "tr": "Sadece, yalnızca" }, { "en": "Merge", "tr": "Birleşmek" }, { "en": "Merit", "tr": "Erdem, liyakat" }, { "en": "Meticulous", "tr": "Titiz" }, { "en": "Microscopic", "tr": "Mikroskobik" }, { "en": "Middle", "tr": "Orta" }, { "en": "Mighty", "tr": "Güçlü" }, { "en": "Migrate", "tr": "Göç etmek" }, { "en": "Mild", "tr": "Hafif, yumuşak" }, { "en": "Military", "tr": "Askeri" }, { "en": "Mimic", "tr": "Taklit etmek" }, { "en": "Mindful", "tr": "Dikkate alan, farkında" }, { "en": "Minimize", "tr": "Minimize etmek, küçültmek" }, { "en": "Minor", "tr": "Küçük, önemsiz" }, { "en": "Miracle", "tr": "Mucize" }, { "en": "Mischief", "tr": "Yaramazlık" }, { "en": "Miserable", "tr": "Perişan, zavallı" }, { "en": "Misleading", "tr": "Yanıltıcı" }, { "en": "Mission", "tr": "Görev" } ];
+    fixedData["YDS"][46] = [ { "en": "Mistake", "tr": "Hata" }, { "en": "Mitigate", "tr": "Hafifletmek, azaltmak" }, { "en": "Mix", "tr": "Karıştırmak" }, { "en": "Moan", "tr": "İnlemek" }, { "en": "Mobile", "tr": "Hareketli" }, { "en": "Mock", "tr": "Alay etmek" }, { "en": "Moderate", "tr": "Ilımlı, orta" }, { "en": "Modern", "tr": "Modern" }, { "en": "Modest", "tr": "Mütevazı" }, { "en": "Modify", "tr": "Değiştirmek" }, { "en": "Moist", "tr": "Nemli" }, { "en": "Momentum", "tr": "Hız, ivme" }, { "en": "Monetary", "tr": "Parasal" }, { "en": "Monitor", "tr": "İzlemek, gözlemlemek" }, { "en": "Monopoly", "tr": "Tekel" }, { "en": "Monotonous", "tr": "Tekdüze" }, { "en": "Monster", "tr": "Canavar" }, { "en": "Monument", "tr": "Anıt" }, { "en": "Mood", "tr": "Ruh hali" }, { "en": "Moral", "tr": "Ahlaki" } ];
+    fixedData["YDS"][47] = [ { "en": "Mortal", "tr": "Ölümlü" }, { "en": "Motivate", "tr": "Motive etmek" }, { "en": "Motive", "tr": "Güdü, neden" }, { "en": "Mourn", "tr": "Yas tutmak" }, { "en": "Movement", "tr": "Hareket" }, { "en": "Muddy", "tr": "Çamurlu" }, { "en": "Multiple", "tr": "Çoklu" }, { "en": "Multiply", "tr": "Çoğaltmak, çarpmak" }, { "en": "Multitude", "tr": "Çokluk, kalabalık" }, { "en": "Mundane", "tr": "Dünyevi, sıradan" }, { "en": "Municipal", "tr": "Belediyeye ait" }, { "en": "Murder", "tr": "Cinayet" }, { "en": "Murmur", "tr": "Mırıldanmak" }, { "en": "Muscle", "tr": "Kas" }, { "en": "Mutual", "tr": "Karşılıklı" }, { "en": "Mystery", "tr": "Gizem" }, { "en": "Myth", "tr": "Efsane, mit" }, { "en": "Naive", "tr": "Saf, deneyimsiz" }, { "en": "Naked", "tr": "Çıplak" }, { "en": "Narrate", "tr": "Anlatmak" } ];
+    fixedData["YDS"][48] = [ { "en": "Narrow", "tr": "Dar" }, { "en": "Nasty", "tr": "Pis, kötü" }, { "en": "Native", "tr": "Yerli" }, { "en": "Natural", "tr": "Doğal" }, { "en": "Nausea", "tr": "Bulantı" }, { "en": "Navigable", "tr": "Gemiyle gidilebilir" }, { "en": "Near", "tr": "Yakın" }, { "en": "Necessary", "tr": "Gerekli" }, { "en": "Needle", "tr": "İğne" }, { "en": "Negative", "tr": "Olumsuz" }, { "en": "Neglect", "tr": "İhmal etmek" }, { "en": "Negotiate", "tr": "Müzakere etmek" }, { "en": "Neighbor", "tr": "Komşu" }, { "en": "Nerve", "tr": "Sinir, cesaret" }, { "en": "Neutral", "tr": "Tarafsız" }, { "en": "Newcomer", "tr": "Yeni gelen" }, { "en": "Niche", "tr": "Uygun yer" }, { "en": "Nimble", "tr": "Çevik" }, { "en": "Noble", "tr": "Soylu" }, { "en": "Nocturnal", "tr": "Geceye özgü" } ];
+    fixedData["YDS"][49] = [ { "en": "Nominate", "tr": "Aday göstermek" }, { "en": "Nonsense", "tr": "Saçma" }, { "en": "Normal", "tr": "Normal" }, { "en": "Notable", "tr": "Kayda değer" }, { "en": "Notify", "tr": "Bildirmek" }, { "en": "Notion", "tr": "Kavram, görüş" }, { "en": "Notorious", "tr": "Kötü şöhretli" }, { "en": "Nourish", "tr": "Beslemek" }, { "en": "Novel", "tr": "Roman, yeni" }, { "en": "Novice", "tr": "Acemi" }, { "en": "Nuisance", "tr": "Dert, baş belası" }, { "en": "Nullify", "tr": "Geçersiz kılmak" }, { "en": "Numerous", "tr": "Pek çok" }, { "en": "Nurture", "tr": "Büyütmek, beslemek" }, { "en": "Nutrition", "tr": "Beslenme" }, { "en": "Obedient", "tr": "İtaatkar" }, { "en": "Object", "tr": "Nesne, itiraz etmek" }, { "en": "Objective", "tr": "Nesnel, hedef" }, { "en": "Oblige", "tr": "Zorunda bırakmak" }, { "en": "Oblique", "tr": "Eğik" } ];
+    fixedData["YDS"][50] = [ { "en": "Obliterate", "tr": "Yok etmek, silmek" }, { "en": "Oblivion", "tr": "Unutulma, farkında olmama" }, { "en": "Obnoxious", "tr": "İğrenç, çok itici" }, { "en": "Obscure", "tr": "Belirsiz, gizlemek" }, { "en": "Observation", "tr": "Gözlem" }, { "en": "Obsession", "tr": "Takıntı" }, { "en": "Obsolete", "tr": "Modası geçmiş" }, { "en": "Obstacle", "tr": "Engel" }, { "en": "Obstinate", "tr": "İnatçı" }, { "en": "Obtain", "tr": "Elde etmek" }, { "en": "Obvious", "tr": "Açık, bariz" }, { "en": "Occasion", "tr": "Durum, vesile" }, { "en": "Occupy", "tr": "İşgal etmek, meşgul etmek" }, { "en": "Occur", "tr": "Meydana gelmek" }, { "en": "Odd", "tr": "Tuhaf, tek (sayı)" }, { "en": "Odour", "tr": "Koku" }, { "en": "Offend", "tr": "Gücendirmek, suç işlemek" }, { "en": "Offer", "tr": "Teklif etmek" }, { "en": "Official", "tr": "Resmi" }, { "en": "Offset", "tr": "Dengelemek" } ];
 
     // --- C Seviyesi Veritabanı ---
     fixedData["C"][1] = [{en:"Abandon", tr:"Terk etmek"}, {en:"Abolish", tr:"Yürürlükten kaldırmak"}, {en:"Accomplish", tr:"Başarmak"}, {en:"Accumulate", tr:"Biriktirmek"}, {en:"Acquire", tr:"Edinmek"}, {en:"Adopt", tr:"Benimsemek"}, {en:"Advocate", tr:"Savunmak"}, {en:"Alleviate", tr:"Hafifletmek"}, {en:"Alter", tr:"Değiştirmek"}, {en:"Ambiguity", tr:"Belirsizlik"}, {en:"Assess", tr:"Değerlendirmek"}, {en:"Benefit", tr:"Fayda"}, {en:"Boost", tr:"Artırmak"}, {en:"Coincide", tr:"Rastlamak"}, {en:"Compensate", tr:"Telafi etmek"}, {en:"Comprise", tr:"Oluşmak"}, {en:"Conceal", tr:"Gizlemek"}, {en:"Conduct", tr:"Yürütmek"}, {en:"Confine", tr:"Sınırlandırmak"}, {en:"Cope with", tr:"Başa çıkmak"}];
@@ -333,7 +327,7 @@
     fixedData["C"][20] = [{en:"Orchestrate", "tr": "Düzenlemek, planlamak" }, {en:"Ordeal", "tr": "Çile, zorlu deneyim" }, {en:"Ornament", "tr": "Süs, bezek" }, {en:"Orthodox", "tr": "Geleneksel, alışılagelmiş" }, {en:"Ostentatious", "tr": "Gösterişli, şatafatlı" }, {en:"Outcome", "tr": "Sonuç" }, {en:"Outdated", "tr": "Eski, zamanı geçmiş" }, {en:"Outlook", "tr": "Görünüm, bakış açısı" }, {en:"Outrageous", "tr": "Rezilce, aşırı, şoke edici" }, {en:"Overcome", "tr": "Üstesinden gelmek" }, {en:"Overlook", "tr": "Görmezden gelmek, tepeden bakmak" }, {en:"Oversee", "tr": "Denetlemek, gözetmek" }, {en:"Overwhelm", "tr": "Boğmak, bunaltmak, ezmek" }, {en:"Paradox", "tr": "Çelişki, paradoks" }, {en:"Paramount", "tr": "En önemli, üstün" }, {en:"Partial", "tr": "Kısmi, taraflı" }, {en:"Passive", "tr": "Edilgen, pasif" }, {en:"Patronize", "tr": "Küçümsemek / Desteklemek" }, {en:"Peculiar", "tr": "Tuhaf, kendine özgü" }, {en:"Penalize", "tr": "Cezalandırmak" }];
 
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v31'; // Versiyon v31: L-O Kelimeleri Eklendi (51-60. Seviyeler)
+    const DB_KEY = 'VocabApp_FixedLayout_v32'; // Versiyon v32: 41-50 Silindi, Liste Kaydırıldı (Toplam 50)
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -449,8 +443,8 @@
         if(!vocabularyData.progress) vocabularyData.progress = {};
         if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
 
-        // SADECE YDS İÇİN 60, DİĞERLERİ İÇİN 40
-        let maxLvl = (cat === 'YDS') ? 60 : 40;
+        // YDS İÇİN 50, DİĞERLERİ İÇİN 40
+        let maxLvl = (cat === 'YDS') ? 50 : 40;
 
         for(let i=1; i<=maxLvl; i++) {
             if(!vocabularyData[cat][i]) vocabularyData[cat][i] = [];
@@ -557,7 +551,7 @@
                         <option value="YDS">YDS</option><option value="H">HABER</option>
                         <option value="B2">B2</option><option value="B1">B1</option><option value="C" selected>C</option>
                     </select>
-                    <select id="t-lvl" class="form-select">${Array.from({length:60},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+                    <select id="t-lvl" class="form-select">${Array.from({length:50},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
                 </div>
                 <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma&#10;Run : Koşmak" rows="5"></textarea>
                 <button class="save-btn" onclick="addWords()">Kaydet</button>
@@ -602,8 +596,8 @@
         
         currentQuestions = words.map(w => {
             let pool = [];
-            // Şıkları oluştururken de 60'a kadar bakalım
-            let maxRand = (activeCategory === 'YDS') ? 60 : 40;
+            // Şıkları oluştururken YDS ise 50, değilse 40
+            let maxRand = (activeCategory === 'YDS') ? 50 : 40;
             for(let l=1; l<=maxRand; l++) if(vocabularyData[activeCategory][l]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
             if(pool.length < 10) pool.push("Gitmek", "Bakmak", "Koşmak", "Görmek", "Yazmak");
             let opts = [w.tr];
