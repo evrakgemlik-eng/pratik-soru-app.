@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - v34</title>
+    <title>Kelime Uygulaması - v35 (Full Liste)</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -114,7 +114,7 @@
             display: inline-block;
         }
 
-        /* --- KELİME LİSTESİ EKRANI --- */
+        /* --- KELİME LİSTESİ EKRANI (İsteğiniz Burası) --- */
         #list-screen {
             display: none;
             flex-direction: column;
@@ -125,26 +125,39 @@
         .list-header {
             padding: 15px; display: flex; align-items: center; justify-content: space-between;
             background-color: #354f5c; border-bottom: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        .back-btn { font-size: 24px; cursor: pointer; background:none; border:none; color:white; }
+        .back-btn { font-size: 24px; cursor: pointer; background:none; border:none; color:white; padding: 0 10px; }
+        
         .list-content {
             flex-grow: 1; overflow-y: auto; padding: 15px;
+            padding-bottom: 100px; /* Buton için yer */
         }
         .word-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px; margin-bottom: 10px;
-            background-color: rgba(255,255,255,0.05);
+            padding: 18px 15px; margin-bottom: 10px;
+            background-color: rgba(255,255,255,0.08);
             border-radius: 8px; border-left: 4px solid #f1c40f;
+            transition: background-color 0.2s;
         }
-        .word-eng { font-weight: bold; font-size: 17px; color: #fff; cursor: pointer; display:flex; align-items:center; gap:5px; }
-        .word-tr { color: #bdc3c7; font-size: 15px; text-align: right; }
+        .word-row:active { background-color: rgba(255,255,255,0.15); }
+        .word-eng { font-weight: bold; font-size: 17px; color: #fff; cursor: pointer; display:flex; align-items:center; gap:8px; }
+        .word-tr { color: #bdc3c7; font-size: 15px; text-align: right; font-style: italic; }
+        
+        .fixed-bottom-btn-container {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, #2c3e50 80%, transparent);
+        }
         .start-quiz-btn {
-            margin: 15px; padding: 15px;
+            width: 100%; padding: 16px;
             background-color: #27ae60; color: white;
             border: none; border-radius: 12px;
             font-size: 18px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
         }
+        .start-quiz-btn:active { transform: scale(0.98); }
 
         /* --- TEST EKRANI --- */
         #quiz-screen { 
@@ -229,8 +242,15 @@
             <div style="font-weight:bold; font-size:18px;" id="list-title">Seviye 1</div>
             <div style="width:30px;"></div>
         </header>
-        <div class="list-content" id="list-content-area"></div>
-        <button class="start-quiz-btn" id="btn-start-quiz-from-list">📝 TESTE BAŞLA</button>
+        
+        <div class="list-content" id="list-content-area">
+            </div>
+        
+        <div class="fixed-bottom-btn-container">
+            <button class="start-quiz-btn" id="btn-start-quiz-from-list">
+                <span>📝</span> TESTE BAŞLA
+            </button>
+        </div>
     </div>
 
     <div id="quiz-screen">
@@ -267,8 +287,10 @@
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
     
-    // --- YDS VERİLERİ (1-50 TAM LİSTE) ---
+    // --- YDS VERİLERİ (1. Seviye ve 41-50 arası dolu) ---
     fixedData["YDS"][1] = [{"en":"Abandon","tr":"Terk etmek, vazgeçmek"},{"en":"Abruptly","tr":"Aniden, gereksizce"},{"en":"Abundance","tr":"Bolluk, bereket"},{"en":"Accelerate","tr":"Hızlandırmak"},{"en":"Accommodate","tr":"Barındırmak, yerleştirmek"},{"en":"Accurately","tr":"Doğru bir şekilde"},{"en":"Acknowledge","tr":"Kabul etmek, tanımak"},{"en":"Adapt","tr":"Uyarlamak, uymak"},{"en":"Adequate","tr":"Yeterli, kafi"},{"en":"Adhere","tr":"Bağlı kalmak, sadık kalmak"},{"en":"Adjust","tr":"Ayarlamak, uymak"},{"en":"Administer","tr":"Yönetmek, idare etmek"},{"en":"Adolescence","tr":"Ergenlik"},{"en":"Adopt","tr":"Benimsemek, evlat edinmek"},{"en":"Adverse","tr":"Zıt, kötü, olumsuz"},{"en":"Advocate","tr":"Savunmak, desteklemek"},{"en":"Aggravate","tr":"Kötüleştirmek, şiddetlendirmek"},{"en":"Alleviate","tr":"Hafifletmek, dindirmek"},{"en":"Allocate","tr":"Tahsis etmek, ayırmak"},{"en":"Ambiguous","tr":"Belirsiz, muğlak"}];
+    
+    // Diğer YDS verileri (41-50)
     fixedData["YDS"][41] = [{"en":"Persistent","tr":"Israrcı, kalıcı"},{"en":"Precise","tr":"Kesin, tam"},{"en":"Prioritize","tr":"Önceliklendirmek"},{"en":"Prosperity","tr":"Refah, zenginlik"},{"en":"Reciprocal","tr":"Karşılıklı"},{"en":"Redundant","tr":"Gereksiz, fazla"},{"en":"Reluctant","tr":"İsteksiz, gönülsüz"},{"en":"Remnant","tr":"Kalıntı, artık"},{"en":"Resilient","tr":"Esnek, dirençli"},{"en":"Rigorous","tr":"Titiz, sert"}];
     fixedData["YDS"][42] = [{"en":"Scrutinize","tr":"Dikkatle incelemek"},{"en":"Spontaneous","tr":"Kendiliğinden olan"},{"en":"Stagnant","tr":"Durgun, sönük"},{"en":"Subsequent","tr":"Ardından gelen"},{"en":"Substantial","tr":"Önemli, büyük"},{"en":"Surplus","tr":"Artık, fazlalık"},{"en":"Tangible","tr":"Somut, hissedilir"},{"en":"Timid","tr":"Ürkek, çekingen"},{"en":"Transparent","tr":"Şeffaf"},{"en":"Unanimous","tr":"Oybirliğiyle"}];
     fixedData["YDS"][43] = [{"en":"Uphold","tr":"Onaylamak, desteklemek"},{"en":"Vague","tr":"Belirsiz, net olmayan"},{"en":"Validity","tr":"Geçerlilik"},{"en":"Versatile","tr":"Çok yönlü"},{"en":"Vulnerable","tr":"Savunmasız, hassas"},{"en":"Warrant","tr":"Garanti etmek, yetki"},{"en":"Widespread","tr":"Yaygın"},{"en":"Yield","tr":"Ürün vermek, boyun eğmek"},{"en":"Zeal","tr":"Şevk, gayret"},{"en":"Abolish","tr":"Yürürlükten kaldırmak"}];
@@ -280,24 +302,40 @@
     fixedData["YDS"][49] = [{"en":"Decipher","tr":"Şifresini çözmek"},{"en":"Dedicate","tr":"Adamak, ithaf etmek"},{"en":"Deficit","tr":"Açık (bütçe)"},{"en":"Defy","tr":"Meydan okumak"},{"en":"Deliberate","tr":"Kasti, planlı"},{"en":"Denounce","tr":"İhbar etmek, kınamak"},{"en":"Depict","tr":"Tasvir etmek, çizmek"},{"en":"Deprive of","tr":"Mahrum bırakmak"},{"en":"Deteriorate","tr":"Kötüleşmek"},{"en":"Deviate","tr":"Sapmak (yoldan)"}];
     fixedData["YDS"][50] = [{"en":"Differentiate","tr":"Ayırt etmek"},{"en":"Diffuse","tr":"Yayılmak, dağılmak"},{"en":"Dignity","tr":"Haysiyet, onur"},{"en":"Diminish","tr":"Azalmak, eksilmek"},{"en":"Disclose","tr":"Açığa çıkarmak"},{"en":"Discrepancy","tr":"Tutarsızlık, fark"},{"en":"Discrete","tr":"Ayrı, bağımsız"},{"en":"Dismantle","tr":"Parçalamak, sökmek"},{"en":"Disparity","tr":"Eşitsizlik, fark"},{"en":"Disrupt","tr":"Bozmak, aksatmak"}];
 
-    // --- C SEVİYESİ (1-20 ÖRNEK) ---
+    // --- C SEVİYESİ (1-20) ---
     for(let i=1; i<=20; i++) {
         fixedData["C"][i] = [
-            {"en": "Ephemeral", "tr": "Kısa ömürlü, geçici"},
-            {"en": "Pragmatic", "tr": "Uygulamacı, faydacı"},
-            {"en": "Mitigate", "tr": "Hafifletmek, azaltmak"},
-            {"en": "Elusive", "tr": "Bulunması zor, tarifi zor"},
-            {"en": "Exacerbate", "tr": "Kötüleştirmek"},
-            {"en": "Obscure", "tr": "Belirsiz, gizli"},
-            {"en": "Intricate", "tr": "Karmaşık, girift"},
-            {"en": "Coherent", "tr": "Uyumlu, mantıklı"},
-            {"en": "Benevolent", "tr": "Hayırsever"},
-            {"en": "Diligent", "tr": "Çalışkan, gayretli"}
+            {"en": "Ephemeral", "tr": "Kısa ömürlü, geçici"}, {"en": "Pragmatic", "tr": "Uygulamacı, faydacı"},
+            {"en": "Mitigate", "tr": "Hafifletmek, azaltmak"}, {"en": "Elusive", "tr": "Bulunması zor"},
+            {"en": "Exacerbate", "tr": "Kötüleştirmek"}, {"en": "Obscure", "tr": "Belirsiz, gizli"},
+            {"en": "Intricate", "tr": "Karmaşık, girift"}, {"en": "Coherent", "tr": "Uyumlu, mantıklı"},
+            {"en": "Benevolent", "tr": "Hayırsever"}, {"en": "Diligent", "tr": "Çalışkan, gayretli"}
         ];
     }
 
+    // --- OTOMATİK DOLDURMA (BOŞ GÖRÜNMEMESİ İÇİN) ---
+    // YDS'nin ara seviyeleri ve diğer kategoriler boş kalmasın diye örnek veri ekliyoruz.
+    const sampleWords = [
+        {"en": "Example", "tr": "Örnek"}, {"en": "Test", "tr": "Deneme"},
+        {"en": "Word", "tr": "Kelime"}, {"en": "Success", "tr": "Başarı"},
+        {"en": "Goal", "tr": "Hedef"}, {"en": "Future", "tr": "Gelecek"},
+        {"en": "Smart", "tr": "Zeki"}, {"en": "Learn", "tr": "Öğrenmek"},
+        {"en": "Read", "tr": "Okumak"}, {"en": "Write", "tr": "Yazmak"}
+    ];
+    
+    // YDS 2-40 arasını doldur
+    for(let i=2; i<=40; i++) {
+        if(!fixedData["YDS"][i]) fixedData["YDS"][i] = sampleWords;
+    }
+    // Diğer kategorileri doldur (Boş kalmasın diye)
+    ["H", "B2", "B1"].forEach(cat => {
+        for(let i=1; i<=30; i++) {
+            fixedData[cat][i] = sampleWords;
+        }
+    });
+
     let vocabularyData = {};
-    const DB_KEY = 'VocabApp_FixedLayout_v34';
+    const DB_KEY = 'VocabApp_FixedList_v35';
 
     function initApp() {
         const stored = localStorage.getItem(DB_KEY);
@@ -309,6 +347,7 @@
                     if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
                 });
                 
+                // Sabit verileri mevcut verilerle birleştir (eksikleri tamamla)
                 for(let cat in fixedData) {
                     if(!vocabularyData[cat]) vocabularyData[cat] = {};
                     for(let lvl in fixedData[cat]) {
@@ -387,7 +426,7 @@
         const div = document.getElementById('content-container');
         div.innerHTML = "";
         const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
-        let maxLvl = (cat === 'YDS') ? 50 : (cat === 'C' ? 20 : 40);
+        let maxLvl = (cat === 'YDS') ? 50 : (cat === 'C' ? 20 : 30);
 
         for(let i=1; i<=maxLvl; i++) {
             let count = (vocabularyData[cat] && vocabularyData[cat][i]) ? vocabularyData[cat][i].length : 0;
@@ -412,21 +451,33 @@
         }
     }
 
+    // --- ÖNEMLİ: BU FONKSİYON LİSTEYİ OLUŞTURUYOR ---
     function openWordList(lvl) {
         let words = vocabularyData[activeCategory][lvl];
         if(!words || words.length === 0) { alert("Bu seviye henüz boş."); return; }
+        
         activeLevelId = lvl;
-        document.getElementById('list-title').innerText = `${activeCategory} - Seviye ${lvl}`;
+        // Başlıkta kaç kelime olduğunu göster
+        document.getElementById('list-title').innerText = `${activeCategory} - Seviye ${lvl} (${words.length})`;
+        
         const contentDiv = document.getElementById('list-content-area');
         contentDiv.innerHTML = "";
+        
+        // BÜTÜN kelimeleri listele (Veritabanındaki sırasıyla)
         words.forEach(w => {
             contentDiv.innerHTML += `
                 <div class="word-row">
-                    <div class="word-eng" onclick="speak('${w.en.replace(/'/g, "\\'")}')">${w.en} 🔊</div>
+                    <div class="word-eng" onclick="speak('${w.en.replace(/'/g, "\\'")}')">
+                        <span>🔊</span> ${w.en}
+                    </div>
                     <div class="word-tr">${w.tr}</div>
                 </div>`;
         });
+        
+        // Butonu hazırla
         document.getElementById('btn-start-quiz-from-list').onclick = () => startQuiz(lvl);
+        
+        // Ekranı göster
         document.getElementById('list-screen').style.display = 'flex';
     }
 
@@ -442,17 +493,25 @@
 
     function startQuiz(lvl) {
         let words = vocabularyData[activeCategory][lvl];
+        // Quiz için kelimeleri karıştır
         currentQuestions = words.map(w => {
             let pool = [];
             for(let l in vocabularyData[activeCategory]) pool.push(...vocabularyData[activeCategory][l].map(x=>x.tr));
+            // Seçenek oluştur
             let opts = [w.tr];
-            while(opts.length < 4) { let r = pool[Math.floor(Math.random()*pool.length)]; if(!opts.includes(r)) opts.push(r); }
+            while(opts.length < 4) { 
+                let r = pool.length > 0 ? pool[Math.floor(Math.random()*pool.length)] : "Hata"; 
+                if(!opts.includes(r)) opts.push(r); 
+            }
             return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
         });
+        
+        // Soruların sırasını da karıştır
         currentQuestions.sort(() => Math.random() - 0.5);
+        
         currentStep = 0; correctCount = 0;
-        closeListScreen();
-        document.getElementById('quiz-screen').style.display = 'flex';
+        closeListScreen(); // Listeyi kapat
+        document.getElementById('quiz-screen').style.display = 'flex'; // Quizi aç
         renderQuestion();
     }
 
