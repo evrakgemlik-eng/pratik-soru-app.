@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - YDS 60 (L-O Eklendi)</title>
+    <title>Kelime Uygulaması - Liste Görünümü</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -35,7 +35,7 @@
             flex-shrink: 0; 
             background-color: #354f5c;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            z-index: 10;
+            z-index: 20;
         }
 
         header.home-header { 
@@ -77,53 +77,88 @@
         .content-area { 
             flex-grow: 1;
             overflow-y: auto; 
-            padding: 15px;
             padding-bottom: 80px;
             -webkit-overflow-scrolling: touch;
+            position: relative;
         }
 
-        /* KART TASARIMI */
-        .level-card { 
-            background-color: #3e5c6a; 
-            border: 2px solid #d4a35a; 
-            border-radius: 12px; 
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 20px; margin-bottom: 15px; 
-            cursor: pointer; 
-            position: relative;
+        /* --- YENİ EKLENEN: LİSTE VE NAVİGASYON STİLLERİ --- */
+        .sticky-level-header {
+            position: sticky;
+            top: 0;
+            background-color: #3e5c6a;
+            padding: 15px;
+            border-bottom: 2px solid #f1c40f;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .level-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .nav-arrow-btn {
+            background-color: #2c3e50;
+            border: 1px solid #7f8c8d;
+            color: white;
+            width: 40px; height: 40px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .level-indicator {
+            text-align: center;
+        }
+        
+        .level-title-text { font-size: 18px; font-weight: bold; color: #fff; }
+        .level-status-text { font-size: 12px; color: #bdc3c7; margin-top: 2px; }
+
+        .start-quiz-btn {
+            width: 100%;
+            background-color: #e74c3c; /* Kırmızımsı buton dikkat çekmek için */
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 4px 0 #c0392b;
             transition: transform 0.1s;
         }
-        .level-card:active { transform: scale(0.98); background-color: #354f5c; }
-        
-        /* TAMAMLANMIŞ (YEŞİL) KART STİLİ */
-        .level-card.completed {
-            background-color: #27ae60;
-            border-color: #2ecc71;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+        .start-quiz-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #c0392b; }
+
+        /* KELİME LİSTESİ */
+        .word-list {
+            padding: 10px;
         }
 
-        .level-icon { font-size: 24px; margin-right: 15px; pointer-events: none; }
-        .level-info { font-size: 16px; font-weight: bold; pointer-events: none; }
-        
-        .level-details { text-align: right; pointer-events: none; }
-        .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
-        .mastery-badge { 
-            font-size: 11px; 
-            background-color: rgba(0,0,0,0.3); 
-            padding: 3px 8px; 
-            border-radius: 10px; 
-            margin-top: 4px; 
-            display: inline-block;
+        .word-item {
+            background-color: rgba(255,255,255,0.05);
+            margin-bottom: 8px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #f1c40f;
+            display: flex;
+            flex-direction: column;
         }
+        
+        .word-en { font-size: 18px; font-weight: bold; color: #f1c40f; margin-bottom: 4px; }
+        .word-tr { font-size: 16px; color: #ecf0f1; }
 
-        /* FORM VE BUTONLAR */
+        /* ESKİ STİLLER (Form vb. için) */
         .add-word-container, .backup-container { 
             background-color: #3e5c6a; padding: 15px; 
-            border-radius: 15px; margin-bottom: 20px; 
+            border-radius: 15px; margin: 20px; 
             border: 1px solid #f1c40f;
         }
         .backup-container { border-color: #3498db; border-style: dashed; }
-        
         .form-select, .form-textarea { width: 100%; padding: 12px; background-color: #2c3e50; border: 1px solid #546e7a; border-radius: 10px; color: white; margin-bottom: 10px; font-size: 16px; }
         .save-btn, .backup-btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: white; font-size: 16px; }
         .save-btn { background-color: #f1c40f; color: #1a1a1a; }
@@ -131,55 +166,25 @@
         .btn-download { background-color: #27ae60; }
         .btn-upload { background-color: #3498db; }
 
-        /* --- SÖZLÜK TASARIMI --- */
-        .dict-container { padding-bottom: 20px; }
-        .search-input { 
-            width: 100%; padding: 15px; 
-            background-color: #2c3e50; border: 2px solid #f1c40f; 
-            border-radius: 30px; color: white; 
-            font-size: 16px; margin-bottom: 20px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23f1c40f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>');
-            background-repeat: no-repeat;
-            background-position: 15px center;
-            padding-left: 50px;
-        }
-        .dict-result-card {
-            background-color: rgba(0,0,0,0.2);
-            padding: 15px; border-radius: 10px;
-            margin-bottom: 10px; border-left: 4px solid #3498db;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .dict-en { font-size: 18px; font-weight: bold; color: #fff; }
-        .dict-tr { font-size: 16px; color: #bdc3c7; margin-top: 4px; }
-        .dict-tag { font-size: 11px; background: #f1c40f; color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .no-result { text-align: center; color: #95a5a6; margin-top: 30px; }
+        /* SÖZLÜK */
+        .dict-container { padding: 20px; }
+        .search-input { width: 100%; padding: 15px; background-color: #2c3e50; border: 2px solid #f1c40f; border-radius: 30px; color: white; font-size: 16px; margin-bottom: 20px; padding-left: 20px; }
+        .dict-result-card { background-color: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid #3498db; }
 
-        /* --- TEST EKRANI --- */
-        #quiz-screen { 
-            display: none; 
-            flex-direction: column; 
-            position: fixed; 
-            top: 0; left: 0; right: 0; bottom: 0; 
-            background-color: #1a1a1a; 
-            z-index: 9999; 
-            padding: 20px;
-        }
-        
+        /* TEST EKRANI */
+        #quiz-screen { display: none; flex-direction: column; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #1a1a1a; z-index: 9999; padding: 20px; }
         .quiz-header { display: flex; justify-content: space-between; align-items: center; height: 50px; margin-bottom: 20px; }
         .close-btn { font-size: 32px; color: #e74c3c; cursor: pointer; padding: 10px; font-weight: bold; }
-
         .progress-container { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; }
         .progress-track { flex-grow: 1; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; }
         #progress-fill { width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s; }
-        
         .quiz-content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .word-to-solve { font-size: 32px; font-weight: 800; margin-bottom: 40px; color: #fff; text-align: center; }
         .options { width: 100%; display: flex; flex-direction: column; gap: 12px; }
         .option-btn { background-color: #333; border: none; color: #ecf0f1; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; }
         .option-btn.correct { background-color: #27ae60; color: white; }
         .option-btn.wrong { background-color: #e74c3c; color: white; }
-        .option-btn:disabled { cursor: default; }
-
+        
         /* SONUÇ EKRANI */
         #result-screen { display: none; flex-direction: column; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(26,26,26,0.98); z-index: 10000; }
         .result-card { background-color: #3e5c6a; width: 85%; max-width: 400px; padding: 30px; border-radius: 20px; text-align: center; border: 2px solid #d4a35a; }
@@ -200,7 +205,7 @@
         <header class="home-header">
             <div style="font-size:24px;">⚙️</div>
             <div class="app-title" id="app-header-title">C - Seviyesi</div>
-            <div class="profile-pic">👨🏻‍💼</div>
+            <div class="profile-pic">👨🏻💼</div>
         </header>
 
         <div class="tabs">
@@ -214,7 +219,8 @@
         </div>
     </div>
 
-    <div class="content-area" id="content-container"></div>
+    <div class="content-area" id="content-container">
+        </div>
 
     <div id="quiz-screen">
         <header class="quiz-header">
@@ -239,7 +245,7 @@
             <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
             <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
             <div id="mastery-message" style="margin-top:10px; font-weight:bold; color:#f1c40f; display:none;">🎉 Mükemmel! İlerleme Kaydedildi.</div>
-            <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
+            <button class="home-btn" onclick="closeResultScreen()">Listeye Dön</button>
         </div>
     </div>
 </div>
