@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kelime Uygulaması - v35 (Full Liste)</title>
+    <title>Kelime Uygulaması - v35 (Genişletilmiş - 60 Seviye)</title>
     <style>
         /* --- TEMEL AYARLAR --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -15,13 +15,12 @@
             color: white; 
             width: 100%;
             height: 100vh; 
-            height: 100dvh; 
+            height: 100dvh;
             overflow: hidden; 
         }
 
         .app-container { 
-            width: 100%; 
-            max-width: 600px; 
+            width: 100%; max-width: 600px; 
             margin: 0 auto; 
             background-color: #4a6a7a; 
             height: 100%;
@@ -32,7 +31,7 @@
         
         /* --- BAŞLIK VE SEKMELER (SABİT) --- */
         .fixed-header-group {
-            flex-shrink: 0; 
+            flex-shrink: 0;
             background-color: #354f5c;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
             z-index: 10;
@@ -46,37 +45,35 @@
         }
         
         .app-title { font-size: 18px; font-weight: bold; }
-        .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+        .profile-pic { width: 36px; height: 36px; background-color: #f3d290; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 20px; }
         
         /* TABS */
         .tabs { 
-            display: flex; 
-            overflow-x: auto; 
+            display: flex; overflow-x: auto; 
             white-space: nowrap; 
             padding: 0; 
             height: 50px; 
             align-items: center;
-            scrollbar-width: none; 
+            scrollbar-width: none;
         }
         .tabs::-webkit-scrollbar { display: none; }
         
         .tab { 
-            padding: 0 15px; 
-            height: 100%;
+            padding: 0 15px; height: 100%;
             display: flex; align-items: center;
             color: #bdc3c7; 
             font-weight: bold; font-size: 14px; 
             position: relative; cursor: pointer;
-            flex-shrink: 0;
-            transition: color 0.3s;
+            flex-shrink: 0; transition: color 0.3s;
         }
         .tab.active { color: #f1c40f; background-color: rgba(255,255,255,0.05); }
-        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background-color: #f1c40f; }
+        .tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%;
+            height: 4px; background-color: #f1c40f; }
 
         /* --- İÇERİK ALANI --- */
         .content-area { 
-            flex-grow: 1;
-            overflow-y: auto; 
+            flex-grow: 1; overflow-y: auto; 
             padding: 15px;
             padding-bottom: 80px;
             -webkit-overflow-scrolling: touch;
@@ -84,20 +81,17 @@
 
         /* KART TASARIMI */
         .level-card { 
-            background-color: #3e5c6a; 
-            border: 2px solid #d4a35a; 
+            background-color: #3e5c6a; border: 2px solid #d4a35a; 
             border-radius: 12px; 
             display: flex; align-items: center; justify-content: space-between;
             padding: 20px; margin-bottom: 15px; 
             cursor: pointer; 
-            position: relative;
-            transition: transform 0.1s;
+            position: relative; transition: transform 0.1s;
         }
         .level-card:active { transform: scale(0.98); background-color: #354f5c; }
         
         .level-card.completed {
-            background-color: #27ae60;
-            border-color: #2ecc71;
+            background-color: #27ae60; border-color: #2ecc71;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
         }
 
@@ -106,18 +100,16 @@
         .level-details { text-align: right; pointer-events: none; }
         .level-progress { color: #ecf0f1; font-size: 13px; opacity: 0.8; }
         .mastery-badge { 
-            font-size: 11px; 
-            background-color: rgba(0,0,0,0.3); 
+            font-size: 11px; background-color: rgba(0,0,0,0.3); 
             padding: 3px 8px; 
             border-radius: 10px; 
             margin-top: 4px; 
             display: inline-block;
         }
 
-        /* --- KELİME LİSTESİ EKRANI (İsteğiniz Burası) --- */
+        /* --- KELİME LİSTESİ EKRANI --- */
         #list-screen {
-            display: none;
-            flex-direction: column;
+            display: none; flex-direction: column;
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             background-color: #2c3e50;
             z-index: 5000;
@@ -131,7 +123,7 @@
         
         .list-content {
             flex-grow: 1; overflow-y: auto; padding: 15px;
-            padding-bottom: 100px; /* Buton için yer */
+            padding-bottom: 100px;
         }
         .word-row {
             display: flex; justify-content: space-between; align-items: center;
@@ -161,8 +153,7 @@
 
         /* --- TEST EKRANI --- */
         #quiz-screen { 
-            display: none; 
-            flex-direction: column; 
+            display: none; flex-direction: column; 
             position: fixed; 
             top: 0; left: 0; right: 0; bottom: 0; 
             background-color: #1a1a1a; 
@@ -218,9 +209,9 @@
 <div class="app-container">
     <div class="fixed-header-group">
         <header class="home-header">
-            <div style="font-size:24px;">⚙️</div>
+            <div style="font-size:24px;">??</div>
             <div class="app-title" id="app-header-title">YDS</div>
-            <div class="profile-pic">👨🏻‍💼</div>
+            <div class="profile-pic">???????</div>
         </header>
 
         <div class="tabs">
@@ -230,7 +221,7 @@
             <div class="tab" onclick="switchTab('B1', this)">B1</div>
             <div class="tab" onclick="switchTab('C', this)">C</div>
             <div class="tab" onclick="switchTab('DICT', this)">SÖZLÜK</div>
-            <div class="tab" onclick="switchTab('ADD', this)">➕ EKLE</div>
+            <div class="tab" onclick="switchTab('ADD', this)">? EKLE</div>
         </div>
     </div>
 
@@ -238,7 +229,7 @@
 
     <div id="list-screen">
         <header class="list-header">
-            <button class="back-btn" onclick="closeListScreen()">⬅️</button>
+            <button class="back-btn" onclick="closeListScreen()">??</button>
             <div style="font-weight:bold; font-size:18px;" id="list-title">Seviye 1</div>
             <div style="width:30px;"></div>
         </header>
@@ -248,14 +239,14 @@
         
         <div class="fixed-bottom-btn-container">
             <button class="start-quiz-btn" id="btn-start-quiz-from-list">
-                <span>📝</span> TESTE BAŞLA
+                <span>??</span> TESTE BAŞLA
             </button>
         </div>
     </div>
 
     <div id="quiz-screen">
         <header class="quiz-header">
-            <div class="close-btn" onclick="quitQuiz()">✕</div>
+            <div class="close-btn" onclick="quitQuiz()">?</div>
             <div style="font-weight:bold; color:white;">Kelime Testi</div>
             <div style="width:30px;"></div>
         </header>
@@ -264,7 +255,7 @@
             <div style="color:#3498db; font-weight:bold; font-size:14px;" id="progress-text">1/20</div>
         </div>
         <div class="quiz-content">
-            <div style="font-size:40px; margin-bottom:20px; cursor:pointer;" onclick="speakCurrentWord()">🔊</div>
+            <div style="font-size:40px; margin-bottom:20px; cursor:pointer;" onclick="speakCurrentWord()">??</div>
             <div class="word-to-solve" id="target-word">...</div>
             <div class="options" id="options-container"></div>
         </div>
@@ -275,7 +266,7 @@
         <div class="result-card">
             <div style="font-size:24px; font-weight:bold; margin-bottom:10px;">Tamamlandı!</div>
             <div class="score-circle" id="score-circle"><span class="score-text" id="final-score">0</span></div>
-            <div id="mastery-message" style="margin-top:10px; font-weight:bold; color:#f1c40f; display:none;">🎉 Mükemmel! İlerleme Kaydedildi.</div>
+            <div id="mastery-message" style="margin-top:10px; font-weight:bold; color:#f1c40f; display:none;">?? Mükemmel! İlerleme Kaydedildi.</div>
             <button class="home-btn" onclick="closeResultScreen()">Ana Sayfaya Dön</button>
         </div>
     </div>
@@ -286,10 +277,8 @@
 <script>
     /* ================= VERİLER ================= */
     const fixedData = { "YDS": {}, "H": {}, "B2": {}, "B1": {}, "C": {} };
-    
     // --- YDS VERİLERİ (1. Seviye ve 41-50 arası dolu) ---
     fixedData["YDS"][1] = [{"en":"Abandon","tr":"Terk etmek, vazgeçmek"},{"en":"Abruptly","tr":"Aniden, gereksizce"},{"en":"Abundance","tr":"Bolluk, bereket"},{"en":"Accelerate","tr":"Hızlandırmak"},{"en":"Accommodate","tr":"Barındırmak, yerleştirmek"},{"en":"Accurately","tr":"Doğru bir şekilde"},{"en":"Acknowledge","tr":"Kabul etmek, tanımak"},{"en":"Adapt","tr":"Uyarlamak, uymak"},{"en":"Adequate","tr":"Yeterli, kafi"},{"en":"Adhere","tr":"Bağlı kalmak, sadık kalmak"},{"en":"Adjust","tr":"Ayarlamak, uymak"},{"en":"Administer","tr":"Yönetmek, idare etmek"},{"en":"Adolescence","tr":"Ergenlik"},{"en":"Adopt","tr":"Benimsemek, evlat edinmek"},{"en":"Adverse","tr":"Zıt, kötü, olumsuz"},{"en":"Advocate","tr":"Savunmak, desteklemek"},{"en":"Aggravate","tr":"Kötüleştirmek, şiddetlendirmek"},{"en":"Alleviate","tr":"Hafifletmek, dindirmek"},{"en":"Allocate","tr":"Tahsis etmek, ayırmak"},{"en":"Ambiguous","tr":"Belirsiz, muğlak"}];
-    
     // Diğer YDS verileri (41-50)
     fixedData["YDS"][41] = [{"en":"Persistent","tr":"Israrcı, kalıcı"},{"en":"Precise","tr":"Kesin, tam"},{"en":"Prioritize","tr":"Önceliklendirmek"},{"en":"Prosperity","tr":"Refah, zenginlik"},{"en":"Reciprocal","tr":"Karşılıklı"},{"en":"Redundant","tr":"Gereksiz, fazla"},{"en":"Reluctant","tr":"İsteksiz, gönülsüz"},{"en":"Remnant","tr":"Kalıntı, artık"},{"en":"Resilient","tr":"Esnek, dirençli"},{"en":"Rigorous","tr":"Titiz, sert"}];
     fixedData["YDS"][42] = [{"en":"Scrutinize","tr":"Dikkatle incelemek"},{"en":"Spontaneous","tr":"Kendiliğinden olan"},{"en":"Stagnant","tr":"Durgun, sönük"},{"en":"Subsequent","tr":"Ardından gelen"},{"en":"Substantial","tr":"Önemli, büyük"},{"en":"Surplus","tr":"Artık, fazlalık"},{"en":"Tangible","tr":"Somut, hissedilir"},{"en":"Timid","tr":"Ürkek, çekingen"},{"en":"Transparent","tr":"Şeffaf"},{"en":"Unanimous","tr":"Oybirliğiyle"}];
@@ -301,7 +290,6 @@
     fixedData["YDS"][48] = [{"en":"Consequence","tr":"Sonuç, netice"},{"en":"Consolidate","tr":"Güçlendirmek, birleştirmek"},{"en":"Conspicuous","tr":"Göze çarpan, bariz"},{"en":"Contaminate","tr":"Kirletmek, bulaştırmak"},{"en":"Controversial","tr":"Tartışmalı"},{"en":"Convene","tr":"Toplanmak, toplantı yapmak"},{"en":"Cordial","tr":"Candan, içten"},{"en":"Counterfeit","tr":"Sahte, taklit"},{"en":"Crucial","tr":"Kritik, çok önemli"},{"en":"Cunning","tr":"Kurnaz"}];
     fixedData["YDS"][49] = [{"en":"Decipher","tr":"Şifresini çözmek"},{"en":"Dedicate","tr":"Adamak, ithaf etmek"},{"en":"Deficit","tr":"Açık (bütçe)"},{"en":"Defy","tr":"Meydan okumak"},{"en":"Deliberate","tr":"Kasti, planlı"},{"en":"Denounce","tr":"İhbar etmek, kınamak"},{"en":"Depict","tr":"Tasvir etmek, çizmek"},{"en":"Deprive of","tr":"Mahrum bırakmak"},{"en":"Deteriorate","tr":"Kötüleşmek"},{"en":"Deviate","tr":"Sapmak (yoldan)"}];
     fixedData["YDS"][50] = [{"en":"Differentiate","tr":"Ayırt etmek"},{"en":"Diffuse","tr":"Yayılmak, dağılmak"},{"en":"Dignity","tr":"Haysiyet, onur"},{"en":"Diminish","tr":"Azalmak, eksilmek"},{"en":"Disclose","tr":"Açığa çıkarmak"},{"en":"Discrepancy","tr":"Tutarsızlık, fark"},{"en":"Discrete","tr":"Ayrı, bağımsız"},{"en":"Dismantle","tr":"Parçalamak, sökmek"},{"en":"Disparity","tr":"Eşitsizlik, fark"},{"en":"Disrupt","tr":"Bozmak, aksatmak"}];
-
     // --- C SEVİYESİ (1-20) ---
     for(let i=1; i<=20; i++) {
         fixedData["C"][i] = [
@@ -322,9 +310,8 @@
         {"en": "Smart", "tr": "Zeki"}, {"en": "Learn", "tr": "Öğrenmek"},
         {"en": "Read", "tr": "Okumak"}, {"en": "Write", "tr": "Yazmak"}
     ];
-    
-    // YDS 2-40 arasını doldur
-    for(let i=2; i<=40; i++) {
+    // YDS 2-60 arasını doldur (Eski hali 40 idi, 51-60 için genişletildi)
+    for(let i=2; i<=60; i++) {
         if(!fixedData["YDS"][i]) fixedData["YDS"][i] = sampleWords;
     }
     // Diğer kategorileri doldur (Boş kalmasın diye)
@@ -346,7 +333,6 @@
                 ["YDS", "H", "B2", "B1", "C"].forEach(cat => {
                     if(!vocabularyData.progress[cat]) vocabularyData.progress[cat] = {};
                 });
-                
                 // Sabit verileri mevcut verilerle birleştir (eksikleri tamamla)
                 for(let cat in fixedData) {
                     if(!vocabularyData[cat]) vocabularyData[cat] = {};
@@ -392,10 +378,10 @@
 
     // --- UYGULAMA MANTIĞI ---
     let activeCategory = 'YDS';
-    let activeLevelId = 0; 
+    let activeLevelId = 0;
     let currentQuestions = [];
     let currentStep = 0, correctCount = 0;
-
+    
     window.onload = function() { 
         initApp(); 
         switchTab('YDS', document.querySelector('.tab.active')); 
@@ -408,7 +394,6 @@
             el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
         activeCategory = cat;
-        
         if(cat === 'ADD') {
             document.getElementById('app-header-title').innerText = "Ekle / Yedekle";
             renderAddScreen();
@@ -425,8 +410,10 @@
     function renderLevelCards(cat) {
         const div = document.getElementById('content-container');
         div.innerHTML = "";
-        const icons = ["🛡️","✍️","🔍","🧠","📚","🚀","💎","🔥"];
-        let maxLvl = (cat === 'YDS') ? 50 : (cat === 'C' ? 20 : 30);
+        const icons = ["???","??","??","??","??","??","??","??"];
+        
+        // DEĞİŞİKLİK BURADA: YDS için 60 yapıldı
+        let maxLvl = (cat === 'YDS') ? 60 : (cat === 'C' ? 20 : 30);
 
         for(let i=1; i<=maxLvl; i++) {
             let count = (vocabularyData[cat] && vocabularyData[cat][i]) ? vocabularyData[cat][i].length : 0;
@@ -435,7 +422,7 @@
             
             let status = count > 0 ? `${count} Kelime` : "Boş";
             let cardClass = isMastered ? "level-card completed" : "level-card";
-            let progressBadge = count > 0 ? `<div class="mastery-badge">${isMastered ? 'Tamamlandı ✅' : progressVal + '/2 Tamamlandı'}</div>` : "";
+            let progressBadge = count > 0 ? `<div class="mastery-badge">${isMastered ? 'Tamamlandı ?' : progressVal + '/2 Tamamlandı'}</div>` : "";
 
             div.innerHTML += `
                 <div class="${cardClass}" onclick="openWordList(${i})" style="${count === 0 ? 'opacity:0.6;' : ''}">
@@ -459,7 +446,6 @@
         activeLevelId = lvl;
         // Başlıkta kaç kelime olduğunu göster
         document.getElementById('list-title').innerText = `${activeCategory} - Seviye ${lvl} (${words.length})`;
-        
         const contentDiv = document.getElementById('list-content-area');
         contentDiv.innerHTML = "";
         
@@ -468,15 +454,13 @@
             contentDiv.innerHTML += `
                 <div class="word-row">
                     <div class="word-eng" onclick="speak('${w.en.replace(/'/g, "\\'")}')">
-                        <span>🔊</span> ${w.en}
+                        <span>??</span> ${w.en}
                     </div>
                     <div class="word-tr">${w.tr}</div>
                 </div>`;
         });
-        
         // Butonu hazırla
         document.getElementById('btn-start-quiz-from-list').onclick = () => startQuiz(lvl);
-        
         // Ekranı göster
         document.getElementById('list-screen').style.display = 'flex';
     }
@@ -505,13 +489,14 @@
             }
             return { en: w.en, correct: w.tr, options: opts.sort(()=>0.5-Math.random()) };
         });
-        
         // Soruların sırasını da karıştır
         currentQuestions.sort(() => Math.random() - 0.5);
         
-        currentStep = 0; correctCount = 0;
+        currentStep = 0;
+        correctCount = 0;
         closeListScreen(); // Listeyi kapat
-        document.getElementById('quiz-screen').style.display = 'flex'; // Quizi aç
+        document.getElementById('quiz-screen').style.display = 'flex';
+        // Quizi aç
         renderQuestion();
     }
 
@@ -533,7 +518,8 @@
         const buttons = document.querySelectorAll('.option-btn');
         buttons.forEach(b => b.disabled = true);
         if(sel === cor) {
-            btn.classList.add('correct'); correctCount++;
+            btn.classList.add('correct');
+            correctCount++;
             document.getElementById('success-overlay').style.display='flex';
             setTimeout(()=>{ document.getElementById('success-overlay').style.display='none'; next(); }, 600);
         } else {
@@ -566,12 +552,13 @@
     function speakCurrentWord() { speak(document.getElementById('target-word').innerText); }
 
     function renderAddScreen() {
+        // DEĞİŞİKLİK BURADA: Select 60'a kadar uzatıldı
         document.getElementById('content-container').innerHTML = `
             <div class="add-word-container">
                 <div style="font-weight:bold; color:#f1c40f; margin-bottom:10px;">Kelime Ekle</div>
                 <div style="display:flex; gap:10px; margin-bottom:10px;">
                     <select id="t-cat" class="form-select"><option value="YDS">YDS</option><option value="C">C</option></select>
-                    <select id="t-lvl" class="form-select">${Array.from({length:50},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
+                    <select id="t-lvl" class="form-select">${Array.from({length:60},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}</select>
                 </div>
                 <textarea id="bulk-txt" class="form-textarea" placeholder="Apple : Elma&#10;Run : Koşmak" rows="5"></textarea>
                 <button class="save-btn" onclick="addWords()">Kaydet</button>
