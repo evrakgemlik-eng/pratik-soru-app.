@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 
-# Ortam değişkenlerini yükle (.env dosyasından)
+# .env dosyasından oku (Yerel çalışmada devreye girer, GitHub'da sistem ortam değişkenlerini kullanır)
 load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -65,7 +65,7 @@ def ilan_kaydet(ilan_id: str, baslik: str, link: str):
 def telegram_mesaj_gonder(baslik: str, link: str, sehir: str):
     """Bulunan ilanı Telegram botu üzerinden bildirim olarak iletir."""
     if not TELEGRAM_BOT_TOKEN or not TELEGRAM_CHAT_ID:
-        print("[!] Telegram token veya chat ID tanımlanmamış.")
+        print("[!] TELEGRAM_BOT_TOKEN veya TELEGRAM_CHAT_ID bulunamadı. Bildirim atlanıyor.")
         return
 
     mesaj = (
